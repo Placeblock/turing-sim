@@ -1,7 +1,12 @@
 package util;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple utility class for reading and writing CSV files. 
@@ -17,7 +22,7 @@ public class CSV {
      */
     public static List<String[]> readCSV(String filePath) throws IOException {
         List<String[]> data = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (var br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
@@ -36,7 +41,7 @@ public class CSV {
      * @throws IOException
      */
     public static void writeCSV(String filePath, List<String[]> data) throws IOException {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+        try (var bw = new BufferedWriter(new FileWriter(filePath))) {
             for (String[] row : data) {
                 bw.write(String.join(",", row));
                 bw.newLine();
