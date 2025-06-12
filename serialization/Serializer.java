@@ -13,7 +13,7 @@ public class Serializer {
             for (var entry : state.getTransitions().entrySet()) {
                 var symbol = entry.getKey();
                 var transition = entry.getValue();
-                String line = String.format("%d,%s,%s,%s,%s,%b\n",
+                String line = String.format("%d,%s,%s,%s,%d,%b\n",
                         i,
                         symbol,
                         transition.getNewSymbol(),
