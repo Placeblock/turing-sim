@@ -1,7 +1,10 @@
 package serialization;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import core.State;
@@ -17,31 +20,33 @@ public class Serializer {
      * @throws IOException if an I/O error occurs during stream writing
      */
     public static void serialize(List<State> states, OutputStream outputStream) throws IOException {
-        int i = 0;
-        for (var state : states) {
-            if(state.getTransitions().isEmpty()) {
-                String line = String.format("%d,,,,,%b\n",
-                        i,
-                        state.isTerminating()
-                    );
-                outputStream.write(line.getBytes());
+        try (var writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8))) {
+            int i = 0;
+            for (var state : states) {
+                if(state.getTransitions().isEmpty()) {
+                    String line = String.format("%d,,,,,%b\n",
+                            i,
+                            state.isTerminating()
+                        );
+                    writer.write(line);
+                    i++;
+                    continue;
+                }
+                for (var entry : state.getTransitions().entrySet()) {
+                    var symbol = entry.getKey();
+                    var transition = entry.getValue();
+                    String line = String.format("%d,%s,%s,%s,%d,%b\n",
+                            i,
+                            symbol,
+                            transition.getNewSymbol(),
+                            transition.getMove(),
+                            states.indexOf(transition.getNewState()),
+                            state.isTerminating()
+                        );
+                    writer.write(line);
+                }
                 i++;
-                continue;
             }
-            for (var entry : state.getTransitions().entrySet()) {
-                var symbol = entry.getKey();
-                var transition = entry.getValue();
-                String line = String.format("%d,%s,%s,%s,%d,%b\n",
-                        i,
-                        symbol,
-                        transition.getNewSymbol(),
-                        transition.getMove(),
-                        states.indexOf(transition.getNewState()),
-                        state.isTerminating()
-                    );
-                outputStream.write(line.getBytes());
-            }
-            i++;
         }
     }
 }
