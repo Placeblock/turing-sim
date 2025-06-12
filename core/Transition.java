@@ -7,7 +7,7 @@ package core;
 public class Transition {
     private final char newSymbol;
     private final Move move;
-    private final State newState;
+    private State newState;
 
     public Transition(char newSymbol, Move move, State newState) {
         this.newSymbol = newSymbol;
@@ -25,5 +25,9 @@ public class Transition {
 
     public State getNewState() {
         return newState;
+    }
+
+    public void setNewState(State newState) {
+        this.newState = newState;
     }
 }
