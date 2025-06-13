@@ -139,4 +139,27 @@ public class Serializer {
 
         return states;
     }
+
+    public static void main(String[] args) {
+        String asd = """
+                    0,0,1,RIGHT,0,false
+                    0,B,B,NONE,1,false
+                    1,,,,,true
+                    """;
+
+        List<State> states = new ArrayList<>();
+
+        try (InputStream inputStream = new java.io.ByteArrayInputStream(asd.getBytes(StandardCharsets.UTF_8))) {
+            states = deserialize(inputStream);
+            System.out.println(asd);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            serialize(states, System.out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
