@@ -22,7 +22,7 @@ import core.Transition;
  * This class provides methods to serialize a list of states to an output stream
  * and deserialize a list of states from an input stream.
  */
-public class Serializer {
+public class StateMachineCsvSerializer {
     
     /**
      * Serializes a list of states to a specified output stream in CSV format.
