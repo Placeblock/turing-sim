@@ -22,13 +22,13 @@ public class MainWindow extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenuItem loadCsvItem = new JMenuItem("Load CSV");
-        loadCsvItem.addActionListener(_ -> openFileChooser());
+        loadCsvItem.addActionListener(e -> openFileChooser());
         fileMenu.add(loadCsvItem);
         menuBar.add(fileMenu);
         setJMenuBar(menuBar);
 
         JButton openButton = new JButton("Open File");
-        openButton.addActionListener(_ -> openFileChooser());
+        openButton.addActionListener(e -> openFileChooser());
 
         getContentPane().setLayout(new FlowLayout());
         getContentPane().add(openButton);
