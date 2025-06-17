@@ -1,8 +1,10 @@
-package main.serialization;
+package serialization;
 
-import main.core.Move;
-import main.core.State;
-import main.core.Transition;
+
+
+import core.Move;
+import core.State;
+import core.Transition;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

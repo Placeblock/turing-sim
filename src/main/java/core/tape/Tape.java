@@ -1,4 +1,4 @@
-package main.core.tape;
+package core.tape;
 
 import java.util.Iterator;
 import java.util.List;
