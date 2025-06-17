@@ -1,4 +1,4 @@
-package core;
+package src.main.core;
 
 /**
  * Class representing a Turing machine.

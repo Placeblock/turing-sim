@@ -1,6 +1,6 @@
-package core;
+package src.main.core;
 
-import core.tape.Tape;
+import src.main.core.tape.Tape;
 
 /**
  * Class representing the state of the Turing machine itself.

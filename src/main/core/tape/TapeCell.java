@@ -1,4 +1,4 @@
-package core.tape;
+package src.main.core.tape;
 
 /**
  * TapeCell implementation. This represents one cell on the tape.
