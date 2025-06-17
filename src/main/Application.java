@@ -1,6 +1,6 @@
-package src.main;
+package main;
 
-import src.main.ui.MainWindow;
+import main.ui.MainWindow;
 
 public class Application {
     public static void main(String[] args) {

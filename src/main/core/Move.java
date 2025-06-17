@@ -1,4 +1,4 @@
-package src.main.core;
+package main.core;
 
 /**
  * Enum representing the possible moves of a Turing machine head.

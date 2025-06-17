@@ -1,4 +1,8 @@
-package src.main.serialization;
+package main.serialization;
+
+import main.core.Move;
+import main.core.State;
+import main.core.Transition;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,9 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import src.main.core.Move;
-import src.main.core.State;
-import src.main.core.Transition;
+
 
 // TODO rename class to StateMachineCsvSerializer or similar
 /**

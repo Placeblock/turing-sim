@@ -1,4 +1,4 @@
-package src.main.ui;
+package main.ui;
 
 import java.io.File;
 
