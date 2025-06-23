@@ -50,7 +50,7 @@ public class StateMachineCsvSerializer {
                 if(state.getTransitions().isEmpty()) {
                     String line = String.format("%d,,,,,%b",
                             i,
-                            state.isTerminating()
+                            state.isTerminates()
                         );
                     writer.write(line);
                     writer.newLine();
@@ -66,7 +66,7 @@ public class StateMachineCsvSerializer {
                             transition.getNewSymbol(),
                             transition.getMove(),
                             states.indexOf(transition.getNewState()),
-                            state.isTerminating()
+                            state.isTerminates()
                         );
                     writer.write(line);
                     writer.newLine();

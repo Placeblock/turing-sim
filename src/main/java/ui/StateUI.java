@@ -1,32 +1,33 @@
 package ui;
 
-import core.State;
+import core.StateRegister;
 import event.Emitter;
 import event.events.AddStateEvent;
+import event.events.RemoveStateEvent;
 
 import javax.swing.*;
-import java.util.List;
 
-public class StateUI extends JPanel {
+public class StateUI extends JPanel{
     private final Emitter<AddStateEvent> addStatePublisher;
-    private final Emitter<AddStateEvent> removeStatePublisher;
+    private final Emitter<RemoveStateEvent> removeStatePublisher;
 
-    private final List<State> stateRegister;
+    private final StateRegister stateRegister;
 
     public StateUI(Emitter<AddStateEvent> addStatePublisher,
-                   Emitter<AddStateEvent> removeStatePublisher,
-                   List<State> stateRegister) {
+                   Emitter<RemoveStateEvent> removeStatePublisher,
+                   StateRegister stateRegister) {
         this.addStatePublisher = addStatePublisher;
         this.removeStatePublisher = removeStatePublisher;
         this.stateRegister = stateRegister;
 
-        this.update();
+        this.stateRegister.getAddStatePublisher().subscribe(this::onStateAdd);
+        this.stateRegister.getRemoveStatePublisher().subscribe(this::onStateRemove);
     }
 
-    private void update() {
-        for (int i = 0; i < this.stateRegister.size(); i++) {
-            this.add(new JLabel(Integer.toString(i)));
-        }
+    public void onStateAdd(observer.events.AddStateEvent event) {
+        // Add UI State
     }
-
+    public void onStateRemove(observer.events.RemoveStateEvent event) {
+        // Remove UI State
+    }
 }
