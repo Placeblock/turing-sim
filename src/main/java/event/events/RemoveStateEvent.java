@@ -1,8 +1,6 @@
 package event.events;
 
-import lombok.RequiredArgsConstructor;
+import event.Event;
 
-@RequiredArgsConstructor
-public class RemoveStateEvent {
-    private final int index;
+public record RemoveStateEvent(int index) implements Event {
 }
