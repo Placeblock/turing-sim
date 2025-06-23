@@ -1,11 +1,14 @@
 package core;
 
+import lombok.Getter;
+
 import java.util.Map;
 
 /**
  * Class representing a state in a Turing machine.
  * A state consists of transitions for each character, and a flag indicating if it is a terminating state.
  */
+@Getter
 public class State {
     private final Map<Character, Transition> transitions;
     private final boolean terminates;
@@ -15,11 +18,7 @@ public class State {
         this.terminates = terminates;
     }
 
-    public Map<Character, Transition> getTransitions() {
-        return transitions;
-    }
-
-    public boolean isTerminating() {
-        return terminates;
+    public Transition getTransition(char c) {
+        return transitions.get(c);
     }
 }
