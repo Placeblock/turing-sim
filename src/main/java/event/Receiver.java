@@ -31,6 +31,7 @@ public class Receiver {
         if (!this.handlers.containsKey(eventClass)) {
             throw new IllegalArgumentException("No handler for event " + eventClass.getName());
         }
+        
         this.handlers.get(eventClass).remove(handler);
     }
 }

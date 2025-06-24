@@ -1,6 +1,6 @@
 package ui.stateregister;
 
-import core.IStateRegister;
+import core.StateRegister;
 import event.Emitter;
 import event.events.AddStateEvent;
 import event.events.RemoveStateEvent;
@@ -13,12 +13,13 @@ public class StateRegisterUI extends JTable {
     private final Emitter<AddStateEvent> addStatePublisher;
     private final Emitter<RemoveStateEvent> removeStatePublisher;
 
-    private final IStateRegister stateRegister;
+    private final StateRegister stateRegister;
 
-    public StateRegisterUI(IStateRegister stateRegister,
+    public StateRegisterUI(StateRegister stateRegister,
                            Emitter<AddStateEvent> addStatePublisher,
                            Emitter<RemoveStateEvent> removeStatePublisher) {
         super(new StateRegisterTableModel(stateRegister));
+
         this.addStatePublisher = addStatePublisher;
         this.removeStatePublisher = removeStatePublisher;
         this.stateRegister = stateRegister;
@@ -39,6 +40,7 @@ public class StateRegisterUI extends JTable {
         if (column == 0) {
             return new DefaultTableCellRenderer();
         }
+        
         return new TransitionRenderer();
     }
 }

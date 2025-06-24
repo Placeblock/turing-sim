@@ -6,10 +6,12 @@ import observer.events.AddStateEvent;
 import observer.events.RemoveStateEvent;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
-public class StateRegister implements IStateRegister {
+public class StateRegister {
     private final Publisher<AddStateEvent> addStatePublisher = new Publisher<>();
     private final Publisher<RemoveStateEvent> removeStatePublisher = new Publisher<>();
 
@@ -25,13 +27,13 @@ public class StateRegister implements IStateRegister {
         this.removeStatePublisher.publish(new RemoveStateEvent(index, state));
     }
 
-    @Override
     public List<Character> getSymbols() {
-        List<Character> symbols = new ArrayList<>();
+        Set<Character> symbols = new HashSet<>();
+
         for (State state : this.states) {
             symbols.addAll(state.getTransitions().keySet());
         }
-        return symbols;
+        
+        return symbols.stream().toList();
     }
-
 }

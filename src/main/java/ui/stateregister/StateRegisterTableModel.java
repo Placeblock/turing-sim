@@ -1,7 +1,7 @@
 package ui.stateregister;
 
 
-import core.IStateRegister;
+import core.StateRegister;
 import core.State;
 import lombok.RequiredArgsConstructor;
 
@@ -10,7 +10,7 @@ import javax.swing.table.AbstractTableModel;
 
 @RequiredArgsConstructor
 public class StateRegisterTableModel extends AbstractTableModel {
-    private final IStateRegister stateRegister;
+    private final StateRegister stateRegister;
 
     @Override
     public int getRowCount() {
@@ -27,6 +27,7 @@ public class StateRegisterTableModel extends AbstractTableModel {
         if (y == 0) {
             return x;
         }
+        
         State state = this.stateRegister.getStates().get(x);
         Character symbol = this.stateRegister.getSymbols().get(y - 1);
         return state.getTransitions().get(symbol);
