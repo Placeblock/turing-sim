@@ -10,19 +10,27 @@ import lombok.RequiredArgsConstructor;
 public class Machine {
     private final MachineState machineState;
 
-    public void step() {
+    /**
+     * Executes a single step of the Turing machine.
+     * It reads the current state and the symbol under the head,
+     * applies the transition defined for that state and symbol,
+     * writes the new symbol to the tape,
+     * moves the head according to the transition,
+     * and updates the current state of the machine.
+     * @return true if the step was successful, false if the machine is in a terminating state.
+     */
+    public boolean step() {
         var state = this.machineState.getCurrentState();
 
         if (state.isTerminates()) {
-            // TODO terminate
-            return;
+            return false;
         }
 
         TapeCell<Character> head = this.machineState.getTape().getHead();
-        Character headSymbol = head.getSymbol();
-        Transition transition = state.getTransition(headSymbol);
+        Character currentHeadSymbol = head.getSymbol();
+        Transition transition = state.getTransition(currentHeadSymbol);
         if (transition == null) {
-            throw new IllegalStateException("No transition found for symbol " + headSymbol);
+            throw new IllegalStateException("No transition found for symbol " + currentHeadSymbol);
         }
 
         head.setSymbol(transition.getNewSymbol());
@@ -39,5 +47,7 @@ public class Machine {
                 // Do nothing, stay on the same cell
                 break;
         }
+
+        return true;
     }
 }
