@@ -15,6 +15,7 @@ public class MainWindow extends JFrame {
     public MainWindow() {
         setTitle("Turing Maschine");
         setSize(400, 200);
+        setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
 

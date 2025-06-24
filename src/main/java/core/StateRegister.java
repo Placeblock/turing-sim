@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-public class StateRegister {
+public class StateRegister implements IStateRegister {
     private final Publisher<AddStateEvent> addStatePublisher = new Publisher<>();
     private final Publisher<RemoveStateEvent> removeStatePublisher = new Publisher<>();
 
@@ -24,4 +24,14 @@ public class StateRegister {
         this.states.remove(index);
         this.removeStatePublisher.publish(new RemoveStateEvent(index, state));
     }
+
+    @Override
+    public List<Character> getSymbols() {
+        List<Character> symbols = new ArrayList<>();
+        for (State state : this.states) {
+            symbols.addAll(state.getTransitions().keySet());
+        }
+        return symbols;
+    }
+
 }
