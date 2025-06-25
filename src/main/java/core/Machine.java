@@ -35,6 +35,7 @@ public class Machine {
 
         TapeCell<Character> head = this.machineState.getTape().getHead();
         Character currentHeadSymbol = head.getSymbol();
+        System.out.println("Reading: " + currentHeadSymbol);
         Transition transition = state.getTransition(currentHeadSymbol);
         if (transition == null) {
             throw new IllegalStateException("No transition found for symbol " + currentHeadSymbol);
@@ -54,6 +55,8 @@ public class Machine {
                 // Do nothing, stay on the same cell
                 break;
         }
+
+        System.out.println("Tape content: " + this.machineState.getTape().getAllData());
 
         return true;
     }
@@ -89,7 +92,7 @@ public class Machine {
         MachineState machineState = new MachineState(tape);
         Machine machine = new Machine(machineState);
 
-        machineState.setCurrentState(states.get(0)); // Set the initial state
+        machineState.setCurrentState(states.getFirst()); // Set the initial state
 
         // Initialize the machine state, tape, and states here
         // ...
@@ -99,10 +102,10 @@ public class Machine {
             System.out.println("step");
         }
 
-        var kaka = tape.getRangeRelativeToHead(-10, 10);
+        var result = tape.getAllData();
 
-        System.out.println("Tape content: " + kaka);
-        System.out.println("Final state: " + kaka.size());
+        System.out.println("Tape content: " + result);
+        System.out.println("Final state: " + result.size());
 
         System.out.println("Machine has terminated.");
     }

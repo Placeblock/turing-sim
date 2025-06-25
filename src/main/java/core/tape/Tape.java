@@ -79,30 +79,19 @@ public class Tape<T> {
         return cells;
     }
 
-    public List<T> getRangeRelativeToHead(int from, int to) {
-        List<T> symbols = new ArrayList<>();
+    public List<T> getAllData() {
+        List<T> data = new ArrayList<>();
         TapeCell<T> current = this.headPosition;
-
-        // Move to the 'from' position
-        if (from < 0) {
-            // Move backward for negative positions
-            for (int i = 0; i > from; i--) {
-                current = current.getPrevious();
-            }
-        } else {
-            // Move forward for positive positions
-            for (int i = 0; i < from; i++) {
-                current = current.getNext();
-            }
+        while (current != null) {
+            data.addFirst(current.getSymbol());
+            current = current.getPrevious();
         }
-
-        // Collect symbols from 'from' to 'to' position
-        for (int i = from; i < to; i++) {
-            symbols.add(current.getSymbol());
+        current = this.headPosition.getNext();
+        while (current != null) {
+            data.add(current.getSymbol());
             current = current.getNext();
         }
-
-        return symbols;
+        return data;
     }
 
     public TapeCell<T> moveNext() {
