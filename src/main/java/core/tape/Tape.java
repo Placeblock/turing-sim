@@ -62,10 +62,6 @@ public class Tape<T> {
 
         TapeCell<T> current = this.headPosition;
         for (int i = 0; i < count; i++) {
-            if (current.getNext() == null) {
-                TapeCell<T> next = new TapeCell<>(defaultSymbol);
-                current.connectNext(next);
-            }
             cells.add(current = current.getNext());
         }
 
@@ -77,10 +73,6 @@ public class Tape<T> {
 
         TapeCell<T> current = this.headPosition;
         for (int i = 0; i < count; i++) {
-            if (current.getPrevious() == null) {
-                TapeCell<T> previous = new TapeCell<>(defaultSymbol);
-                current.connectPrevious(previous);
-            }
             cells.add(current = current.getPrevious());
         }
 
@@ -95,17 +87,11 @@ public class Tape<T> {
         if (from < 0) {
             // Move backward for negative positions
             for (int i = 0; i > from; i--) {
-                if (current.getPrevious() == null) {
-                    current.connectPrevious(new TapeCell<>(defaultSymbol));
-                }
                 current = current.getPrevious();
             }
         } else {
             // Move forward for positive positions
             for (int i = 0; i < from; i++) {
-                if (current.getNext() == null) {
-                    current.connectNext(new TapeCell<>(defaultSymbol));
-                }
                 current = current.getNext();
             }
         }
@@ -113,9 +99,6 @@ public class Tape<T> {
         // Collect symbols from 'from' to 'to' position
         for (int i = from; i < to; i++) {
             symbols.add(current.getSymbol());
-            if (current.getNext() == null) {
-                current.connectNext(new TapeCell<>(defaultSymbol));
-            }
             current = current.getNext();
         }
 
