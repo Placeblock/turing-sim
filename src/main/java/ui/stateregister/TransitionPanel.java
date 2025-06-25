@@ -20,7 +20,6 @@ public class TransitionPanel extends JPanel {
         JComboBox stateComboBox = new JComboBox<>();
         for (int i = 0; i < stateRegister.getStates().size(); i++) {
             stateComboBox.addItem(i);
-            // stateComboBox.addItem(stateRegister.getStates().get(i));
         }
         State newState = transition.getNewState();
         stateComboBox.setSelectedItem(stateRegister.getStates().indexOf(newState));
@@ -29,6 +28,7 @@ public class TransitionPanel extends JPanel {
         for(Character alphabetChar: tapeAlphabet){
             symbolComboBox.addItem(alphabetChar);
         }
+        symbolComboBox.setSelectedItem(transition.getNewSymbol());
 
         JComboBox moveComboBox = new JComboBox();
         for (Move move: Move.values()) {

@@ -15,8 +15,12 @@ public class StateRegister {
     private final Publisher<AddStateEvent> addStatePublisher = new Publisher<>();
     private final Publisher<RemoveStateEvent> removeStatePublisher = new Publisher<>();
 
-    private final List<State> states = new ArrayList<>();
+    private final List<State> states;
 
+
+    public StateRegister(List<State> states){
+        this.states = states;
+    }
     public void addState(int index, State state) {
         this.states.add(index, state);
         this.addStatePublisher.publish(new AddStateEvent(index, state));

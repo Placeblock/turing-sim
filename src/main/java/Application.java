@@ -22,11 +22,11 @@ public class Application {
 
     public static StateRegister createStateRegister() {
         StateRegister stateRegister = new StateRegister();
-        Set<Character> symbols = Set.of('A', 'B', 'C');
+        Set<Character> tapeAlphabet = Set.of('A', 'B', 'C');
 
         for (int i = 0; i < TEST_STATES; i++) {
             Map<Character, Transition> transitions = new HashMap<>();
-            for (Character symbol : symbols) {
+            for (Character symbol : tapeAlphabet) {
                 transitions.put(symbol, new Transition(symbol, Move.LEFT, null));
             }
             stateRegister.addState(i, new State(transitions, i==TEST_STATES-1));
@@ -40,6 +40,14 @@ public class Application {
             }
         }
         
+        return stateRegister;
+    }
+
+    public static StateRegister createStateRegister2() {
+        StateRegister stateRegister = new StateRegister();
+
+
+
         return stateRegister;
     }
 }
