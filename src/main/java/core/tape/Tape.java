@@ -1,5 +1,6 @@
 package core.tape;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -54,6 +55,71 @@ public class Tape<T> {
             this.headPosition.connectPrevious(previous);
         }
         return this.headPosition.getPrevious();
+    }
+
+    public List<TapeCell<T>> getNext(int count) {
+        List<TapeCell<T>> cells = new ArrayList<>();
+
+        TapeCell<T> current = this.headPosition;
+        for (int i = 0; i < count; i++) {
+            if (current.getNext() == null) {
+                TapeCell<T> next = new TapeCell<>(defaultSymbol);
+                current.connectNext(next);
+            }
+            cells.add(current = current.getNext());
+        }
+
+        return cells;
+    }
+
+    public List<TapeCell<T>> getPrevious(int count) {
+        List<TapeCell<T>> cells = new ArrayList<>();
+
+        TapeCell<T> current = this.headPosition;
+        for (int i = 0; i < count; i++) {
+            if (current.getPrevious() == null) {
+                TapeCell<T> previous = new TapeCell<>(defaultSymbol);
+                current.connectPrevious(previous);
+            }
+            cells.add(current = current.getPrevious());
+        }
+
+        return cells;
+    }
+
+    public List<T> getRangeRelativeToHead(int from, int to) {
+        List<T> symbols = new ArrayList<>();
+        TapeCell<T> current = this.headPosition;
+
+        // Move to the 'from' position
+        if (from < 0) {
+            // Move backward for negative positions
+            for (int i = 0; i > from; i--) {
+                if (current.getPrevious() == null) {
+                    current.connectPrevious(new TapeCell<>(defaultSymbol));
+                }
+                current = current.getPrevious();
+            }
+        } else {
+            // Move forward for positive positions
+            for (int i = 0; i < from; i++) {
+                if (current.getNext() == null) {
+                    current.connectNext(new TapeCell<>(defaultSymbol));
+                }
+                current = current.getNext();
+            }
+        }
+
+        // Collect symbols from 'from' to 'to' position
+        for (int i = from; i < to; i++) {
+            symbols.add(current.getSymbol());
+            if (current.getNext() == null) {
+                current.connectNext(new TapeCell<>(defaultSymbol));
+            }
+            current = current.getNext();
+        }
+
+        return symbols;
     }
 
     public TapeCell<T> moveNext() {

@@ -10,7 +10,6 @@ import java.util.Set;
  * Class representing a transition in a Turing machine.
  * A transition consists of a new state, a new symbol to write, and a move direction.
  */
-@AllArgsConstructor
 @Getter
 public class Transition {
     private final char newSymbol;
