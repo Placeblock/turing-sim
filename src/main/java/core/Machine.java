@@ -1,7 +1,14 @@
 package core;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
+import core.tape.Tape;
 import core.tape.TapeCell;
 import lombok.RequiredArgsConstructor;
+import serialization.StateMachineCsvSerializer;
 
 /**
  * Class representing a Turing machine.
@@ -49,5 +56,54 @@ public class Machine {
         }
 
         return true;
+    }
+
+    public static void main(String[] args) {
+        String asd = """
+                    0,0,1,RIGHT,0,false
+                    0,2,2,RIGHT,0,false
+                    0,B,B,NONE,1,false
+                    1,,,,,true
+                    """;
+
+        List<Character> symbols = new ArrayList<>();
+        symbols.add('0');
+        symbols.add('0');
+        symbols.add('0');
+        symbols.add('0');
+        symbols.add('0');
+        symbols.add('2');
+
+        List<State> states = new ArrayList<>();
+
+        try (InputStream inputStream = new java.io.ByteArrayInputStream(asd.getBytes(StandardCharsets.UTF_8))) {
+            states = StateMachineCsvSerializer.deserialize(inputStream);
+            System.out.println(asd);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        // Example usage of the Machine class
+        Tape<Character> tape = new Tape<>('B', symbols); // Initialize tape with a default symbol
+        MachineState machineState = new MachineState(tape);
+        Machine machine = new Machine(machineState);
+
+        machineState.setCurrentState(states.get(0)); // Set the initial state
+
+        // Initialize the machine state, tape, and states here
+        // ...
+
+        // Run the machine step by step
+        while (machine.step()) {
+            System.out.println("step");
+        }
+
+        var kaka = tape.getRangeRelativeToHead(-10, 10);
+
+        System.out.println("Tape content: " + kaka);
+        System.out.println("Final state: " + kaka.size());
+
+        System.out.println("Machine has terminated.");
     }
 }
