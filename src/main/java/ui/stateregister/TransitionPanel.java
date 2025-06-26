@@ -13,16 +13,17 @@ public class TransitionPanel extends JPanel {
     private final StateRegister stateRegister;
     private Set<Character> tapeAlphabet;
 
+
     public TransitionPanel (StateRegister stateRegister, Transition transition){
         this.stateRegister = stateRegister;
 
         JPanel panel = new JPanel(new FlowLayout((FlowLayout.LEFT)));
         JComboBox stateComboBox = new JComboBox<>();
         for (int i = 0; i < stateRegister.getStates().size(); i++) {
-            stateComboBox.addItem(i);
+            stateComboBox.addItem("q" + i);
         }
         State newState = transition.getNewState();
-        stateComboBox.setSelectedItem(stateRegister.getStates().indexOf(newState));
+        stateComboBox.setSelectedItem("q" + stateRegister.getStates().indexOf(newState));
         // (->q1/q2/q3/q4, B, R)
         JComboBox symbolComboBox = new JComboBox();
         for(Character alphabetChar: tapeAlphabet){

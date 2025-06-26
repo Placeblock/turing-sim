@@ -21,7 +21,7 @@ public class Application {
     private static final int TEST_STATES = 3;
 
     public static StateRegister createStateRegister() {
-        StateRegister stateRegister = new StateRegister();
+        StateRegister stateRegister = new StateRegister(null);
         Set<Character> tapeAlphabet = Set.of('A', 'B', 'C');
 
         for (int i = 0; i < TEST_STATES; i++) {
@@ -44,7 +44,7 @@ public class Application {
     }
 
     public static StateRegister createStateRegister2() {
-        StateRegister stateRegister = new StateRegister();
+        StateRegister stateRegister = new StateRegister(null);
 
 
 
