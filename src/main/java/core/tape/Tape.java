@@ -94,6 +94,21 @@ public class Tape<T> {
         return data;
     }
 
+    public List<TapeCell<T>> getAllCells() {
+        var cells = new ArrayList<TapeCell<T>>();
+        TapeCell<T> current = this.headPosition;
+        while (current != null) {
+            cells.addFirst(current);
+            current = current.getPrevious();
+        }
+        current = this.headPosition.getNext();
+        while (current != null) {
+            cells.add(current);
+            current = current.getNext();
+        }
+        return cells;
+    }
+
     public TapeCell<T> moveNext() {
         this.headPosition = this.getNext();
         return this.getHead();
