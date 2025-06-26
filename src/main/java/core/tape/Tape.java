@@ -4,10 +4,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import lombok.Getter;
+import observer.Publisher;
+import observer.events.TapeHeadPositionChangedEvent;
+
 public class Tape<T> {
 
     private final T defaultSymbol;
     private TapeCell<T> headPosition;
+
+    @Getter
+    private Publisher<TapeHeadPositionChangedEvent<T>> headPositionChangedPublisher = new Publisher<>();
 
     public Tape(T defaultSymbol) {
         this.defaultSymbol = defaultSymbol;
@@ -39,6 +46,11 @@ public class Tape<T> {
 
     public TapeCell<T> getHead() {
         return this.headPosition;
+    }
+
+    public void setHead(TapeCell<T> head) {
+        this.headPosition = head;
+        this.headPositionChangedPublisher.publish(new TapeHeadPositionChangedEvent<>(head));
     }
 
     public TapeCell<T> getNext() {
@@ -110,12 +122,12 @@ public class Tape<T> {
     }
 
     public TapeCell<T> moveNext() {
-        this.headPosition = this.getNext();
+        this.setHead(this.getNext());
         return this.getHead();
     }
 
     public TapeCell<T> movePrevious() {
-        this.headPosition = this.getPrevious();
+        this.setHead(this.getPrevious());
         return this.getHead();
     }
 }

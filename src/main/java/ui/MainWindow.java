@@ -60,6 +60,12 @@ public class MainWindow extends JFrame {
         });
         getContentPane().add(testCharacterChangedEventButton);
 
+        JButton testHeadChangedEventButton = new JButton("Test Head Changed Event");
+        testHeadChangedEventButton.addActionListener(e -> {
+            tape.moveNext();
+        });
+        getContentPane().add(testHeadChangedEventButton);
+
         setVisible(true);
     }
 
