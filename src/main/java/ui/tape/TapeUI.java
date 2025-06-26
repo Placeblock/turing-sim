@@ -35,6 +35,7 @@ public class TapeUI extends JScrollPane {
         setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         setPreferredSize(new Dimension(300, 50)); //! TEST
+        setBorder(null);
 
         tapePanel = new JPanel(new GridBagLayout());
         setViewportView(tapePanel);
@@ -52,7 +53,6 @@ public class TapeUI extends JScrollPane {
      */
     private void rebuildTapeUI() {
         var cells = tape.getAllCells();
-        var head = tape.getHead();
         
         // Create a new map for the cells
         Map<TapeCell<Character>, TapeCellUI> newCellToUIMap = new HashMap<>();
@@ -75,15 +75,13 @@ public class TapeUI extends JScrollPane {
             tapePanel.add(cellUI, gbc);
             newCellToUIMap.put(cell, cellUI);
             
-            // Update head cell UI reference
-            if (cell.equals(head)) {
-                this.headCellUI = cellUI;
-                this.headCellUI.highlight();
-                this.aaa = cell; //! TEST
-            } else {
-                cellUI.resetHighlight();
-            }
+            cellUI.resetHighlight();
         }
+
+        var head = tape.getHead();
+        this.headCellUI = newCellToUIMap.get(head);
+        this.headCellUI.highlight();
+        this.aaa = head; //! TEST
         
         // Update the cell to UI map
         this.cellToUIMap = newCellToUIMap;
