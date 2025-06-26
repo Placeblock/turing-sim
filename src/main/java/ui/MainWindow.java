@@ -1,6 +1,8 @@
 package ui;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -10,6 +12,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import core.tape.Tape;
 import ui.tape.TapeUI;
 
 import java.awt.FlowLayout;
@@ -37,8 +40,19 @@ public class MainWindow extends JFrame {
         getContentPane().setLayout(new FlowLayout());
         getContentPane().add(openButton);
 
-        TapeUI tapePanel = new TapeUI(5, 5);
+
+        List<Character> symbols = new ArrayList<>();
+        symbols.add('0');
+        symbols.add('0');
+        symbols.add('0');
+        symbols.add('0');
+        symbols.add('0');
+        symbols.add('2');
+        Tape<Character> tape = new Tape<>('B', symbols);
+
+        TapeUI tapePanel = new TapeUI(tape);
         getContentPane().add(tapePanel);
+
 
         JButton testCharacterChangedEventButton = new JButton("Test Character Changed Event");
         testCharacterChangedEventButton.addActionListener(e -> {
