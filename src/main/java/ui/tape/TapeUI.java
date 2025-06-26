@@ -3,10 +3,12 @@ package ui.tape;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 
 import core.tape.Tape;
 import core.tape.TapeCell;
 import observer.events.TapeHeadPositionChangedEvent;
+import observer.events.TapeLengthModifiedEvent;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -20,42 +22,89 @@ public class TapeUI extends JScrollPane {
 
     public TapeCell<Character> aaa; //! TEST
 
+    public Tape<Character> tape;
+    public JPanel tapePanel;
+
     private Map<TapeCell<Character>, TapeCellUI> cellToUIMap = new HashMap<>();
     private TapeCellUI headCellUI;
     
     public TapeUI(Tape<Character> tape) {
         super();
+        this.tape = tape;
 
         setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        setPreferredSize(new Dimension(200, 50)); //! TEST
+        setPreferredSize(new Dimension(300, 50)); //! TEST
 
-        JPanel tapePanel = new JPanel(new GridBagLayout());
+        tapePanel = new JPanel(new GridBagLayout());
         setViewportView(tapePanel);
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridy = 0;
-        gbc.insets = new Insets(0, 2, 0, 2); 
-        
+        rebuildTapeUI();
+
+        tape.getHeadPositionChangedPublisher().subscribe(this::onHeadPositionChanged);
+        tape.getLengthModifiedPublisher().subscribe(this::onTapeLengthModified);
+    }
+
+    /**
+     * Rebuilds the tape UI by iterating through all tape cells
+     * and updating the UI components accordingly.
+     * It highlights the current head cell and resets highlights for others.
+     */
+    private void rebuildTapeUI() {
         var cells = tape.getAllCells();
         var head = tape.getHead();
-
+        
+        // Create a new map for the cells
+        Map<TapeCell<Character>, TapeCellUI> newCellToUIMap = new HashMap<>();
+        
+        // Remove all components from the panel
+        tapePanel.removeAll();
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 2, 0, 2);
+        
         int gridx = 0;
         for (TapeCell<Character> cell : cells) {
-            var cellUI = new TapeCellUI(cell);
+            TapeCellUI cellUI;
+            
+            // Reuse existing UI component if it exists, otherwise create new one
+            cellUI = cellToUIMap.containsKey(cell) ? cellToUIMap.get(cell) : new TapeCellUI(cell);
+            
             gbc.gridx = gridx++;
             tapePanel.add(cellUI, gbc);
-            this.cellToUIMap.put(cell, cellUI);
-
+            newCellToUIMap.put(cell, cellUI);
+            
+            // Update head cell UI reference
             if (cell.equals(head)) {
                 this.headCellUI = cellUI;
-                this.headCellUI.highlight(); // Highlight head cell
+                this.headCellUI.highlight();
                 this.aaa = cell; //! TEST
+            } else {
+                cellUI.resetHighlight();
             }
         }
+        
+        // Update the cell to UI map
+        this.cellToUIMap = newCellToUIMap;
+        
+        // Refresh the panel
+        tapePanel.revalidate();
+        tapePanel.repaint();
+    }
 
-        // Subscribe to head position changes
-        tape.getHeadPositionChangedPublisher().subscribe(this::onHeadPositionChanged);
+    /**
+     * Handles the TapeLengthModifiedEvent by rebuilding the tape UI.
+     * This method is called when the tape length is modified,
+     * ensuring that the UI reflects the current state of the tape.
+     *
+     * @param event The event indicating that the tape length has been modified.
+     */
+    private void onTapeLengthModified(TapeLengthModifiedEvent event) {
+        rebuildTapeUI();
+        
+        // Scroll to head cell to maintain view
+        SwingUtilities.invokeLater(this::scrollToHeadCell);
     }
 
     /**
@@ -69,8 +118,9 @@ public class TapeUI extends JScrollPane {
         this.headCellUI.resetHighlight(); // Reset highlight on old head cell
         this.headCellUI = this.cellToUIMap.get(event.newHeadPosition());
         this.headCellUI.highlight(); // Highlight new head cell
+        this.aaa = event.newHeadPosition(); //! TEST
 
-        scrollToHeadCell();
+        SwingUtilities.invokeLater(this::scrollToHeadCell);
     }
 
     /**

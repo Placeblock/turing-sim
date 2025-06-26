@@ -56,6 +56,10 @@ public class MainWindow extends JFrame {
         symbols.add('2');
         Tape<Character> tape = new Tape<>('B', symbols);
 
+        tape.moveNext();
+        tape.moveNext();
+        tape.moveNext();
+
         TapeUI tapePanel = new TapeUI(tape);
         getContentPane().add(tapePanel);
 

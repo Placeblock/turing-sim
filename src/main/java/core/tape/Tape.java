@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.Getter;
 import observer.Publisher;
 import observer.events.TapeHeadPositionChangedEvent;
+import observer.events.TapeLengthModifiedEvent;
 
 public class Tape<T> {
 
@@ -15,6 +16,8 @@ public class Tape<T> {
 
     @Getter
     private Publisher<TapeHeadPositionChangedEvent<T>> headPositionChangedPublisher = new Publisher<>();
+    @Getter
+    private Publisher<TapeLengthModifiedEvent> lengthModifiedPublisher = new Publisher<>();
 
     public Tape(T defaultSymbol) {
         this.defaultSymbol = defaultSymbol;
@@ -57,6 +60,7 @@ public class Tape<T> {
         if (this.headPosition.getNext() == null) {
             TapeCell<T> next = new TapeCell<>(defaultSymbol);
             this.headPosition.connectNext(next);
+            this.lengthModifiedPublisher.publish(new TapeLengthModifiedEvent());
         }
         return this.headPosition.getNext();
     }
@@ -65,6 +69,7 @@ public class Tape<T> {
         if (this.headPosition.getPrevious() == null) {
             TapeCell<T> previous = new TapeCell<>(defaultSymbol);
             this.headPosition.connectPrevious(previous);
+            this.lengthModifiedPublisher.publish(new TapeLengthModifiedEvent());
         }
         return this.headPosition.getPrevious();
     }
