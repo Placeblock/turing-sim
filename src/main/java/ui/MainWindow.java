@@ -40,6 +40,12 @@ public class MainWindow extends JFrame {
         TapeUI tapePanel = new TapeUI(5, 5);
         getContentPane().add(tapePanel);
 
+        JButton testCharacterChangedEventButton = new JButton("Test Character Changed Event");
+        testCharacterChangedEventButton.addActionListener(e -> {
+            tapePanel.aaa.setSymbol('T');
+        });
+        getContentPane().add(testCharacterChangedEventButton);
+
         setVisible(true);
     }
 
