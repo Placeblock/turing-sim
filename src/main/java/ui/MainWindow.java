@@ -40,7 +40,7 @@ public class MainWindow extends JFrame {
         getContentPane().setLayout(new FlowLayout());
         getContentPane().add(openButton);
 
-
+        //! TEST
         List<Character> symbols = new ArrayList<>();
         symbols.add('0');
         symbols.add('0');
@@ -48,18 +48,25 @@ public class MainWindow extends JFrame {
         symbols.add('0');
         symbols.add('0');
         symbols.add('2');
+        symbols.add('0');
+        symbols.add('2');
+        symbols.add('0');
+        symbols.add('2');
+        symbols.add('0');
+        symbols.add('2');
         Tape<Character> tape = new Tape<>('B', symbols);
 
         TapeUI tapePanel = new TapeUI(tape);
         getContentPane().add(tapePanel);
 
-
+        //! TEST
         JButton testCharacterChangedEventButton = new JButton("Test Character Changed Event");
         testCharacterChangedEventButton.addActionListener(e -> {
             tapePanel.aaa.setSymbol('T');
         });
         getContentPane().add(testCharacterChangedEventButton);
 
+        //! TEST
         JButton testHeadChangedEventButton = new JButton("Test Head Changed Event");
         testHeadChangedEventButton.addActionListener(e -> {
             tape.moveNext();

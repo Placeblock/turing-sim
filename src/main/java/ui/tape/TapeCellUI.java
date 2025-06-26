@@ -19,19 +19,24 @@ public class TapeCellUI extends JLabel {
         setPreferredSize(new Dimension(25, 25));
     }
 
-    public TapeCellUI() {
-        this(""); // Default constructor with empty text
+    public TapeCellUI(TapeCell<Character> dataSource) {
+        this(dataSource.getSymbol().toString());
+        dataSource.getSymbolChangedPublisher().subscribe(this::onCellUpdate);
     }
 
-    public TapeCellUI(TapeCell<Character> dataSource) {
-        super(dataSource.getSymbol().toString());
-        setHorizontalAlignment(SwingConstants.CENTER);
-        setBorder(new LineBorder(Color.BLACK));
-        setPreferredSize(new Dimension(25, 25));
-        dataSource.getSymbolChangedPublisher().subscribe(this::onCellUpdate);
+    public TapeCellUI() {
+        this("");
     }
 
     private void onCellUpdate(CellSymbolChangedEvent<Character> event) {
         setText(event.newSymbol().toString());
+    }
+
+    public void highlight() {
+        setBorder(new LineBorder(Color.RED, 2));
+    }
+
+    public void resetHighlight() {
+        setBorder(new LineBorder(Color.BLACK));
     }
 }
