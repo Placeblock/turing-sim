@@ -9,12 +9,15 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+
+import ui.tape.TapeUI;
+
 import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame {
     public MainWindow() {
         setTitle("Turing Maschine");
-        setSize(400, 200);
+        setSize(800, 450);
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
@@ -33,6 +36,9 @@ public class MainWindow extends JFrame {
 
         getContentPane().setLayout(new FlowLayout());
         getContentPane().add(openButton);
+
+        TapeUI tapePanel = new TapeUI(5, 5);
+        getContentPane().add(tapePanel);
 
         setVisible(true);
     }
