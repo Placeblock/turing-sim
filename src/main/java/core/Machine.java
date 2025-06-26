@@ -64,7 +64,7 @@ public class Machine {
     public static void main(String[] args) {
         String asd = """
                     0,0,1,RIGHT,0,false
-                    0,2,2,RIGHT,0,false
+                    0,2,0,RIGHT,0,false
                     0,B,B,NONE,1,false
                     1,,,,,true
                     """;
@@ -97,6 +97,8 @@ public class Machine {
         // Initialize the machine state, tape, and states here
         // ...
 
+        System.out.println("Initial tape content: " + tape.getAllData());
+
         // Run the machine step by step
         while (machine.step()) {
             System.out.println("step");
@@ -105,7 +107,7 @@ public class Machine {
         var result = tape.getAllData();
 
         System.out.println("Tape content: " + result);
-        System.out.println("Final state: " + result.size());
+        System.out.println("Final tape size: " + result.size());
 
         System.out.println("Machine has terminated.");
     }
