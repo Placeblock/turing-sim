@@ -2,6 +2,8 @@ package core.tape;
 
 import lombok.Getter;
 import lombok.Setter;
+import observer.Publisher;
+import observer.events.CellSymbolChangedEvent;
 
 /**
  * TapeCell implementation. This represents one cell on the tape.
@@ -25,6 +27,8 @@ public class TapeCell<T> {
      */
     private TapeCell<T> next = null;
 
+    private Publisher<CellSymbolChangedEvent<T>> symbolChangedPublisher = new Publisher<>();
+
     public TapeCell(T symbol) {
         this.symbol = symbol;
     }
@@ -38,4 +42,8 @@ public class TapeCell<T> {
         next.setPrevious(this);
     }
 
+    public void setSymbol(T symbol) {
+        this.symbol = symbol;
+        this.symbolChangedPublisher.publish(new CellSymbolChangedEvent<>(symbol));
+    }
 }
