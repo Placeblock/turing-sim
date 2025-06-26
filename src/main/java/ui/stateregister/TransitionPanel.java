@@ -14,8 +14,9 @@ public class TransitionPanel extends JPanel {
     private Set<Character> tapeAlphabet;
 
 
-    public TransitionPanel (StateRegister stateRegister, Transition transition){
+    public TransitionPanel (StateRegister stateRegister, Set<Character> tapeAlphabet, Transition transition){
         this.stateRegister = stateRegister;
+        this.tapeAlphabet = tapeAlphabet;
 
         JPanel panel = new JPanel(new FlowLayout((FlowLayout.LEFT)));
         JComboBox stateComboBox = new JComboBox<>();

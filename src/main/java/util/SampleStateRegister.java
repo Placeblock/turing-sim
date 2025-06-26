@@ -1,6 +1,7 @@
 package util;
 
 import core.State;
+import core.StateRegister;
 import serialization.StateMachineCsvSerializer;
 
 import java.io.InputStream;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SampleStateRegister {
-    public static List<State> get(){
+    public static StateRegister get(){
         List<State> states = new ArrayList<>();
 
         String asd = """
@@ -25,6 +26,6 @@ public class SampleStateRegister {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return states;
+        return new StateRegister(states);
     }
 }

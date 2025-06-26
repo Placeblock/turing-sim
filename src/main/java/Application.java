@@ -4,6 +4,7 @@ import core.StateRegister;
 import core.Transition;
 import ui.MainWindow;
 import ui.stateregister.StateRegisterUI;
+import util.SampleTransitionAlphabet;
 
 import java.util.*;
 
@@ -22,7 +23,7 @@ public class Application {
 
     public static StateRegister createStateRegister() {
         StateRegister stateRegister = new StateRegister(null);
-        Set<Character> tapeAlphabet = Set.of('A', 'B', 'C');
+        Set<Character> tapeAlphabet = SampleTransitionAlphabet.get();
 
         for (int i = 0; i < TEST_STATES; i++) {
             Map<Character, Transition> transitions = new HashMap<>();
