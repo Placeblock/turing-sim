@@ -1,21 +1,21 @@
 package ui.stateregister;
 
 
-import core.StateRegister;
 import core.State;
+import core.StateRegister;
 import core.Transition;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class StateRegisterTableModel extends AbstractTableModel {
     private StateRegister stateRegister;
     private LinkedHashSet<Character> eingabeAlphabet;
+
 
     @Override
     public int getRowCount() {
@@ -24,7 +24,7 @@ public class StateRegisterTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return this.stateRegister.getSymbols().size()+1;
+        return eingabeAlphabet.size()+1;
     }
 
     @Override
@@ -37,13 +37,9 @@ public class StateRegisterTableModel extends AbstractTableModel {
             Iterator<Character> iterator = eingabeAlphabet.iterator();
             Character symbol = null;
             for (int i = 0; i < y; i++) {
-                if (iterator.hasNext()) {
-                    symbol = iterator.next();
-                } else {
-                    throw new IndexOutOfBoundsException("index bigger than rows");
-                }
+                symbol = iterator.next();
             }
-            return "q" + symbol;
+            return symbol;
         }
         State stateOfTransition = stateRegister.getStates().get(x);
         Transition transition = stateOfTransition.getTransitions().get(y);

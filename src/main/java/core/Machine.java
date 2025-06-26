@@ -73,7 +73,7 @@ public class Machine {
         symbols.add('0');
         symbols.add('2');
 
-        List<State> states = SampleStateRegister.get();
+        List<State> states = SampleStateRegister.get().getStates();
 
         // Example usage of the Machine class
         Tape<Character> tape = new Tape<>('B', symbols); // Initialize tape with a default symbol

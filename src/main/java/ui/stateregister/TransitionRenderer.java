@@ -11,8 +11,16 @@ import java.awt.*;
 public class TransitionRenderer implements TableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object o, boolean isSelected, boolean hasFocus, int row, int column) {
-        Transition transition = (Transition) o;
+        //Render Transition
+        if (o instanceof Transition) {
+            Transition transition = (Transition) o;
+            System.out.println(transition.getMove().toString() + transition.getNewSymbol() + transition.getNewState().toString());
 
-        return new TransitionPanel(SampleStateRegister.get(), SampleTransitionAlphabet.get(), transition);
+
+            return new TransitionPanel(SampleStateRegister.get(), SampleTransitionAlphabet.get(), transition);
+        // Render Column and Row Name
+        } else {
+            return new JLabel(String.valueOf(o));
+        }
     }
 }

@@ -4,6 +4,7 @@ import core.StateRegister;
 import event.Emitter;
 import event.events.AddStateEvent;
 import event.events.RemoveStateEvent;
+import util.SampleTransitionAlphabet;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -15,10 +16,11 @@ public class StateRegisterUI extends JTable {
 
     private final StateRegister stateRegister;
 
+
     public StateRegisterUI(StateRegister stateRegister,
                            Emitter<AddStateEvent> addStatePublisher,
                            Emitter<RemoveStateEvent> removeStatePublisher) {
-        super(new StateRegisterTableModel(stateRegister));
+        super(new StateRegisterTableModel(stateRegister, SampleTransitionAlphabet.get()));
 
         this.addStatePublisher = addStatePublisher;
         this.removeStatePublisher = removeStatePublisher;
