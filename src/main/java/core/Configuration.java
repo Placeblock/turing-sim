@@ -30,18 +30,32 @@ public class Configuration {
         this.tapeSymbols = tapeSymbols;
         this.tapeSymbolsChangedPublisher.publish(new TapeSymbolsChangedEvent(tapeSymbols));
         if (!this.tapeSymbols.contains(this.blankSymbol)) {
+            System.out.println("Setting blank symbol because " + this.blankSymbol + " is not a valid symbol");
             this.setBlankSymbol(this.tapeSymbols.iterator().next());
         }
     }
 
     public void setBlankSymbol(Character blankSymbol) {
+        if (!this.tapeSymbols.contains(blankSymbol)) {
+            throw new IllegalArgumentException("Tried to set invalid blank symbol not in tape symbols");
+        }
+        System.out.println("SETTING BLANK SYMBOL: " + blankSymbol);
         this.blankSymbol = blankSymbol;
         this.blankSymbolChangedPublisher.publish(new BlankSymbolChangedEvent(blankSymbol));
     }
 
     public void setInitialState(String initialState) {
-        this.initialState = initialState;
-        this.initialStateChangedPublisher.publish(new InitialStateChangedEvent(initialState));
+        this.initialState = this.removeInvalidCharacters(initialState);
+        this.initialStateChangedPublisher.publish(new InitialStateChangedEvent(this.initialState));
+    }
+
+    private String removeInvalidCharacters(String input) {
+        StringBuilder result = new StringBuilder();
+        for (char c : input.toCharArray()) {
+            if (!this.tapeSymbols.contains(c)) continue;
+            result.append(c);
+        }
+        return result.toString();
     }
 
     public Set<Character> getInputSymbols() {

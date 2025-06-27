@@ -3,6 +3,7 @@ package ui;
 import controller.ConfigurationController;
 import core.Configuration;
 import ui.configuration.BlankSymbolUI;
+import ui.configuration.InitialStateUI;
 import ui.configuration.TapeSymbolsUI;
 
 import javax.swing.*;
@@ -21,6 +22,8 @@ public class ConfigurationWindow extends JFrame {
 
         getContentPane().setLayout(new FlowLayout());
 
+        InitialStateUI initialStateUI = new InitialStateUI(config, controller.getReceiver());
+        getContentPane().add(initialStateUI);
         BlankSymbolUI blankSymbolUI = new BlankSymbolUI(config, controller.getReceiver());
         getContentPane().add(blankSymbolUI);
         TapeSymbolsUI tapeSymbolsUI = new TapeSymbolsUI(config, controller.getReceiver());

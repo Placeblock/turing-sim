@@ -18,6 +18,8 @@ public class ConfigurationController {
     public ConfigurationController(Configuration config) {
         this.config = config;
         this.receiver.registerHandler(TapeSymbolsChangeEvent.class, this::handleTapeSymbolsChangeEvent);
+        this.receiver.registerHandler(BlankSymbolChangeEvent.class, this::handleBlankSymbolChangeEvent);
+        this.receiver.registerHandler(InitialStateChangeEvent.class, this::handleInitialStateChangeEvent);
     }
 
     private void handleTapeSymbolsChangeEvent(TapeSymbolsChangeEvent event) {

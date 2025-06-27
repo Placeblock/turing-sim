@@ -3,6 +3,7 @@ package ui.configuration;
 import core.Configuration;
 import event.Emitter;
 import event.Receiver;
+import event.events.TapeSymbolsChangeEvent;
 import observer.events.TapeSymbolsChangedEvent;
 
 import javax.swing.*;
@@ -30,18 +31,14 @@ public class TapeSymbolsUI extends JPanel {
         this.tapeSymbolsField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent documentEvent) {
-                if (TapeSymbolsUI.this.updatingContent) return;
                 Set<Character> chars = TapeSymbolsUI.this.getChars();
-                event.events.TapeSymbolsChangeEvent event = new event.events.TapeSymbolsChangeEvent(chars);
-                TapeSymbolsUI.this.tapeSymbolsChangeEmitter.emit(event);
+                TapeSymbolsUI.this.onUpdateTapeSymbols(chars);
             }
 
             @Override
             public void removeUpdate(DocumentEvent documentEvent) {
-                if (TapeSymbolsUI.this.updatingContent) return;
                 Set<Character> chars = TapeSymbolsUI.this.getChars();
-                event.events.TapeSymbolsChangeEvent event = new event.events.TapeSymbolsChangeEvent(chars);
-                TapeSymbolsUI.this.tapeSymbolsChangeEmitter.emit(event);
+                TapeSymbolsUI.this.onUpdateTapeSymbols(chars);
             }
 
             @Override
@@ -59,6 +56,12 @@ public class TapeSymbolsUI extends JPanel {
             chars.add(c);
         }
         return chars;
+    }
+
+    private void onUpdateTapeSymbols(Set<Character> chars) {
+        if (TapeSymbolsUI.this.updatingContent) return;
+        TapeSymbolsChangeEvent event = new TapeSymbolsChangeEvent(chars);
+        TapeSymbolsUI.this.tapeSymbolsChangeEmitter.emit(event);
     }
 
     private void updateTapeSymbols(TapeSymbolsChangedEvent event) {
