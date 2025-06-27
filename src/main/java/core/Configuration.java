@@ -23,6 +23,27 @@ public class Configuration {
     private Set<Character> tapeSymbols = Set.of('B');
     private Character blankSymbol = 'B';
 
+    public void setTapeSymbols(Set<Character> tapeSymbols) {
+        if (tapeSymbols.isEmpty()) {
+            tapeSymbols.add('B');
+        }
+        this.tapeSymbols = tapeSymbols;
+        this.tapeSymbolsChangedPublisher.publish(new TapeSymbolsChangedEvent(tapeSymbols));
+        if (!this.tapeSymbols.contains(this.blankSymbol)) {
+            this.setBlankSymbol(this.tapeSymbols.iterator().next());
+        }
+    }
+
+    public void setBlankSymbol(Character blankSymbol) {
+        this.blankSymbol = blankSymbol;
+        this.blankSymbolChangedPublisher.publish(new BlankSymbolChangedEvent(blankSymbol));
+    }
+
+    public void setInitialState(String initialState) {
+        this.initialState = initialState;
+        this.initialStateChangedPublisher.publish(new InitialStateChangedEvent(initialState));
+    }
+
     public Set<Character> getInputSymbols() {
         Set<Character> inputSymbols = new HashSet<>();
         for (char c : this.initialState.toCharArray()) {

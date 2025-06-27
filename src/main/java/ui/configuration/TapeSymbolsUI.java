@@ -3,7 +3,6 @@ package ui.configuration;
 import core.Configuration;
 import event.Emitter;
 import event.Receiver;
-import event.events.TapeSymbolsChangeEvent;
 import observer.events.TapeSymbolsChangedEvent;
 
 import javax.swing.*;
@@ -15,8 +14,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TapeSymbolsUI extends JPanel {
-    private final Emitter<TapeSymbolsChangeEvent> tapeSymbolsChangeEmitter;
+    private final Emitter<event.events.TapeSymbolsChangeEvent> tapeSymbolsChangeEmitter;
     private final JTextField tapeSymbolsField;
+
+    private boolean updatingContent = false;
 
     public TapeSymbolsUI(Configuration config, Receiver receiver) {
         super(new BorderLayout());
@@ -29,19 +30,26 @@ public class TapeSymbolsUI extends JPanel {
         this.tapeSymbolsField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent documentEvent) {
+                if (TapeSymbolsUI.this.updatingContent) return;
                 Set<Character> chars = TapeSymbolsUI.this.getChars();
-                TapeSymbolsChangeEvent event = new TapeSymbolsChangeEvent(chars);
+                event.events.TapeSymbolsChangeEvent event = new event.events.TapeSymbolsChangeEvent(chars);
                 TapeSymbolsUI.this.tapeSymbolsChangeEmitter.emit(event);
             }
 
             @Override
-            public void removeUpdate(DocumentEvent documentEvent) {}
+            public void removeUpdate(DocumentEvent documentEvent) {
+                if (TapeSymbolsUI.this.updatingContent) return;
+                Set<Character> chars = TapeSymbolsUI.this.getChars();
+                event.events.TapeSymbolsChangeEvent event = new event.events.TapeSymbolsChangeEvent(chars);
+                TapeSymbolsUI.this.tapeSymbolsChangeEmitter.emit(event);
+            }
 
             @Override
-            public void changedUpdate(DocumentEvent documentEvent) {}
+            public void changedUpdate(DocumentEvent documentEvent) {
+            }
         });
 
-        this.add(new JLabel("Tape Symbols"), BorderLayout.WEST);
+        this.add(new JLabel("Tape Symbols: "), BorderLayout.WEST);
         this.add(this.tapeSymbolsField, BorderLayout.CENTER);
     }
 
@@ -53,13 +61,18 @@ public class TapeSymbolsUI extends JPanel {
         return chars;
     }
 
-    public void updateTapeSymbols(TapeSymbolsChangedEvent event) {
-        this.updateTapeSymbols(event.getTapeSymbols());
+    private void updateTapeSymbols(TapeSymbolsChangedEvent event) {
+        this.updateTapeSymbols(event.getSymbols());
     }
-    public void updateTapeSymbols(Set<Character> tapeSymbols) {
+    private void updateTapeSymbols(Set<Character> tapeSymbols) {
         String text = tapeSymbols.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining());
-        this.tapeSymbolsField.setText(text);
+        if (text.equals(this.tapeSymbolsField.getText())) return;
+        SwingUtilities.invokeLater(() -> {
+            this.updatingContent = true;
+            tapeSymbolsField.setText(text);
+            this.updatingContent = false;
+        });
     }
 }

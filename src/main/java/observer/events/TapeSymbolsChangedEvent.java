@@ -9,5 +9,5 @@ import java.util.Set;
 @Getter
 @RequiredArgsConstructor
 public class TapeSymbolsChangedEvent implements Event {
-    private final Set<Character> tapeSymbols;
+    private final Set<Character> symbols;
 }
