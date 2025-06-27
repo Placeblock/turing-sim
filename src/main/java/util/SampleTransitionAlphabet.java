@@ -1,14 +1,14 @@
 package util;
 
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 public class SampleTransitionAlphabet {
     public static LinkedHashSet<Character> get(){
         LinkedHashSet<Character> transitionAlphabet = new LinkedHashSet<>();
-        transitionAlphabet.add('A');
+        transitionAlphabet.add('0');
+        transitionAlphabet.add('1');
+        transitionAlphabet.add('2');
         transitionAlphabet.add('B');
-        transitionAlphabet.add('C');
 
         return transitionAlphabet;
     }

@@ -22,7 +22,6 @@ public class SampleStateRegister {
 
         try (InputStream inputStream = new java.io.ByteArrayInputStream(asd.getBytes(StandardCharsets.UTF_8))) {
             states = StateMachineCsvSerializer.deserialize(inputStream);
-            System.out.println(asd);
         } catch (Exception e) {
             e.printStackTrace();
         }

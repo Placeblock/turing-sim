@@ -4,6 +4,7 @@ import core.StateRegister;
 import event.Emitter;
 import event.events.AddStateEvent;
 import event.events.RemoveStateEvent;
+import util.SampleStateRegister;
 import util.SampleTransitionAlphabet;
 
 import javax.swing.*;
@@ -43,6 +44,6 @@ public class StateRegisterUI extends JTable {
             return new DefaultTableCellRenderer();
         }
         
-        return new TransitionRenderer();
+        return new TransitionRenderer(SampleStateRegister.get(), SampleTransitionAlphabet.get());
     }
 }
