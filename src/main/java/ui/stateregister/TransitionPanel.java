@@ -22,29 +22,23 @@ public class TransitionPanel extends JPanel {
 
         JComboBox<String> stateComboBox = new JComboBox<>();
         for (int i = 0; i < stateRegister.getStates().size(); i++) {
-            System.out.println("Adding state: q" + i);
             stateComboBox.addItem("q" + i);
         }
         State newState = transition.getNewState();
         stateComboBox.setSelectedItem("q" + stateRegister.getStates().indexOf(newState));
-        System.out.println("Selected state: " + stateComboBox.getSelectedItem());
 
         // (->q1/q2/q3/q4, B, R)
         JComboBox<Character> symbolComboBox = new JComboBox();
         for(Character alphabetChar: tapeAlphabet){
-            System.out.println("Adding symbol: " + alphabetChar);
             symbolComboBox.addItem(alphabetChar);
         }
         symbolComboBox.setSelectedItem(transition.getNewSymbol());
-        System.out.println("Selected symbol: " + symbolComboBox.getSelectedItem());
 
         JComboBox<String> moveComboBox = new JComboBox();
         for (Move move: Move.values()) {
-            System.out.println("Adding move: " + move);
             moveComboBox.addItem(move.toString());
         }
         moveComboBox.setSelectedItem(transition.getMove().toString());
-        System.out.println("Selected move: " + moveComboBox.getSelectedItem());
         this.add(new JLabel(("(")));
         this.add(stateComboBox);
         this.add(symbolComboBox);
