@@ -1,31 +1,36 @@
 package ui.stateregister;
 
+import core.Configuration;
 import core.StateRegister;
 import event.Emitter;
 import event.events.AddStateEvent;
 import event.events.RemoveStateEvent;
-import util.SampleStateRegister;
-import util.SampleTransitionAlphabet;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import java.awt.*;
+
+
 
 public class StateRegisterUI extends JTable {
     private final Emitter<AddStateEvent> addStatePublisher;
     private final Emitter<RemoveStateEvent> removeStatePublisher;
 
     private final StateRegister stateRegister;
+    private final Configuration configuration;
 
-
-    public StateRegisterUI(StateRegister stateRegister,
+    public StateRegisterUI(StateRegister stateRegister, Configuration configuration,
                            Emitter<AddStateEvent> addStatePublisher,
                            Emitter<RemoveStateEvent> removeStatePublisher) {
-        super(new StateRegisterTableModel(stateRegister, SampleTransitionAlphabet.get()));
-
+        super(new StateRegisterTableModel(stateRegister, configuration));
+        if (configuration == null) {
+            throw new IllegalArgumentException("Configuration must not be null");
+        }
         this.addStatePublisher = addStatePublisher;
         this.removeStatePublisher = removeStatePublisher;
         this.stateRegister = stateRegister;
+        this.configuration = configuration;
 
         this.stateRegister.getAddStatePublisher().subscribe(this::onStateAdd);
         this.stateRegister.getRemoveStatePublisher().subscribe(this::onStateRemove);
@@ -44,6 +49,8 @@ public class StateRegisterUI extends JTable {
             return new DefaultTableCellRenderer();
         }
         
-        return new TransitionRenderer(SampleStateRegister.get(), SampleTransitionAlphabet.get());
+        return new TransitionRenderer(this.stateRegister, this.configuration);
     }
+
+
 }

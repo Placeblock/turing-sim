@@ -15,31 +15,40 @@ public class TransitionPanel extends JPanel {
 
 
     public TransitionPanel (StateRegister stateRegister, Set<Character> tapeAlphabet, Transition transition){
+        super();
         this.stateRegister = stateRegister;
         this.tapeAlphabet = tapeAlphabet;
-
+        System.out.println("TransitionPanel: " + transition);
         JPanel panel = new JPanel(new FlowLayout((FlowLayout.LEFT)));
-        JComboBox stateComboBox = new JComboBox<>();
+        JComboBox<String> stateComboBox = new JComboBox<>();
         for (int i = 0; i < stateRegister.getStates().size(); i++) {
+            System.out.println("Adding state: q" + i);
             stateComboBox.addItem("q" + i);
         }
         State newState = transition.getNewState();
         stateComboBox.setSelectedItem("q" + stateRegister.getStates().indexOf(newState));
+        System.out.println("Selected state: " + stateComboBox.getSelectedItem());
+
         // (->q1/q2/q3/q4, B, R)
-        JComboBox symbolComboBox = new JComboBox();
+        JComboBox<Character> symbolComboBox = new JComboBox();
         for(Character alphabetChar: tapeAlphabet){
+            System.out.println("Adding symbol: " + alphabetChar);
             symbolComboBox.addItem(alphabetChar);
         }
         symbolComboBox.setSelectedItem(transition.getNewSymbol());
+        System.out.println("Selected symbol: " + symbolComboBox.getSelectedItem());
 
-        JComboBox moveComboBox = new JComboBox();
+        JComboBox<String> moveComboBox = new JComboBox();
         for (Move move: Move.values()) {
+            System.out.println("Adding move: " + move);
             moveComboBox.addItem(move.toString());
         }
+        moveComboBox.setSelectedItem(transition.getMove().toString());
+        System.out.println("Selected move: " + moveComboBox.getSelectedItem());
 
-        panel.add(stateComboBox);
-        panel.add(symbolComboBox);
-        panel.add(moveComboBox);
+        this.add(stateComboBox);
+        this.add(symbolComboBox);
+        this.add(moveComboBox);
     }
 
 }

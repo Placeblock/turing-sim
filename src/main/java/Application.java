@@ -1,13 +1,8 @@
-import core.Move;
-import core.State;
+import core.Configuration;
 import core.StateRegister;
-import core.Transition;
 import ui.MainWindow;
 import ui.stateregister.StateRegisterUI;
 import util.SampleStateRegister;
-import util.SampleTransitionAlphabet;
-
-import java.util.*;
 
 public class Application {
 
@@ -15,7 +10,8 @@ public class Application {
         javax.swing.SwingUtilities.invokeLater(() -> {
             MainWindow mainWindow = new MainWindow();
             StateRegister stateRegister = SampleStateRegister.get();
-            StateRegisterUI stateRegisterUI = new StateRegisterUI(stateRegister, null, null);
+            Configuration configuration = new Configuration();
+            StateRegisterUI stateRegisterUI = new StateRegisterUI(stateRegister, configuration, null, null);
             mainWindow.getContentPane().add(stateRegisterUI);
         });
     }

@@ -6,16 +6,23 @@ import java.util.LinkedHashSet;
 import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
 
+import core.Configuration;
 import core.State;
 import core.StateRegister;
 import core.Transition;
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 public class StateRegisterTableModel extends AbstractTableModel {
 
     private StateRegister stateRegister;
-    private LinkedHashSet<Character> eingabeAlphabet;
+    private Configuration configuration;
+    private LinkedHashSet<Character> transitionAlphabet;
+
+    public StateRegisterTableModel(StateRegister stateRegister, Configuration configuration) {
+        this.stateRegister = stateRegister;
+        this.configuration = configuration;
+        this.transitionAlphabet = configuration.getTapeAlphabet();
+    }
 
     @Override
     public int getRowCount() {
@@ -24,7 +31,13 @@ public class StateRegisterTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return eingabeAlphabet.size() + 1;
+        return transitionAlphabet.size() + 1;
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        // Make only transition cells editable (not headers)
+        return rowIndex > 0 && columnIndex > 0;
     }
 
     @Override
@@ -33,8 +46,8 @@ public class StateRegisterTableModel extends AbstractTableModel {
             return "q" + (x - 1);
         }
         if (x == 0) {
-            assert eingabeAlphabet != null;
-            Iterator<Character> iterator = eingabeAlphabet.iterator();
+            assert transitionAlphabet != null;
+            Iterator<Character> iterator = transitionAlphabet.iterator();
             Character symbol = null;
             for (int i = 0; i < y; i++) {
                 symbol = iterator.next();
