@@ -10,13 +10,15 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TapeSymbolsUI extends JPanel {
-    private final Emitter<TapeSymbolsChangeEvent> tapeSymbolsChangeEmitter;
+    private final Emitter<event.events.TapeSymbolsChangeEvent> tapeSymbolsChangeEmitter;
     private final JTextField tapeSymbolsField;
+
+    private boolean updatingContent = false;
 
     public TapeSymbolsUI(Configuration config, Receiver receiver) {
         super(new BorderLayout());
@@ -29,37 +31,51 @@ public class TapeSymbolsUI extends JPanel {
         this.tapeSymbolsField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent documentEvent) {
-                Set<Character> chars = TapeSymbolsUI.this.getChars();
-                TapeSymbolsChangeEvent event = new TapeSymbolsChangeEvent(chars);
-                TapeSymbolsUI.this.tapeSymbolsChangeEmitter.emit(event);
+                LinkedHashSet<Character> chars = TapeSymbolsUI.this.getChars();
+                TapeSymbolsUI.this.onUpdateTapeSymbols(chars);
             }
 
             @Override
-            public void removeUpdate(DocumentEvent documentEvent) {}
+            public void removeUpdate(DocumentEvent documentEvent) {
+                LinkedHashSet<Character> chars = TapeSymbolsUI.this.getChars();
+                TapeSymbolsUI.this.onUpdateTapeSymbols(chars);
+            }
 
             @Override
-            public void changedUpdate(DocumentEvent documentEvent) {}
+            public void changedUpdate(DocumentEvent documentEvent) {
+            }
         });
 
-        this.add(new JLabel("Tape Symbols"), BorderLayout.WEST);
+        this.add(new JLabel("Tape Symbols: "), BorderLayout.WEST);
         this.add(this.tapeSymbolsField, BorderLayout.CENTER);
     }
 
-    public Set<Character> getChars() {
-        Set<Character> chars = new HashSet<>();
+    public LinkedHashSet<Character> getChars() {
+        LinkedHashSet<Character> chars = new LinkedHashSet<>();
         for (char c : this.tapeSymbolsField.getText().toCharArray()) {
             chars.add(c);
         }
         return chars;
     }
 
-    public void updateTapeSymbols(TapeSymbolsChangedEvent event) {
-        this.updateTapeSymbols(event.getTapeSymbols());
+    private void onUpdateTapeSymbols(LinkedHashSet<Character> chars) {
+        if (TapeSymbolsUI.this.updatingContent) return;
+        TapeSymbolsChangeEvent event = new TapeSymbolsChangeEvent(chars);
+        TapeSymbolsUI.this.tapeSymbolsChangeEmitter.emit(event);
     }
-    public void updateTapeSymbols(Set<Character> tapeSymbols) {
+
+    private void updateTapeSymbols(TapeSymbolsChangedEvent event) {
+        this.updateTapeSymbols(event.getSymbols());
+    }
+    private void updateTapeSymbols(Set<Character> tapeSymbols) {
         String text = tapeSymbols.stream()
                 .map(String::valueOf)
                 .collect(Collectors.joining());
-        this.tapeSymbolsField.setText(text);
+        if (text.equals(this.tapeSymbolsField.getText())) return;
+        SwingUtilities.invokeLater(() -> {
+            this.updatingContent = true;
+            tapeSymbolsField.setText(text);
+            this.updatingContent = false;
+        });
     }
 }

@@ -1,10 +1,13 @@
 package ui;
 
+import controller.ConfigurationController;
 import core.Configuration;
-import event.Receiver;
+import ui.configuration.BlankSymbolUI;
+import ui.configuration.InitialStateUI;
 import ui.configuration.TapeSymbolsUI;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class ConfigurationWindow extends JFrame {
     public ConfigurationWindow() {
@@ -14,7 +17,16 @@ public class ConfigurationWindow extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
 
-        TapeSymbolsUI tapeSymbolsUI = new TapeSymbolsUI(new Configuration(), new Receiver());
+        Configuration config = new Configuration();
+        ConfigurationController controller = new ConfigurationController(config);
+
+        getContentPane().setLayout(new FlowLayout());
+
+        InitialStateUI initialStateUI = new InitialStateUI(config, controller.getReceiver());
+        getContentPane().add(initialStateUI);
+        BlankSymbolUI blankSymbolUI = new BlankSymbolUI(config, controller.getReceiver());
+        getContentPane().add(blankSymbolUI);
+        TapeSymbolsUI tapeSymbolsUI = new TapeSymbolsUI(config, controller.getReceiver());
         getContentPane().add(tapeSymbolsUI);
         setVisible(true);
     }
