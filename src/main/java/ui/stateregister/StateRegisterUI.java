@@ -8,8 +8,8 @@ import event.events.RemoveStateEvent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import java.awt.*;
 
 
 
@@ -24,8 +24,9 @@ public class StateRegisterUI extends JTable {
                            Emitter<AddStateEvent> addStatePublisher,
                            Emitter<RemoveStateEvent> removeStatePublisher) {
         super(new StateRegisterTableModel(stateRegister, configuration));
-        if (configuration == null) {
-            throw new IllegalArgumentException("Configuration must not be null");
+        this.setRowHeight(60);
+        for (int i = 0; i < this.getColumnModel().getColumnCount(); i++) {
+            this.getColumnModel().getColumn(i).setPreferredWidth(120);
         }
         this.addStatePublisher = addStatePublisher;
         this.removeStatePublisher = removeStatePublisher;
@@ -50,6 +51,15 @@ public class StateRegisterUI extends JTable {
         }
         
         return new TransitionRenderer(this.stateRegister, this.configuration);
+    }
+
+    @Override
+    public TableCellEditor getCellEditor(int row, int column) {
+        if (column == 0) {
+            return super.getCellEditor(row, column);
+        }
+
+        return new TransitionEditor(this.stateRegister, this.configuration);
     }
 
 

@@ -18,8 +18,7 @@ public class TransitionPanel extends JPanel {
         super();
         this.stateRegister = stateRegister;
         this.tapeAlphabet = tapeAlphabet;
-        System.out.println("TransitionPanel: " + transition);
-        JPanel panel = new JPanel(new FlowLayout((FlowLayout.LEFT)));
+        JPanel panel = new JPanel();
         JComboBox<String> stateComboBox = new JComboBox<>();
         for (int i = 0; i < stateRegister.getStates().size(); i++) {
             System.out.println("Adding state: q" + i);
@@ -51,4 +50,11 @@ public class TransitionPanel extends JPanel {
         this.add(moveComboBox);
     }
 
+    public TransitionPanel(StateRegister stateRegister, Set<Character> tapeAlphabet) {
+        //implement events for adding a new transition
+        super();
+        this.stateRegister = stateRegister;
+        this.tapeAlphabet = tapeAlphabet;
+        this.add(new JLabel("to be implemented"));
+    }
 }
