@@ -71,7 +71,6 @@ public class Configuration {
         alphabet.add('0');
         alphabet.add('1');
         alphabet.add('B');
-        alphabet.add('5');
         return alphabet;
     }
 

@@ -24,9 +24,9 @@ public class StateRegisterUI extends JTable {
                            Emitter<AddStateEvent> addStatePublisher,
                            Emitter<RemoveStateEvent> removeStatePublisher) {
         super(new StateRegisterTableModel(stateRegister, configuration));
-        this.setRowHeight(60);
+        this.setRowHeight(30);
         for (int i = 0; i < this.getColumnModel().getColumnCount(); i++) {
-            this.getColumnModel().getColumn(i).setPreferredWidth(120);
+            this.getColumnModel().getColumn(i).setPreferredWidth(175);
         }
         this.addStatePublisher = addStatePublisher;
         this.removeStatePublisher = removeStatePublisher;

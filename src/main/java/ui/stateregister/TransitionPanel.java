@@ -19,6 +19,7 @@ public class TransitionPanel extends JPanel {
         this.stateRegister = stateRegister;
         this.tapeAlphabet = tapeAlphabet;
         JPanel panel = new JPanel();
+
         JComboBox<String> stateComboBox = new JComboBox<>();
         for (int i = 0; i < stateRegister.getStates().size(); i++) {
             System.out.println("Adding state: q" + i);
@@ -44,10 +45,11 @@ public class TransitionPanel extends JPanel {
         }
         moveComboBox.setSelectedItem(transition.getMove().toString());
         System.out.println("Selected move: " + moveComboBox.getSelectedItem());
-
+        this.add(new JLabel(("(")));
         this.add(stateComboBox);
         this.add(symbolComboBox);
         this.add(moveComboBox);
+        this.add(new JLabel((")")));
     }
 
     public TransitionPanel(StateRegister stateRegister, Set<Character> tapeAlphabet) {

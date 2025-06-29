@@ -18,13 +18,12 @@ public class TransitionRenderer implements TableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object o, boolean isSelected, boolean hasFocus, int row, int column) {
 
-
         //Render Transition
         if (o instanceof Transition) {
             Transition transition = (Transition) o;
             State newState = transition.getNewState();
 
-            return new TransitionRenderTextField(stateRegister, configuration.getTapeAlphabet(), transition);
+            return new TransitionPanel(stateRegister, configuration.getTapeAlphabet(), transition);
         // Render Column and Row Name
         } else {
             return new JLabel(String.valueOf(o));
