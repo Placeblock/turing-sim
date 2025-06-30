@@ -16,18 +16,18 @@ public class ConfigurationWindow extends JFrame {
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
+        // vertical layout
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         Configuration config = new Configuration();
         ConfigurationController controller = new ConfigurationController(config);
 
-        getContentPane().setLayout(new FlowLayout());
-
         InitialStateUI initialStateUI = new InitialStateUI(config, controller.getReceiver());
-        getContentPane().add(initialStateUI);
+        add(initialStateUI);
         BlankSymbolUI blankSymbolUI = new BlankSymbolUI(config, controller.getReceiver());
-        getContentPane().add(blankSymbolUI);
+        add(blankSymbolUI);
         TapeSymbolsUI tapeSymbolsUI = new TapeSymbolsUI(config, controller.getReceiver());
-        getContentPane().add(tapeSymbolsUI);
+        add(tapeSymbolsUI);
         setVisible(true);
     }
 
