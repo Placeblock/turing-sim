@@ -8,6 +8,8 @@ import observer.events.BlankSymbolChangedEvent;
 import observer.events.TapeSymbolsChangedEvent;
 
 import javax.swing.*;
+
+import java.awt.event.ItemEvent;
 import java.util.Set;
 
 public class BlankSymbolComboBox extends JComboBox<Character> {
@@ -25,7 +27,7 @@ public class BlankSymbolComboBox extends JComboBox<Character> {
         this.config = config;
 
         this.addItemListener((event) -> {
-            if (this.updatingContent) return;
+            if (this.updatingContent || event.getStateChange() != ItemEvent.SELECTED) return;
             char symbol = (char) event.getItem();
             this.blankSymbolChangeEmitter.emit(new BlankSymbolChangeEvent(symbol));
         });
