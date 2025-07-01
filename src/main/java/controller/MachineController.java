@@ -3,8 +3,10 @@ package controller;
 import core.Machine;
 import event.Receiver;
 import event.events.StepEvent;
+import lombok.Getter;
 
 public class MachineController {
+    @Getter
     private final Receiver receiver = new Receiver();
     private final Machine machine;
 

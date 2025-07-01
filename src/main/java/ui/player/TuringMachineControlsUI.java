@@ -6,17 +6,32 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.Timer;
+
+import event.Emitter;
+import event.Receiver;
+import event.events.StepEvent;
+
+import java.awt.event.ActionEvent;
 
 public class TuringMachineControlsUI extends JPanel {
+
+    private final Emitter<StepEvent> stepEmitter;
+    private Timer playTimer;
+    private JSlider speedSlider;
+    private boolean isPlaying = false;
     
-    public TuringMachineControlsUI() {
+    public TuringMachineControlsUI(Receiver receiver) {
+        this.stepEmitter = new Emitter<>(receiver);
+        // To step use this.stepEmitter.emit(new StepEvent());
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
         
         JLabel speedLabel = new JLabel("Speed:");
-        JSlider speedSlider = new JSlider(1, 10, 2);
+        speedSlider = new JSlider(1, 10, 2);
         speedSlider.setMajorTickSpacing(1);
         speedSlider.setMinorTickSpacing(1);
         speedSlider.setPaintTicks(true);
@@ -43,6 +58,11 @@ public class TuringMachineControlsUI extends JPanel {
         JButton stopButton = new JButton("Stop");
         JButton resetButton = new JButton("Reset");
         
+        stepButton.addActionListener(this::onStepButtonClicked);
+        playButton.addActionListener(this::onPlayButtonClicked);
+        stopButton.addActionListener(this::onStopButtonClicked);
+        resetButton.addActionListener(this::onResetButtonClicked);
+        
         bottomPanel.add(stepButton);
         bottomPanel.add(playButton);
         bottomPanel.add(stopButton);
@@ -50,5 +70,42 @@ public class TuringMachineControlsUI extends JPanel {
         
         add(topPanel);
         add(bottomPanel);
+    }
+    
+    private int getDelayFromSlider() {
+        int sliderValue = speedSlider.getValue();
+        double multiplier = sliderValue / 2.0; // Convert slider value to multiplier
+        return (int) (500 / multiplier); // 500ms base delay divided by multiplier
+    }
+    
+    private void onStepButtonClicked(ActionEvent e) {
+        this.stepEmitter.emit(new StepEvent());
+    }
+    
+    private void onPlayButtonClicked(ActionEvent e) {
+        if (!isPlaying) {
+            isPlaying = true;
+            int delay = getDelayFromSlider();
+            playTimer = new Timer(delay, (ActionEvent ae) -> {
+                this.stepEmitter.emit(new StepEvent());
+            });
+            playTimer.start();
+        }
+    }
+    
+    private void onStopButtonClicked(ActionEvent e) {
+        if (isPlaying && playTimer != null) {
+            playTimer.stop();
+            isPlaying = false;
+        }
+    }
+    
+    private void onResetButtonClicked(ActionEvent e) {
+        // Stop the timer if playing
+        if (isPlaying && playTimer != null) {
+            playTimer.stop();
+            isPlaying = false;
+        }
+        // TODO: Implement reset functionality
     }
 }
