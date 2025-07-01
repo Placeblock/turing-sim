@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import core.tape.Tape;
+import ui.player.TuringMachineControlsUI;
 import ui.tape.TapeUI;
 
 import java.awt.FlowLayout;
@@ -76,6 +77,8 @@ public class MainWindow extends JFrame {
             tape.moveNext();
         });
         getContentPane().add(testHeadChangedEventButton);
+
+        add(new TuringMachineControlsUI());
 
         setVisible(true);
     }
