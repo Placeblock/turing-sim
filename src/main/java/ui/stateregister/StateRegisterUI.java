@@ -47,8 +47,7 @@ public class StateRegisterUI extends JTable {
 
         this.setRowHeight(30);
         for (int i = 0; i < this.getColumnModel().getColumnCount(); i++) {
-            this.getColumnModel().getColumn(i).setPreferredWidth(175
-            );
+            this.getColumnModel().getColumn(i).setPreferredWidth(175);
         }
         this.addStateEmitter = addStateEmitter;
         this.removeStateEmitter = removeStateEmitter;
@@ -57,6 +56,7 @@ public class StateRegisterUI extends JTable {
 
         this.stateRegister.getAddStatePublisher().subscribe(this::onStateAdd);
         this.stateRegister.getRemoveStatePublisher().subscribe(this::onStateRemove);
+        this.configuration.getTapeSymbolsChangedPublisher().subscribe(this::onRemoveTapeSymbol);
 
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -87,6 +87,11 @@ public class StateRegisterUI extends JTable {
     }
     public void onStateRemove(observer.events.RemoveStateEvent event) {
         // Remove UI State
+        tableModel.fireTableDataChanged();
+    }
+
+    public void onRemoveTapeSymbol(observer.events.TapeSymbolsChangedEvent event) {
+        // Remove UI Symbol
         tableModel.fireTableDataChanged();
     }
 

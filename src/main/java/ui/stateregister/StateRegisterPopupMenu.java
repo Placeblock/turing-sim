@@ -13,8 +13,15 @@ public class StateRegisterPopupMenu extends JPopupMenu {
 
     public StateRegisterPopupMenu(Receiver stateRegisterReceiver, Receiver configurationReceiver, Object o) {
         super();
+        JMenuItem addItem = new JMenuItem("Add State");
+        this.add(addItem);
+
+        // TODO: Add action listeners for addItem and terminateItem
+
         JMenuItem removeItem;
         if(o instanceof State state) {
+            JMenuItem terminateItem = new JMenuItem("Terminate State");
+            this.add(terminateItem);
             removeItem = new JMenuItem("Remove State");
             removeItem.addActionListener(e -> {
                 RemoveStateEvent event = new RemoveStateEvent(state);
@@ -23,6 +30,8 @@ public class StateRegisterPopupMenu extends JPopupMenu {
             this.add(removeItem);
         }
         if(o instanceof  Transition transition) {
+            JMenuItem terminateItem = new JMenuItem("Terminate State");
+            this.add(terminateItem);
             removeItem = new JMenuItem("Remove Transition");
             removeItem.addActionListener(e -> {
                 TransitionChangeEvent event = new TransitionChangeEvent(transition, null);

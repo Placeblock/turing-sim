@@ -20,7 +20,8 @@ public class StateRegister {
     public StateRegister(List<State> states){
         this.states = states;
     }
-    public void addState(int index, State state) {
+    public void addState(int index) {
+        State state = new State(null, false);
         this.states.add(index, state);
         this.addStatePublisher.publish(new AddStateEvent(index, state));
     }
