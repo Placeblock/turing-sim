@@ -2,6 +2,7 @@ package ui.stateregister;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
@@ -16,7 +17,7 @@ public class StateRegisterTableModel extends AbstractTableModel {
 
     private StateRegister stateRegister;
     private Configuration configuration;
-    private LinkedHashSet<Character> transitionAlphabet;
+    private Set<Character> transitionAlphabet;
 
     public StateRegisterTableModel(StateRegister stateRegister, Configuration configuration) {
         this.stateRegister = stateRegister;

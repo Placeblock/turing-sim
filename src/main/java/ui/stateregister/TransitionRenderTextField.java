@@ -9,7 +9,6 @@ import java.util.Set;
 
 public class TransitionRenderTextField extends JTextField {
     public TransitionRenderTextField(StateRegister stateRegister, Set<Character> tapeAlphabet, Transition transition){
-        super();
         State newState = transition.getNewState();
         String state = String.valueOf(stateRegister.getStates().indexOf(newState));
         String newTransition = String.valueOf(transition.getNewSymbol());

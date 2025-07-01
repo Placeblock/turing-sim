@@ -3,6 +3,7 @@ package ui.stateregister;
 import core.Configuration;
 import core.StateRegister;
 import event.Emitter;
+import event.Receiver;
 import event.events.AddStateEvent;
 import event.events.RemoveStateEvent;
 
@@ -17,13 +18,17 @@ public class StateRegisterUI extends JTable {
     private final Emitter<AddStateEvent> addStatePublisher;
     private final Emitter<RemoveStateEvent> removeStatePublisher;
 
+    private final Receiver receiver;
     private final StateRegister stateRegister;
     private final Configuration configuration;
 
-    public StateRegisterUI(StateRegister stateRegister, Configuration configuration,
+    public StateRegisterUI(Receiver receiver,
+                           StateRegister stateRegister, Configuration configuration,
                            Emitter<AddStateEvent> addStatePublisher,
                            Emitter<RemoveStateEvent> removeStatePublisher) {
         super(new StateRegisterTableModel(stateRegister, configuration));
+        this.receiver = receiver;
+
         this.setRowHeight(30);
         for (int i = 0; i < this.getColumnModel().getColumnCount(); i++) {
             this.getColumnModel().getColumn(i).setPreferredWidth(175);
@@ -50,7 +55,7 @@ public class StateRegisterUI extends JTable {
             return new DefaultTableCellRenderer();
         }
         
-        return new TransitionRenderer(this.stateRegister, this.configuration);
+        return new TransitionRenderer(this.receiver, this.stateRegister, this.configuration);
     }
 
     @Override
@@ -59,7 +64,7 @@ public class StateRegisterUI extends JTable {
             return super.getCellEditor(row, column);
         }
 
-        return new TransitionEditor(this.stateRegister, this.configuration);
+        return new TransitionEditor(this.receiver, this.stateRegister, this.configuration);
     }
 
 

@@ -44,13 +44,16 @@ public class BlankSymbolComboBox extends JComboBox<Character> {
     }
     private void updateTapeSymbols(Set<Character> tapeSymbols) {
         System.out.println("Updating Tape Symbols for Blank Symbol");
-        this.updatingContent = true;
-        this.removeAllItems();
-        for (Character tapeSymbol : tapeSymbols) {
-            this.addItem(tapeSymbol);
-        }
-        this.setSelectedItem(this.config.getBlankSymbol());
-        this.updatingContent = false;
+
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            this.updatingContent = true;
+            this.removeAllItems();
+            for (Character tapeSymbol : tapeSymbols) {
+                this.addItem(tapeSymbol);
+            }
+            this.setSelectedItem(this.config.getBlankSymbol());
+            this.updatingContent = false;
+        });
     }
 
 }

@@ -20,7 +20,7 @@ public class Configuration {
     private final Publisher<BlankSymbolChangedEvent> blankSymbolChangedPublisher = new Publisher<>();
 
     private String initialState = "";
-    private LinkedHashSet<Character> tapeSymbols = createTapeAlphabet();
+    private Set<Character> tapeSymbols = createTapeAlphabet();
     private Character blankSymbol = 'B';
 
     public void setTapeSymbols(LinkedHashSet<Character> tapeSymbols) {
@@ -66,15 +66,15 @@ public class Configuration {
         return inputSymbols;
     }
 
-    private LinkedHashSet<Character> createTapeAlphabet() {
-        LinkedHashSet<Character> alphabet = new LinkedHashSet<>();
+    private Set<Character> createTapeAlphabet() {
+        Set<Character> alphabet = new LinkedHashSet<>();
         alphabet.add('0');
         alphabet.add('1');
         alphabet.add('B');
         return alphabet;
     }
 
-    public LinkedHashSet<Character> getTapeAlphabet() {
+    public Set<Character> getTapeAlphabet() {
         return this.tapeSymbols;
     }
 }
