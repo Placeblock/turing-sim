@@ -47,6 +47,8 @@ public class TuringMachineControlsUI extends JPanel {
         labelTable.put(10, new JLabel("5x"));
         speedSlider.setLabelTable(labelTable);
         
+        speedSlider.addChangeListener(this::onSpeedSliderChanged);
+        
         topPanel.add(speedLabel);
         topPanel.add(speedSlider);
         
@@ -70,6 +72,13 @@ public class TuringMachineControlsUI extends JPanel {
         
         add(topPanel);
         add(bottomPanel);
+    }
+    
+    private void onSpeedSliderChanged(javax.swing.event.ChangeEvent e) {
+        if (isPlaying && playTimer != null) {
+            int newDelay = getDelayFromSlider();
+            playTimer.setDelay(newDelay);
+        }
     }
     
     private int getDelayFromSlider() {

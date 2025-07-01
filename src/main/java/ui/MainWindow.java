@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
 
 import controller.MachineController;
 import core.tape.Tape;
+import event.Receiver;
+import event.events.StepEvent;
 import ui.player.TuringMachineControlsUI;
 import ui.tape.TapeUI;
 
@@ -79,8 +81,11 @@ public class MainWindow extends JFrame {
         });
         getContentPane().add(testHeadChangedEventButton);
 
-        var a = new MachineController(null); //!TEST
-        add(new TuringMachineControlsUI(a.getReceiver()));
+        var r = new Receiver(); //!TEST
+        r.registerHandler(StepEvent.class, event -> {
+            System.out.println("Step event received " + Math.random());
+        });
+        add(new TuringMachineControlsUI(r));
 
         setVisible(true);
     }
