@@ -24,7 +24,6 @@ public class TransitionPanel extends JPanel {
 
     public TransitionPanel(Receiver receiver, StateRegister stateRegister, Configuration config, Transition transition) {
         this.transitionChangeEventEmitter = new Emitter<>(receiver);
-
         if (transition == null) {
             this.stateComboBox = null;
             this.newSymbolComboBox = null;

@@ -4,10 +4,10 @@ import event.Event;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @RequiredArgsConstructor
 public class TapeSymbolsChangeEvent implements Event {
-    private final LinkedHashSet<Character> symbols;
+    private final Set<Character> symbols;
 }

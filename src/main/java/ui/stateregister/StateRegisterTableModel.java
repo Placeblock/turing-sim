@@ -1,17 +1,13 @@
 package ui.stateregister;
 
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
-import javax.swing.JLabel;
-import javax.swing.table.AbstractTableModel;
-
 import core.Configuration;
 import core.State;
 import core.StateRegister;
 import core.Transition;
-import lombok.AllArgsConstructor;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import java.util.Iterator;
 
 public class StateRegisterTableModel extends AbstractTableModel {
 
@@ -21,6 +17,7 @@ public class StateRegisterTableModel extends AbstractTableModel {
     public StateRegisterTableModel(StateRegister stateRegister, Configuration configuration) {
         this.stateRegister = stateRegister;
         this.configuration = configuration;
+        this.fireTableDataChanged();
     }
 
     @Override

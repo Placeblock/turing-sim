@@ -23,7 +23,7 @@ public class Configuration {
     private Set<Character> tapeSymbols = createTapeAlphabet();
     private Character blankSymbol = 'B';
 
-    public void setTapeSymbols(LinkedHashSet<Character> tapeSymbols) {
+    public void setTapeSymbols(Set<Character> tapeSymbols) {
         if (tapeSymbols.isEmpty()) {
             tapeSymbols.add('B');
         }

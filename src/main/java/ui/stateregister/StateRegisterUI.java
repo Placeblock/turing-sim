@@ -16,29 +16,42 @@ import java.awt.event.MouseEvent;
 
 
 public class StateRegisterUI extends JTable {
-    private final Emitter<AddStateEvent> addStatePublisher;
-    private final Emitter<RemoveStateEvent> removeStatePublisher;
+    private final Emitter<AddStateEvent> addStateEmitter;
+    private final Emitter<RemoveStateEvent> removeStateEmitter;
 
-    private final Receiver receiver;
+    private final Receiver stateRegisterReceiver;
+    private final Receiver configurationReceiver;
     private final StateRegister stateRegister;
     private final Configuration configuration;
+    private final StateRegisterTableModel tableModel;
 
     private JPopupMenu statePopupMenu;
-
-    public StateRegisterUI(Receiver receiver,
+    public StateRegisterUI(Receiver stateRegisterReceiver, Receiver configurationReceiver,
                            StateRegister stateRegister, Configuration configuration,
-                           Emitter<AddStateEvent> addStatePublisher,
-                           Emitter<RemoveStateEvent> removeStatePublisher) {
-        super(new StateRegisterTableModel(stateRegister, configuration));
-        this.receiver = receiver;
+                           Emitter<AddStateEvent> addStateEmitter,
+                           Emitter<RemoveStateEvent> removeStateEmitter){
+        this(stateRegisterReceiver, configurationReceiver, stateRegister, configuration,
+             new StateRegisterTableModel(stateRegister, configuration), addStateEmitter, removeStateEmitter);
+    }
+
+
+    private StateRegisterUI(Receiver stateRegisterReceiver, Receiver configurationReceiver,
+                           StateRegister stateRegister, Configuration configuration,
+                           StateRegisterTableModel tableModel,
+                           Emitter<AddStateEvent> addStateEmitter,
+                           Emitter<RemoveStateEvent> removeStateEmitter) {
+        super(tableModel);
+        this.stateRegisterReceiver = stateRegisterReceiver;
+        this.configurationReceiver = configurationReceiver;
+        this.tableModel = tableModel;
 
         this.setRowHeight(30);
         for (int i = 0; i < this.getColumnModel().getColumnCount(); i++) {
             this.getColumnModel().getColumn(i).setPreferredWidth(175
             );
         }
-        this.addStatePublisher = addStatePublisher;
-        this.removeStatePublisher = removeStatePublisher;
+        this.addStateEmitter = addStateEmitter;
+        this.removeStateEmitter = removeStateEmitter;
         this.stateRegister = stateRegister;
         this.configuration = configuration;
 
@@ -61,7 +74,7 @@ public class StateRegisterUI extends JTable {
                     setRowSelectionInterval(row, row);
                     setColumnSelectionInterval(col, col);
                     Object cellValue = StateRegisterUI.this.getValueAt(row, col);
-                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(receiver, cellValue);
+                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(stateRegisterReceiver, configurationReceiver, cellValue);
                     statePopupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
@@ -70,14 +83,16 @@ public class StateRegisterUI extends JTable {
 
     public void onStateAdd(observer.events.AddStateEvent event) {
         // Add UI State
+        tableModel.fireTableDataChanged();
     }
     public void onStateRemove(observer.events.RemoveStateEvent event) {
         // Remove UI State
+        tableModel.fireTableDataChanged();
     }
 
     @Override
     public TableCellRenderer getCellRenderer(int row, int column){
-        return new StateRegisterRenderer(this.receiver, this.stateRegister, this.configuration);
+        return new StateRegisterRenderer(this.stateRegisterReceiver, this.stateRegister, this.configuration);
     }
 
     @Override
@@ -85,6 +100,7 @@ public class StateRegisterUI extends JTable {
         if (column == 0) {
             return super.getCellEditor(row, column);
         }
-        return new TransitionEditor(this.receiver, this.stateRegister, this.configuration);
+        return new TransitionEditor(this.stateRegisterReceiver, this.stateRegister, this.configuration);
     }
+
 }

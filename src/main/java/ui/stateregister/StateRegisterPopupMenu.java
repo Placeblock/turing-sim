@@ -11,14 +11,14 @@ import javax.swing.*;
 
 public class StateRegisterPopupMenu extends JPopupMenu {
 
-    public StateRegisterPopupMenu(Receiver receiver, Object o) {
+    public StateRegisterPopupMenu(Receiver stateRegisterReceiver, Receiver configurationReceiver, Object o) {
         super();
         JMenuItem removeItem;
         if(o instanceof State state) {
             removeItem = new JMenuItem("Remove State");
             removeItem.addActionListener(e -> {
                 RemoveStateEvent event = new RemoveStateEvent(state);
-                receiver.receive(event);
+                stateRegisterReceiver.receive(event);
             });
             this.add(removeItem);
         }
@@ -26,7 +26,7 @@ public class StateRegisterPopupMenu extends JPopupMenu {
             removeItem = new JMenuItem("Remove Transition");
             removeItem.addActionListener(e -> {
                 TransitionChangeEvent event = new TransitionChangeEvent(transition, null);
-                receiver.receive(event);
+                stateRegisterReceiver.receive(event);
             });
             this.add(removeItem);
         }
@@ -34,7 +34,7 @@ public class StateRegisterPopupMenu extends JPopupMenu {
             removeItem = new JMenuItem("Remove Symbol");
             removeItem.addActionListener(e -> {
                 RemoveSymbolFromTapeAlphabetEvent event = new RemoveSymbolFromTapeAlphabetEvent(symbol);
-                receiver.receive(event);
+                configurationReceiver.receive(event);
             });
             this.add(removeItem);
         }

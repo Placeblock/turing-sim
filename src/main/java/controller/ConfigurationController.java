@@ -4,10 +4,11 @@ import core.Configuration;
 import event.Receiver;
 import event.events.BlankSymbolChangeEvent;
 import event.events.InitialStateChangeEvent;
+import event.events.RemoveSymbolFromTapeAlphabetEvent;
 import event.events.TapeSymbolsChangeEvent;
 import lombok.Getter;
 
-import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class ConfigurationController {
 
@@ -20,11 +21,20 @@ public class ConfigurationController {
         this.receiver.registerHandler(TapeSymbolsChangeEvent.class, this::handleTapeSymbolsChangeEvent);
         this.receiver.registerHandler(BlankSymbolChangeEvent.class, this::handleBlankSymbolChangeEvent);
         this.receiver.registerHandler(InitialStateChangeEvent.class, this::handleInitialStateChangeEvent);
+        this.receiver.registerHandler(RemoveSymbolFromTapeAlphabetEvent.class, this::handleRemoveSymbolFromTapeAlphabetEvent);
     }
 
+    private void handleRemoveSymbolFromTapeAlphabetEvent(RemoveSymbolFromTapeAlphabetEvent event) {
+        Set<Character> newTapeSymbols = config.getTapeSymbols();
+        newTapeSymbols.remove(event.symbol());
+        System.out.println("Removing symbol from tape alphabet: " + event.symbol());
+        this.config.setTapeSymbols(newTapeSymbols);
+    }
+
+
     private void handleTapeSymbolsChangeEvent(TapeSymbolsChangeEvent event) {
-        LinkedHashSet<Character> tapeSymbols = event.getSymbols();
-        this.config.setTapeSymbols(tapeSymbols);
+        Set<Character> newTapeSymbols = event.getSymbols();
+        this.config.setTapeSymbols(newTapeSymbols);
     }
 
     private void handleInitialStateChangeEvent(InitialStateChangeEvent event) {

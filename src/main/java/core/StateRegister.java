@@ -5,7 +5,6 @@ import observer.Publisher;
 import observer.events.AddStateEvent;
 import observer.events.RemoveStateEvent;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,9 +25,9 @@ public class StateRegister {
         this.addStatePublisher.publish(new AddStateEvent(index, state));
     }
 
-    public void removeState(int index, State state) {
-        this.states.remove(index);
-        this.removeStatePublisher.publish(new RemoveStateEvent(index, state));
+    public void removeState(State state) {
+        this.states.remove(state);
+        this.removeStatePublisher.publish(new RemoveStateEvent(state));
     }
 
     public List<Character> getSymbols() {

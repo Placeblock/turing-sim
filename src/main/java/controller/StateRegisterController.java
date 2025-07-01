@@ -3,6 +3,7 @@ package controller;
 import core.StateRegister;
 import core.Transition;
 import event.Receiver;
+import event.events.RemoveStateEvent;
 import event.events.TransitionChangeEvent;
 import lombok.Getter;
 
@@ -16,6 +17,12 @@ public class StateRegisterController {
         this.stateRegister = stateRegister;
 
         this.receiver.registerHandler(TransitionChangeEvent.class, this::onTransitionChange);
+        this.receiver.registerHandler(RemoveStateEvent.class, this::onRemoveState);
+    }
+
+    private void onRemoveState(RemoveStateEvent event) {
+        System.out.println("REMOVING STATE: " + stateRegister.getStates().indexOf(event.state()));
+        stateRegister.removeState(event.state());
     }
 
     private void onTransitionChange(TransitionChangeEvent event) {

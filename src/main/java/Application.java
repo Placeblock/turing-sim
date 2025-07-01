@@ -1,3 +1,4 @@
+import controller.ConfigurationController;
 import controller.StateRegisterController;
 import core.Configuration;
 import core.StateRegister;
@@ -12,11 +13,13 @@ public class Application {
         javax.swing.SwingUtilities.invokeLater(() -> {
             MainWindow mainWindow = new MainWindow();
             StateRegister stateRegister = SampleStateRegister.get();
-            StateRegisterController stateRegisterController = new StateRegisterController(stateRegister);
-            Receiver receiver = stateRegisterController.getReceiver();
-
             Configuration configuration = new Configuration();
-            StateRegisterUI stateRegisterUI = new StateRegisterUI(receiver, stateRegister, configuration, null, null);
+            StateRegisterController stateRegisterController = new StateRegisterController(stateRegister);
+            ConfigurationController configurationController = new ConfigurationController(configuration);
+            Receiver stateRegisterReceiver = stateRegisterController.getReceiver();
+            Receiver configurationReceiver = configurationController.getReceiver();
+
+            StateRegisterUI stateRegisterUI = new StateRegisterUI(stateRegisterReceiver, configurationReceiver, stateRegister, configuration, null, null);
             mainWindow.getContentPane().add(stateRegisterUI);
         });
     }
