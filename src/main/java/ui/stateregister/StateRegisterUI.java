@@ -25,7 +25,7 @@ public class StateRegisterUI extends JTable {
     private final StateRegister stateRegister;
     private final Configuration configuration;
 
-    private final JPopupMenu statePopupMenu;
+    private JPopupMenu statePopupMenu;
 
     public StateRegisterUI(Receiver receiver,
                            StateRegister stateRegister, Configuration configuration,
@@ -36,7 +36,8 @@ public class StateRegisterUI extends JTable {
 
         this.setRowHeight(30);
         for (int i = 0; i < this.getColumnModel().getColumnCount(); i++) {
-            this.getColumnModel().getColumn(i).setPreferredWidth(175);
+            this.getColumnModel().getColumn(i).setPreferredWidth(175
+            );
         }
         this.addStatePublisher = addStatePublisher;
         this.removeStatePublisher = removeStatePublisher;
@@ -47,19 +48,7 @@ public class StateRegisterUI extends JTable {
         this.stateRegister.getRemoveStatePublisher().subscribe(this::onStateRemove);
 
         // TODO add more menu items
-        // TODO extract code from constructor to somewhere else
-        this.statePopupMenu = new JPopupMenu();
-        JMenuItem removeItem = new JMenuItem("Remove State");
-        // Example action, you can add more or customize
-        removeItem.addActionListener(e -> {
-            int row = this.getSelectedRow();
-            if (row > 0) {
-                // TODO
-                // Fire remove event or handle as needed
-                // Example: removeStatePublisher.emit(new RemoveStateEvent(...));
-            }
-        });
-        this.statePopupMenu.add(removeItem);
+
 
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -74,11 +63,12 @@ public class StateRegisterUI extends JTable {
                 if (e.isPopupTrigger()) {
                     int row = rowAtPoint(e.getPoint());
                     int col = columnAtPoint(e.getPoint());
-                    if (col == 0 && row > 0) {
-                        setRowSelectionInterval(row, row);
-                        setColumnSelectionInterval(col, col);
-                        statePopupMenu.show(e.getComponent(), e.getX(), e.getY());
-                    }
+                    setRowSelectionInterval(row, row);
+                    setColumnSelectionInterval(col, col);
+                    // TODO
+                    // add events in StateRegisterPopupMenu
+                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(row, col);
+                    statePopupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
         });
@@ -105,9 +95,6 @@ public class StateRegisterUI extends JTable {
         if (column == 0) {
             return super.getCellEditor(row, column);
         }
-
         return new TransitionEditor(this.receiver, this.stateRegister, this.configuration);
     }
-
-
 }
