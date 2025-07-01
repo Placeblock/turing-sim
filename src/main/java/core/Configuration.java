@@ -67,7 +67,7 @@ public class Configuration {
     }
 
     private Set<Character> createTapeAlphabet() {
-        Set<Character> alphabet = new LinkedHashSet<>();
+        LinkedHashSet<Character> alphabet = new LinkedHashSet<>();
         alphabet.add('0');
         alphabet.add('1');
         alphabet.add('B');

@@ -17,12 +17,10 @@ public class StateRegisterTableModel extends AbstractTableModel {
 
     private StateRegister stateRegister;
     private Configuration configuration;
-    private Set<Character> transitionAlphabet;
 
     public StateRegisterTableModel(StateRegister stateRegister, Configuration configuration) {
         this.stateRegister = stateRegister;
         this.configuration = configuration;
-        this.transitionAlphabet = configuration.getTapeAlphabet();
     }
 
     @Override
@@ -32,7 +30,7 @@ public class StateRegisterTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return transitionAlphabet.size() + 1;
+        return configuration.getTapeAlphabet().size() + 1;
     }
 
     @Override
@@ -44,11 +42,10 @@ public class StateRegisterTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int x, int y) {
         if (y == 0 && x != 0) {
-            return "q" + (x - 1);
+            return stateRegister.getStates().get(x - 1);
         }
         if (x == 0) {
-            assert transitionAlphabet != null;
-            Iterator<Character> iterator = transitionAlphabet.iterator();
+            Iterator<Character> iterator = configuration.getTapeAlphabet().iterator();
             Character symbol = null;
             for (int i = 0; i < y; i++) {
                 symbol = iterator.next();

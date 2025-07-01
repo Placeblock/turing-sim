@@ -12,7 +12,6 @@ import observer.events.TransitionSymbolChangedEvent;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.util.Set;
 
 public class TransitionPanel extends JPanel {
     private final Emitter<TransitionChangeEvent> transitionChangeEventEmitter;
@@ -30,7 +29,7 @@ public class TransitionPanel extends JPanel {
             this.stateComboBox = null;
             this.newSymbolComboBox = null;
             this.moveComboBox = null;
-            this.add(new JLabel("To be implemented"));
+            this.add(new JLabel("-"));
             return;
         }
 
@@ -128,7 +127,7 @@ public class TransitionPanel extends JPanel {
         @Override
         public Component getListCellRendererComponent(JList<? extends State> jList, State state, int i, boolean b, boolean b1) {
             int index = this.stateRegister.getStates().indexOf(state);
-            return new JLabel("Q" + index);
+            return new JLabel("q" + index);
         }
     }
 }

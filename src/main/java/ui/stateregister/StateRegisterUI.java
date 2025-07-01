@@ -8,12 +8,10 @@ import event.events.AddStateEvent;
 import event.events.RemoveStateEvent;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 
@@ -47,9 +45,6 @@ public class StateRegisterUI extends JTable {
         this.stateRegister.getAddStatePublisher().subscribe(this::onStateAdd);
         this.stateRegister.getRemoveStatePublisher().subscribe(this::onStateRemove);
 
-        // TODO add more menu items
-
-
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -65,9 +60,8 @@ public class StateRegisterUI extends JTable {
                     int col = columnAtPoint(e.getPoint());
                     setRowSelectionInterval(row, row);
                     setColumnSelectionInterval(col, col);
-                    // TODO
-                    // add events in StateRegisterPopupMenu
-                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(row, col);
+                    Object cellValue = StateRegisterUI.this.getValueAt(row, col);
+                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(receiver, cellValue);
                     statePopupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
@@ -83,11 +77,7 @@ public class StateRegisterUI extends JTable {
 
     @Override
     public TableCellRenderer getCellRenderer(int row, int column){
-        if (column == 0) {
-            return new DefaultTableCellRenderer();
-        }
-        
-        return new TransitionRenderer(this.receiver, this.stateRegister, this.configuration);
+        return new StateRegisterRenderer(this.receiver, this.stateRegister, this.configuration);
     }
 
     @Override

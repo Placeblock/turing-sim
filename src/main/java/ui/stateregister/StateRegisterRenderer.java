@@ -12,7 +12,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
 @AllArgsConstructor
-public class TransitionRenderer implements TableCellRenderer {
+public class StateRegisterRenderer implements TableCellRenderer {
     private final Receiver receiver;
     private final StateRegister stateRegister;
     private final Configuration configuration;
@@ -23,6 +23,14 @@ public class TransitionRenderer implements TableCellRenderer {
             Transition transition = (Transition) o;
             return new TransitionPanel(receiver, stateRegister, configuration, transition);
         }
-        return new JLabel(String.valueOf(o));
+        if(row > 0 && column == 0) {
+            // Render state name
+            State state = (State) o;
+            return new JLabel("q" + stateRegister.getStates().indexOf(state));
+        }
+        if(row == 0 && column != 0){
+            return new JLabel(String.valueOf(o));
+        }
+        return null;
     }
 }
