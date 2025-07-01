@@ -12,6 +12,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseAdapter;
+
 
 
 public class StateRegisterUI extends JTable {
@@ -21,6 +24,8 @@ public class StateRegisterUI extends JTable {
     private final Receiver receiver;
     private final StateRegister stateRegister;
     private final Configuration configuration;
+
+    private final JPopupMenu statePopupMenu;
 
     public StateRegisterUI(Receiver receiver,
                            StateRegister stateRegister, Configuration configuration,
@@ -40,6 +45,43 @@ public class StateRegisterUI extends JTable {
 
         this.stateRegister.getAddStatePublisher().subscribe(this::onStateAdd);
         this.stateRegister.getRemoveStatePublisher().subscribe(this::onStateRemove);
+
+        // TODO add more menu items
+        // TODO extract code from constructor to somewhere else
+        this.statePopupMenu = new JPopupMenu();
+        JMenuItem removeItem = new JMenuItem("Remove State");
+        // Example action, you can add more or customize
+        removeItem.addActionListener(e -> {
+            int row = this.getSelectedRow();
+            if (row > 0) {
+                // TODO
+                // Fire remove event or handle as needed
+                // Example: removeStatePublisher.emit(new RemoveStateEvent(...));
+            }
+        });
+        this.statePopupMenu.add(removeItem);
+
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                maybeShowPopup(e);
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                maybeShowPopup(e);
+            }
+            private void maybeShowPopup(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    int row = rowAtPoint(e.getPoint());
+                    int col = columnAtPoint(e.getPoint());
+                    if (col == 0 && row > 0) {
+                        setRowSelectionInterval(row, row);
+                        setColumnSelectionInterval(col, col);
+                        statePopupMenu.show(e.getComponent(), e.getX(), e.getY());
+                    }
+                }
+            }
+        });
     }
 
     public void onStateAdd(observer.events.AddStateEvent event) {
