@@ -2,5 +2,5 @@ package event.events;
 
 import event.Event;
 
-public record SaveTapeEvent() implements Event {
+public record SaveTapeEvent(String filePath) implements Event {
 }

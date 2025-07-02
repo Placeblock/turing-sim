@@ -16,12 +16,14 @@ import controller.MachineController;
 import core.tape.Tape;
 import event.Receiver;
 import event.events.StepEvent;
+import ui.menubar.MenuBarTuring;
 import ui.player.TuringMachineControlsUI;
 import ui.tape.TapeUI;
 
 import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame {
+    public final int a = 1;
     public MainWindow() {
         setTitle("Turing Maschine");
         setSize(800, 450);
@@ -30,12 +32,7 @@ public class MainWindow extends JFrame {
         setLocationRelativeTo(null); // Center the window
 
         // Menu bar setup
-        JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("File");
-        JMenuItem loadCsvItem = new JMenuItem("Load CSV");
-        loadCsvItem.addActionListener(e -> openFileChooser());
-        fileMenu.add(loadCsvItem);
-        menuBar.add(fileMenu);
+        MenuBarTuring menuBar = new MenuBarTuring(new Receiver());
         setJMenuBar(menuBar);
 
         JButton openButton = new JButton("Open File");
