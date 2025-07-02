@@ -33,12 +33,17 @@ public class TransitionPanel extends JPanel {
         }
 
         this.stateComboBox = new JComboBox<>();
+        this.stateComboBox.setOpaque(true);
         this.stateComboBox.setRenderer(new StateComboBoxRenderer(stateRegister));
+
         for (State state : stateRegister.getStates()) {
             this.stateComboBox.addItem(state);
         }
         State newState = transition.getNewState();
         this.stateComboBox.setSelectedItem(newState);
+        if (this.stateComboBox.getSelectedItem() == null) {
+            this.setBackground(Color.RED);
+        }
         this.stateComboBox.addItemListener((e) -> {
             if (this.updatingContent || e.getStateChange() != ItemEvent.SELECTED) return;
             State newNewState = (State) e.getItem();
@@ -57,6 +62,10 @@ public class TransitionPanel extends JPanel {
             this.newSymbolComboBox.addItem(alphabetChar);
         }
         this.newSymbolComboBox.setSelectedItem(transition.getNewSymbol());
+        if (this.newSymbolComboBox.getSelectedItem() == null) {
+            this.setBackground(Color.RED);
+        }
+
         this.newSymbolComboBox.addItemListener((e) -> {
             if (this.updatingContent || e.getStateChange() != ItemEvent.SELECTED) return;
             Character newNewSymbol = (Character) e.getItem();
@@ -101,6 +110,7 @@ public class TransitionPanel extends JPanel {
         SwingUtilities.invokeLater(() -> {
             this.updatingContent = true;
             this.stateComboBox.setSelectedItem(event.getNewState());
+            this.setBackground(Color.WHITE);
             this.updatingContent = false;
         });
     }
@@ -115,6 +125,7 @@ public class TransitionPanel extends JPanel {
         SwingUtilities.invokeLater(() -> {
             this.updatingContent = true;
             this.newSymbolComboBox.setSelectedItem(event.getNewSymbol());
+            this.setBackground(Color.WHITE);
             this.updatingContent = false;
         });
     }
