@@ -2,7 +2,9 @@ package core;
 
 import lombok.Getter;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Class representing a state in a Turing machine.
@@ -20,5 +22,16 @@ public class State {
 
     public Transition getTransition(char c) {
         return transitions.get(c);
+    }
+
+    public Set<Character> getSymbols() {
+        return new HashSet<>(this.transitions.keySet());
+    }
+
+    public void removeSymbol(Character symbol) {
+        Transition transition = transitions.remove(symbol);
+        if (transition != null && transition.getNewSymbol() == symbol) {
+            transition.setNewSymbol(null);
+        }
     }
 }

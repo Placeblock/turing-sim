@@ -2,12 +2,13 @@ package ui;
 
 import controller.ConfigurationController;
 import core.Configuration;
+import core.StateRegister;
 import ui.configuration.BlankSymbolUI;
 import ui.configuration.InitialStateUI;
 import ui.configuration.TapeSymbolsUI;
 
 import javax.swing.*;
-import java.awt.*;
+import java.util.ArrayList;
 
 public class ConfigurationWindow extends JFrame {
     public ConfigurationWindow() {
@@ -20,7 +21,7 @@ public class ConfigurationWindow extends JFrame {
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         Configuration config = new Configuration();
-        ConfigurationController controller = new ConfigurationController(config);
+        ConfigurationController controller = new ConfigurationController(config, new StateRegister(new ArrayList<>()));
 
         InitialStateUI initialStateUI = new InitialStateUI(config, controller.getReceiver());
         add(initialStateUI);

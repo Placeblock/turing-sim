@@ -1,5 +1,4 @@
 import controller.ConfigurationController;
-import controller.StateRegisterController;
 import core.Configuration;
 import core.StateRegister;
 import event.Receiver;
@@ -14,12 +13,10 @@ public class Application {
             MainWindow mainWindow = new MainWindow();
             StateRegister stateRegister = SampleStateRegister.get();
             Configuration configuration = new Configuration();
-            StateRegisterController stateRegisterController = new StateRegisterController(stateRegister);
-            ConfigurationController configurationController = new ConfigurationController(configuration);
-            Receiver stateRegisterReceiver = stateRegisterController.getReceiver();
-            Receiver configurationReceiver = configurationController.getReceiver();
+            ConfigurationController configurationController = new ConfigurationController(configuration, stateRegister);
+            Receiver receiver = configurationController.getReceiver();
 
-            StateRegisterUI stateRegisterUI = new StateRegisterUI(stateRegisterReceiver, configurationReceiver, stateRegister, configuration);
+            StateRegisterUI stateRegisterUI = new StateRegisterUI(receiver, stateRegister, configuration);
             mainWindow.getContentPane().add(stateRegisterUI);
         });
     }

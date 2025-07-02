@@ -28,6 +28,13 @@ public class StateRegister {
 
     public void removeState(State state) {
         this.states.remove(state);
+        for (State registerState : this.getStates()) {
+            for (Transition transition : state.getTransitions().values()) {
+                if (transition.getNewState().equals(state)) {
+                    transition.setNewState(null);
+                }
+            }
+        }
         this.removeStatePublisher.publish(new RemoveStateEvent(state));
     }
 

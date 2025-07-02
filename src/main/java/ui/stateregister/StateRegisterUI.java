@@ -2,10 +2,7 @@ package ui.stateregister;
 
 import core.Configuration;
 import core.StateRegister;
-import event.Emitter;
 import event.Receiver;
-import event.events.AddStateEvent;
-import event.events.RemoveStateEvent;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -16,24 +13,24 @@ import java.awt.event.MouseEvent;
 
 
 public class StateRegisterUI extends JTable {
-    private final Receiver stateRegisterReceiver;
+    private final Receiver receiver;
     private final StateRegister stateRegister;
     private final Configuration configuration;
     private final StateRegisterTableModel tableModel;
 
     private JPopupMenu statePopupMenu;
-    public StateRegisterUI(Receiver stateRegisterReceiver, Receiver configurationReceiver,
+    public StateRegisterUI(Receiver receiver,
                            StateRegister stateRegister, Configuration configuration){
-        this(stateRegisterReceiver, configurationReceiver, stateRegister, configuration,
+        this(receiver, stateRegister, configuration,
              new StateRegisterTableModel(stateRegister, configuration));
     }
 
 
-    private StateRegisterUI(Receiver stateRegisterReceiver, Receiver configurationReceiver,
+    private StateRegisterUI(Receiver receiver,
                            StateRegister stateRegister, Configuration configuration,
                            StateRegisterTableModel tableModel) {
         super(tableModel);
-        this.stateRegisterReceiver = stateRegisterReceiver;
+        this.receiver = receiver;
         this.tableModel = tableModel;
 
         this.setRowHeight(30);
@@ -63,7 +60,7 @@ public class StateRegisterUI extends JTable {
                     setRowSelectionInterval(row, row);
                     setColumnSelectionInterval(col, col);
                     Object cellValue = StateRegisterUI.this.getValueAt(row, col);
-                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(stateRegisterReceiver, configurationReceiver, cellValue);
+                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(receiver, cellValue);
                     statePopupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
@@ -87,7 +84,7 @@ public class StateRegisterUI extends JTable {
 
     @Override
     public TableCellRenderer getCellRenderer(int row, int column){
-        return new StateRegisterRenderer(this.stateRegisterReceiver, this.stateRegister, this.configuration);
+        return new StateRegisterRenderer(this.receiver, this.stateRegister, this.configuration);
     }
 
     @Override
@@ -95,7 +92,7 @@ public class StateRegisterUI extends JTable {
         if (column == 0) {
             return super.getCellEditor(row, column);
         }
-        return new TransitionEditor(this.stateRegisterReceiver, this.stateRegister, this.configuration);
+        return new TransitionEditor(this.receiver, this.stateRegister, this.configuration);
     }
 
 }
