@@ -58,7 +58,7 @@ public class TransitionPanel extends JPanel {
 
         // (->q1/q2/q3/q4, B, R)
         this.newSymbolComboBox = new JComboBox<>();
-        for(Character alphabetChar: config.getTapeAlphabet()){
+        for (Character alphabetChar : config.getTapeAlphabet()) {
             this.newSymbolComboBox.addItem(alphabetChar);
         }
         this.newSymbolComboBox.setSelectedItem(transition.getNewSymbol());
@@ -79,7 +79,7 @@ public class TransitionPanel extends JPanel {
         });
 
         this.moveComboBox = new JComboBox<>();
-        for (Move move: Move.values()) {
+        for (Move move : Move.values()) {
             this.moveComboBox.addItem(move);
         }
         this.moveComboBox.setSelectedItem(transition.getMove());
@@ -110,10 +110,13 @@ public class TransitionPanel extends JPanel {
         SwingUtilities.invokeLater(() -> {
             this.updatingContent = true;
             this.stateComboBox.setSelectedItem(event.getNewState());
-            this.setBackground(Color.WHITE);
+            if (this.newSymbolComboBox.getSelectedItem() != null) {
+                this.setBackground(Color.WHITE);
+            }
             this.updatingContent = false;
         });
     }
+
     private void onMoveChanged(TransitionMoveChangedEvent event) {
         SwingUtilities.invokeLater(() -> {
             this.updatingContent = true;
@@ -121,11 +124,14 @@ public class TransitionPanel extends JPanel {
             this.updatingContent = false;
         });
     }
+
     private void onSymbolChanged(TransitionSymbolChangedEvent event) {
         SwingUtilities.invokeLater(() -> {
             this.updatingContent = true;
             this.newSymbolComboBox.setSelectedItem(event.getNewSymbol());
-            this.setBackground(Color.WHITE);
+            if(this.stateComboBox.getSelectedItem() != null) {
+                this.setBackground(Color.WHITE);
+            }
             this.updatingContent = false;
         });
     }
