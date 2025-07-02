@@ -34,7 +34,9 @@ public class Machine {
         if (transition == null) {
             throw new IllegalStateException("No transition found for symbol " + currentHeadSymbol);
         }
-
+        if (transition.getNewSymbol() == null || transition.getNewState() == null) {
+            throw new IllegalStateException("Incomplete State reached! (No State or Symbol set)");
+        }
         head.setSymbol(transition.getNewSymbol());
         this.machineState.setCurrentState(transition.getNewState());
 
