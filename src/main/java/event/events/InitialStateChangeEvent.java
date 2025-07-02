@@ -1,11 +1,7 @@
 package event.events;
 
+import core.State;
 import event.Event;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@Getter
-@RequiredArgsConstructor
-public class InitialStateChangeEvent implements Event {
-    private final String initialState;
+public record InitialStateChangeEvent(State initialState) implements Event {
 }

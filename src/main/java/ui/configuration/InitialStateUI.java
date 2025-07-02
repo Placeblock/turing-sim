@@ -3,8 +3,8 @@ package ui.configuration;
 import core.Configuration;
 import event.Emitter;
 import event.Receiver;
-import event.events.InitialStateChangeEvent;
-import observer.events.InitialStateChangedEvent;
+import event.events.InitialTapeStateChangeEvent;
+import observer.events.InitialTapeStateChangedEvent;
 import observer.events.TapeSymbolsChangedEvent;
 
 import javax.swing.*;
@@ -13,7 +13,7 @@ import javax.swing.event.DocumentListener;
 import java.util.Set;
 
 public class InitialStateUI extends JPanel {
-    private final Emitter<InitialStateChangeEvent> initialStateChangeEmitter;
+    private final Emitter<InitialTapeStateChangeEvent> initialStateChangeEmitter;
 
     private final JTextField textField;
 
@@ -23,7 +23,7 @@ public class InitialStateUI extends JPanel {
         this.initialStateChangeEmitter = new Emitter<>(receiver);
         this.textField = new JTextField();
 
-        config.getInitialStateChangedPublisher().subscribe(this::updateInitialState);
+        config.getInitialTapeStateChangedPublisher().subscribe(this::updateInitialState);
         config.getTapeSymbolsChangedPublisher().subscribe(this::updateTapeSymbols);
 
         this.textField.getDocument().addDocumentListener(new DocumentListener() {
@@ -52,11 +52,11 @@ public class InitialStateUI extends JPanel {
     private void onUpdateInitialState(String initialState) {
         if (this.updatingContent) return;
         System.out.println("UPDATING INITIAL STATE: " + initialState);
-        InitialStateChangeEvent event = new InitialStateChangeEvent(initialState);
+        InitialTapeStateChangeEvent event = new InitialTapeStateChangeEvent(initialState);
         this.initialStateChangeEmitter.emit(event);
     }
 
-    private void updateInitialState(InitialStateChangedEvent event) {
+    private void updateInitialState(InitialTapeStateChangedEvent event) {
         if (this.updatingContent) return;
         SwingUtilities.invokeLater(() -> {
             this.updatingContent = true;

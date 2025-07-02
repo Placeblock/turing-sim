@@ -1,11 +1,7 @@
 package observer.events;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import core.State;
 import observer.Event;
 
-@Getter
-@RequiredArgsConstructor
-public class InitialStateChangedEvent implements Event {
-    private final String initialState;
+public record InitialStateChangedEvent(State initialState) implements Event {
 }

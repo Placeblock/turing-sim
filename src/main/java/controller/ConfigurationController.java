@@ -23,28 +23,33 @@ public class ConfigurationController {
 
         this.receiver.registerHandler(TapeSymbolsChangeEvent.class, this::handleTapeSymbolsChangeEvent);
         this.receiver.registerHandler(BlankSymbolChangeEvent.class, this::handleBlankSymbolChangeEvent);
-        this.receiver.registerHandler(InitialStateChangeEvent.class, this::handleInitialStateChangeEvent);
+        this.receiver.registerHandler(InitialTapeStateChangeEvent.class, this::handleInitialTapeStateChangeEvent);
         this.receiver.registerHandler(RemoveSymbolFromTapeAlphabetEvent.class, this::handleRemoveSymbolFromTapeAlphabetEvent);
+        this.receiver.registerHandler(InitialStateChangeEvent.class, this::handleInitialStateChangeEvent);
 
-        this.receiver.registerHandler(TransitionChangeEvent.class, this::onTransitionChange);
-        this.receiver.registerHandler(RemoveStateEvent.class, this::onRemoveState);
-        this.receiver.registerHandler(AddStateEvent.class, this::onAddState);
-        this.receiver.registerHandler(SaveTapeEvent.class, this::onSaveTape);
+        this.receiver.registerHandler(TransitionChangeEvent.class, this::handleTransitionChangeEvent);
+        this.receiver.registerHandler(RemoveStateEvent.class, this::handleRemoveStateChangeEvent);
+        this.receiver.registerHandler(AddStateEvent.class, this::handleAddStateChangeEvent);
+        this.receiver.registerHandler(SaveTapeEvent.class, this::handleSaveTapeChangeEvent);
     }
 
     private void handleRemoveSymbolFromTapeAlphabetEvent(RemoveSymbolFromTapeAlphabetEvent event) {
-        Set<Character> newTapeSymbols = config.getTapeSymbols();
+        Set<Character> newTapeSymbols = config.getTapeAlphabet();
         newTapeSymbols.remove(event.symbol());
         this.updateTransitionSymbols(newTapeSymbols);
         System.out.println("Removing symbol from tape alphabet: " + event.symbol());
-        this.config.setTapeSymbols(newTapeSymbols);
+        this.config.setTapeAlphabet(newTapeSymbols);
     }
 
 
     private void handleTapeSymbolsChangeEvent(TapeSymbolsChangeEvent event) {
         Set<Character> newTapeSymbols = event.getSymbols();
         this.updateTransitionSymbols(event.getSymbols());
-        this.config.setTapeSymbols(newTapeSymbols);
+        this.config.setTapeAlphabet(newTapeSymbols);
+    }
+
+    private void handleInitialStateChangeEvent(InitialStateChangeEvent event) {
+        this.config.setInitialState(event.initialState());
     }
 
     private void updateTransitionSymbols(Set<Character> symbols) {
@@ -53,8 +58,8 @@ public class ConfigurationController {
         }
     }
 
-    private void handleInitialStateChangeEvent(InitialStateChangeEvent event) {
-        this.config.setInitialState(event.getInitialState());
+    private void handleInitialTapeStateChangeEvent(InitialTapeStateChangeEvent event) {
+        this.config.setInitialTapeState(event.getInitialState());
     }
 
     private void handleBlankSymbolChangeEvent(BlankSymbolChangeEvent event) {
@@ -63,16 +68,16 @@ public class ConfigurationController {
 
 
 
-    private void onAddState(AddStateEvent event) {
+    private void handleAddStateChangeEvent(AddStateEvent event) {
         stateRegister.addState(event.index());
     }
 
-    private void onRemoveState(RemoveStateEvent event) {
+    private void handleRemoveStateChangeEvent(RemoveStateEvent event) {
         System.out.println("REMOVING STATE: " + stateRegister.getStates().indexOf(event.state()));
         stateRegister.removeState(event.state());
     }
 
-    private void onTransitionChange(TransitionChangeEvent event) {
+    private void handleTransitionChangeEvent(TransitionChangeEvent event) {
         System.out.println("UPDATING TRANSITION");
 
         Transition oldTransition = event.getOldTransition();
@@ -89,7 +94,7 @@ public class ConfigurationController {
         }
     }
 
-    private void onSaveTape(SaveTapeEvent event) {
+    private void handleSaveTapeChangeEvent(SaveTapeEvent event) {
         System.out.println("SaveTapeEvent received, but not implemented yet.");
         //TODO
     }

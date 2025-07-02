@@ -32,7 +32,7 @@ public class BlankSymbolComboBox extends JComboBox<Character> {
             this.blankSymbolChangeEmitter.emit(new BlankSymbolChangeEvent(symbol));
         });
 
-        this.updateTapeSymbols(this.config.getTapeSymbols());
+        this.updateTapeSymbols(this.config.getTapeAlphabet());
     }
 
     private void updateBlankSymbol(BlankSymbolChangedEvent event) {

@@ -1,15 +1,8 @@
 package core;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
-import core.tape.Tape;
 import core.tape.TapeCell;
 import lombok.RequiredArgsConstructor;
-import serialization.StateMachineCsvSerializer;
-import util.SampleStateRegister;
 
 /**
  * Class representing a Turing machine.
@@ -60,43 +53,5 @@ public class Machine {
         System.out.println("Tape content: " + this.machineState.getTape().getAllData());
 
         return true;
-    }
-
-    public static void main(String[] args) {
-
-
-        List<Character> symbols = new ArrayList<>();
-        symbols.add('0');
-        symbols.add('0');
-        symbols.add('0');
-        symbols.add('0');
-        symbols.add('0');
-        symbols.add('2');
-
-        List<State> states = SampleStateRegister.get().getStates();
-
-        // Example usage of the Machine class
-        Tape<Character> tape = new Tape<>('B', symbols); // Initialize tape with a default symbol
-        MachineState machineState = new MachineState(tape);
-        Machine machine = new Machine(machineState);
-
-        machineState.setCurrentState(states.getFirst()); // Set the initial state
-
-        // Initialize the machine state, tape, and states here
-        // ...
-
-        System.out.println("Initial tape content: " + tape.getAllData());
-
-        // Run the machine step by step
-        while (machine.step()) {
-            System.out.println("step");
-        }
-
-        var result = tape.getAllData();
-
-        System.out.println("Tape content: " + result);
-        System.out.println("Final tape size: " + result.size());
-
-        System.out.println("Machine has terminated.");
     }
 }

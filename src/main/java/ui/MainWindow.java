@@ -1,35 +1,42 @@
 package ui;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import controller.ConfigurationController;
 import controller.MachineController;
+import core.Configuration;
+import core.Machine;
+import core.MachineState;
+import core.StateRegister;
 import core.tape.Tape;
 import event.Receiver;
-import event.events.StepEvent;
 import ui.menubar.MenuBarTuring;
 import ui.player.TuringMachineControlsUI;
+import ui.stateregister.StateRegisterUI;
 import ui.tape.TapeUI;
 
 import java.awt.FlowLayout;
 
 public class MainWindow extends JFrame {
     public final int a = 1;
-    public MainWindow() {
+    public MainWindow(Configuration config, StateRegister stateRegister) {
         setTitle("Turing Maschine");
         setSize(800, 450);
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
+
+        ConfigurationController configurationController = new ConfigurationController(config, stateRegister);
+        Receiver receiver = configurationController.getReceiver();
+        Tape<Character> tape = new Tape<>(config.getBlankSymbol(), config.getInitialTapeState());
+        MachineState machineState = new MachineState(tape, config.getInitialState());
+        Machine machine = new Machine(machineState);
+        MachineController machineController = new MachineController(machine);
 
         // Menu bar setup
         MenuBarTuring menuBar = new MenuBarTuring(new Receiver());
@@ -40,22 +47,6 @@ public class MainWindow extends JFrame {
 
         getContentPane().setLayout(new FlowLayout());
         getContentPane().add(openButton);
-
-        //! TEST
-        List<Character> symbols = new ArrayList<>();
-        symbols.add('0');
-        symbols.add('0');
-        symbols.add('0');
-        symbols.add('0');
-        symbols.add('0');
-        symbols.add('2');
-        symbols.add('0');
-        symbols.add('2');
-        symbols.add('0');
-        symbols.add('2');
-        symbols.add('0');
-        symbols.add('2');
-        Tape<Character> tape = new Tape<>('B', symbols);
 
         tape.moveNext();
         tape.moveNext();
@@ -78,13 +69,10 @@ public class MainWindow extends JFrame {
         });
         getContentPane().add(testHeadChangedEventButton);
 
-        var r = new Receiver(); //!TEST
-        r.registerHandler(StepEvent.class, event -> {
-            System.out.println("Step event received " + Math.random());
-        });
-        add(new TuringMachineControlsUI(r));
+        add(new TuringMachineControlsUI(machineController.getReceiver()));
 
-        setVisible(true);
+        StateRegisterUI stateRegisterUI = new StateRegisterUI(receiver, stateRegister, config);
+        this.getContentPane().add(stateRegisterUI);
     }
 
     private void openFileChooser() {

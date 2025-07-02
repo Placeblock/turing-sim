@@ -2,8 +2,8 @@ package core;
 
 
 import core.tape.Tape;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -11,7 +11,7 @@ import lombok.Setter;
  * It contains the current position of the tape of the machine.
  */
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class MachineState {
     private final Tape<Character> tape;
     @Setter

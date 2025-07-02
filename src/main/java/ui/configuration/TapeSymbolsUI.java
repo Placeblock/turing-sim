@@ -26,7 +26,7 @@ public class TapeSymbolsUI extends JPanel {
         this.tapeSymbolsChangeEmitter = new Emitter<>(receiver);
         this.tapeSymbolsField = new JTextField();
 
-        this.updateTapeSymbols(config.getTapeSymbols());
+        this.updateTapeSymbols(config.getTapeAlphabet());
         config.getTapeSymbolsChangedPublisher().subscribe(this::updateTapeSymbols);
         this.tapeSymbolsField.getDocument().addDocumentListener(new DocumentListener() {
             @Override

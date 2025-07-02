@@ -6,12 +6,13 @@ import core.StateRegister;
 import ui.configuration.BlankSymbolUI;
 import ui.configuration.InitialStateUI;
 import ui.configuration.TapeSymbolsUI;
+import util.SampleStateRegister;
 
 import javax.swing.*;
 import java.util.ArrayList;
 
 public class ConfigurationWindow extends JFrame {
-    public ConfigurationWindow() {
+    public ConfigurationWindow(Configuration config) {
         setTitle("Turing Configuration");
         setSize(800, 450);
         setResizable(true);
@@ -20,7 +21,6 @@ public class ConfigurationWindow extends JFrame {
         // vertical layout
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        Configuration config = new Configuration();
         ConfigurationController controller = new ConfigurationController(config, new StateRegister(new ArrayList<>()));
 
         InitialStateUI initialStateUI = new InitialStateUI(config, controller.getReceiver());
@@ -34,7 +34,11 @@ public class ConfigurationWindow extends JFrame {
 
     public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(() -> {
-            ConfigurationWindow configurationWindow = new ConfigurationWindow();
+            StateRegister stateRegister = SampleStateRegister.get();
+            Configuration config = new Configuration(stateRegister.getStates().getFirst());
+            config.setInitialTapeState("000002020202");
+
+            ConfigurationWindow configurationWindow = new ConfigurationWindow(config);
         });
     }
 }

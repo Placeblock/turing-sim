@@ -1,6 +1,7 @@
 package ui.stateregister;
 
 import core.Configuration;
+import core.Move;
 import core.StateRegister;
 import core.Transition;
 import event.Receiver;
@@ -26,6 +27,9 @@ public class TransitionEditor extends AbstractCellEditor implements TableCellEdi
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         currentTransition = (Transition) value;
+        if (this.currentTransition == null) {
+            this.currentTransition = new Transition(null, Move.NONE, null);
+        }
         return new TransitionPanel(this.receiver, this.stateRegister, this.configuration, this.currentTransition);
     }
 
