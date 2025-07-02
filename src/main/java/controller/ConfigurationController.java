@@ -69,6 +69,7 @@ public class ConfigurationController {
 
 
     private void handleAddStateChangeEvent(AddStateEvent event) {
+        System.out.println("ADDING STATE: " + event.index());
         stateRegister.addState(event.index());
     }
 

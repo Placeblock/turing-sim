@@ -51,7 +51,9 @@ public class StateRegisterTableModel extends AbstractTableModel {
         }
         Character symbol = (Character) getValueAt(0, y);
         State stateOfTransition = stateRegister.getStates().get(x - 1);
-
+        if(stateOfTransition.getTransitions() == null) {
+            return null;
+        }
         return stateOfTransition.getTransitions().get(symbol);
     }
 

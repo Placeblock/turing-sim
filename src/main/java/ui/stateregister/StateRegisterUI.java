@@ -58,7 +58,7 @@ public class StateRegisterUI extends JTable {
                     setRowSelectionInterval(row, row);
                     setColumnSelectionInterval(col, col);
                     Object cellValue = StateRegisterUI.this.getValueAt(row, col);
-                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(receiver, cellValue);
+                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(receiver, cellValue, row);
                     statePopupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
@@ -73,6 +73,7 @@ public class StateRegisterUI extends JTable {
 
     public void onStateAdd(observer.events.AddStateEvent event) {
         // Add UI State
+        tableModel.fireTableRowsInserted(0, event.index());
         tableModel.fireTableDataChanged();
     }
     public void onStateRemove(observer.events.RemoveStateEvent event) {

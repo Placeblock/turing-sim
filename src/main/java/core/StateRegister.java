@@ -22,13 +22,22 @@ public class StateRegister {
     }
     public void addState(int index) {
         State state = new State(null, false);
-        this.states.add(index, state);
+        System.out.println("Adding new state at index: " + index);
+        if(index < states.size()){
+            this.states.add(index, state);
+        }
+        else{
+            this.states.add(state);
+        }
         this.addStatePublisher.publish(new AddStateEvent(index, state));
     }
 
     public void removeState(State state) {
         this.states.remove(state);
         for (State registerState : this.getStates()) {
+            if(registerState.getTransitions() == null) {
+                continue;
+            }
             for (Transition transition : registerState.getTransitions().values()) {
                 if (transition.getNewState().equals(state)) {
                     transition.setNewState(null);
