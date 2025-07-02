@@ -18,7 +18,7 @@ public class StateRegisterPopupMenu extends JPopupMenu {
         // TODO: Add action listeners for addItem and terminateItem
         JMenuItem addItem = new JMenuItem("Add State");
         addItem.addActionListener(e -> {
-            AddStateEvent event = new AddStateEvent(row + 1);
+            AddStateEvent event = new AddStateEvent(row);
             receiver.receive(event);
         });
         this.add(addItem);
