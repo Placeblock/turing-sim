@@ -29,6 +29,7 @@ public class ConfigurationController {
         this.receiver.registerHandler(TransitionChangeEvent.class, this::onTransitionChange);
         this.receiver.registerHandler(RemoveStateEvent.class, this::onRemoveState);
         this.receiver.registerHandler(AddStateEvent.class, this::onAddState);
+        this.receiver.registerHandler(SaveTapeEvent.class, this::onSaveTape);
     }
 
     private void handleRemoveSymbolFromTapeAlphabetEvent(RemoveSymbolFromTapeAlphabetEvent event) {
@@ -86,5 +87,10 @@ public class ConfigurationController {
         if (newTransition.getMove() != oldTransition.getMove()) {
             oldTransition.setMove(newTransition.getMove());
         }
+    }
+
+    private void onSaveTape(SaveTapeEvent event) {
+        System.out.println("SaveTapeEvent received, but not implemented yet.");
+        //TODO
     }
 }
