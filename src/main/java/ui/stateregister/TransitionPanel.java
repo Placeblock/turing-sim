@@ -34,6 +34,7 @@ public class TransitionPanel extends JPanel {
         this.stateComboBox = new JComboBox<>();
         this.stateComboBox.setOpaque(true);
         this.stateComboBox.setRenderer(new StateComboBoxRenderer(stateRegister));
+        this.stateComboBox.setEnabled(false); // Prevent bug
 
         for (State listState : stateRegister.getStates()) {
             this.stateComboBox.addItem(listState);
@@ -51,6 +52,7 @@ public class TransitionPanel extends JPanel {
 
         // (->q1/q2/q3/q4, B, R)
         this.newSymbolComboBox = new JComboBox<>();
+        this.newSymbolComboBox.setEnabled(false); // Prevent bug
         for (Character alphabetChar : config.getTapeAlphabet()) {
             this.newSymbolComboBox.addItem(alphabetChar);
         }
@@ -66,6 +68,7 @@ public class TransitionPanel extends JPanel {
         });
 
         this.moveComboBox = new JComboBox<>();
+        this.moveComboBox.setEnabled(false); // Prevent bug
         for (Move move : Move.values()) {
             this.moveComboBox.addItem(move);
         }
@@ -81,6 +84,13 @@ public class TransitionPanel extends JPanel {
         this.add(newSymbolComboBox);
         this.add(moveComboBox);
         this.add(new JLabel(")"));
+
+        // Enable combo boxes after the editor is properly established to prevent bug
+        SwingUtilities.invokeLater(() -> {
+            this.stateComboBox.setEnabled(true);
+            this.newSymbolComboBox.setEnabled(true);
+            this.moveComboBox.setEnabled(true);
+        });
 
         transition.getStateChangedPublisher().subscribe(this::onStateChanged);
         transition.getSymbolChangedPublisher().subscribe(this::onSymbolChanged);
