@@ -22,7 +22,10 @@ public class StateRegisterRenderer implements TableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object o, boolean isSelected, boolean hasFocus, int row, int column) {
         if (row > 0 && column > 0) {
             Transition transition = (Transition) o;
-            return new TransitionPanel(receiver, stateRegister, configuration, transition);
+            if (transition == null) return new JLabel("-");
+            int stateIndex = stateRegister.getStates().indexOf(transition.getNewState());
+            String text = String.format("(q%d, %s, %s)", stateIndex, transition.getNewSymbol(), transition.getMove().getSymbol());
+            return new JLabel(text);
         }
         if(row > 0 && column == 0) {
             // Render state name
