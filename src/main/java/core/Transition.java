@@ -25,7 +25,7 @@ public class Transition {
     private Move move;
     private State newState;
 
-    public Transition(char newSymbol, Move move, State newState) {
+    public Transition(Character newSymbol, Move move, State newState) {
         this.newSymbol = newSymbol;
         this.move = move;
         this.newState = newState;
