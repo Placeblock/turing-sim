@@ -24,14 +24,17 @@ public class State {
         return transitions.get(c);
     }
 
-    public Set<Character> getSymbols() {
-        return new HashSet<>(this.transitions.keySet());
-    }
-
-    public void removeSymbol(Character symbol) {
-        Transition transition = transitions.remove(symbol);
-        if (transition != null && transition.getNewSymbol() == symbol) {
-            transition.setNewSymbol(null);
+    public void updateSymbols(Set<Character> symbols) {
+        for (Transition transition : this.transitions.values()) {
+            if (!symbols.contains(transition.getNewSymbol())) {
+                System.out.println("Reset Symbol in Transition");
+                transition.setNewSymbol(null);
+            }
+        }
+        HashSet<Character> removed = new HashSet<>(this.transitions.keySet());
+        removed.removeAll(symbols);
+        for (Character symbol : removed) {
+            this.transitions.remove(symbol);
         }
     }
 }

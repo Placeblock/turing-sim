@@ -29,7 +29,7 @@ public class StateRegister {
     public void removeState(State state) {
         this.states.remove(state);
         for (State registerState : this.getStates()) {
-            for (Transition transition : state.getTransitions().values()) {
+            for (Transition transition : registerState.getTransitions().values()) {
                 if (transition.getNewState().equals(state)) {
                     transition.setNewState(null);
                 }

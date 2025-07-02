@@ -48,11 +48,7 @@ public class ConfigurationController {
 
     private void updateTransitionSymbols(Set<Character> symbols) {
         for (State state : this.stateRegister.getStates()) {
-            Set<Character> oldSymbols = state.getSymbols();
-            oldSymbols.removeAll(symbols);
-            for (Character oldSymbol : oldSymbols) {
-                state.removeSymbol(oldSymbol);
-            }
+            state.updateSymbols(symbols);
         }
     }
 
