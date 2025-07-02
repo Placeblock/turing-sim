@@ -5,6 +5,7 @@ import observer.Publisher;
 import observer.events.AddStateEvent;
 import observer.events.RemoveStateEvent;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +22,7 @@ public class StateRegister {
         this.states = states;
     }
     public void addState(int index) {
-        State state = new State(null, false);
+        State state = new State(new HashMap<>(), false);
         System.out.println("Adding new state at index: " + index);
         if(index < states.size()){
             this.states.add(index, state);
