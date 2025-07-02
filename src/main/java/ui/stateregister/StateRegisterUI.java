@@ -5,6 +5,7 @@ import core.State;
 import core.StateRegister;
 import event.Receiver;
 import observer.events.TransitionCreatedEvent;
+import observer.events.TransitionRemovedEvent;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -44,6 +45,11 @@ public class StateRegisterUI extends JTable {
         this.stateRegister.getRemoveStatePublisher().subscribe(this::onStateRemove);
         this.configuration.getTapeSymbolsChangedPublisher().subscribe(this::onTapeSymbolChanged);
 
+        for (State state : this.stateRegister.getStates()) {
+            state.getTransitionCreatedPublisher().subscribe(this::onTransitionCreate);
+            state.getTransitionRemovedPublisher().subscribe(this::onTransitionRemove);
+        }
+
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -60,7 +66,7 @@ public class StateRegisterUI extends JTable {
                     setRowSelectionInterval(row, row);
                     setColumnSelectionInterval(col, col);
                     Object cellValue = StateRegisterUI.this.getValueAt(row, col);
-                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(receiver, cellValue, row);
+                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(receiver, stateRegister, cellValue, row);
                     statePopupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
@@ -78,14 +84,20 @@ public class StateRegisterUI extends JTable {
         tableModel.fireTableRowsInserted(0, event.index());
         tableModel.fireTableDataChanged();
         event.state().getTransitionCreatedPublisher().subscribe(this::onTransitionCreate);
+        event.state().getTransitionRemovedPublisher().subscribe(this::onTransitionRemove);
     }
     public void onStateRemove(observer.events.RemoveStateEvent event) {
         // Remove UI State
         tableModel.fireTableRowsDeleted(0, tableModel.getRowCount());
         tableModel.fireTableDataChanged();
         event.state().getTransitionCreatedPublisher().unsubscribe(this::onTransitionCreate);
+        event.state().getTransitionRemovedPublisher().subscribe(this::onTransitionRemove);
     }
     public void onTransitionCreate(TransitionCreatedEvent event) {
+        tableModel.fireTableDataChanged();
+    }
+    public void onTransitionRemove(TransitionRemovedEvent event) {
+        System.out.println("TABLE DATA CHANGED");
         tableModel.fireTableDataChanged();
     }
 
@@ -98,7 +110,7 @@ public class StateRegisterUI extends JTable {
 
     @Override
     public TableCellRenderer getCellRenderer(int row, int column){
-        return new StateRegisterRenderer(this.receiver, this.stateRegister, this.configuration);
+        return new StateRegisterRenderer(this.stateRegister);
     }
 
     @Override

@@ -21,7 +21,7 @@ public class TransitionPanel extends JPanel {
 
     private boolean updatingContent = false;
 
-    public TransitionPanel(Receiver receiver, StateRegister stateRegister, Configuration config, Transition transition) {
+    public TransitionPanel(StateRegister stateRegister, Configuration config, Transition transition) {
         this.transition = transition;
         if (transition == null) {
             this.stateComboBox = null;

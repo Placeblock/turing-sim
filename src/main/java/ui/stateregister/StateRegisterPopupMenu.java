@@ -1,18 +1,17 @@
 package ui.stateregister;
 
 import core.State;
+import core.StateRegister;
 import core.Transition;
 import event.Receiver;
-import event.events.AddStateEvent;
-import event.events.RemoveStateEvent;
-import event.events.RemoveSymbolFromTapeAlphabetEvent;
-import event.events.TransitionChangeEvent;
+import event.events.*;
+import observer.events.TransitionRemovedEvent;
 
 import javax.swing.*;
 
 public class StateRegisterPopupMenu extends JPopupMenu {
 
-    public StateRegisterPopupMenu(Receiver receiver, Object o, int row) {
+    public StateRegisterPopupMenu(Receiver receiver, StateRegister stateRegister, Object o, int row) {
         super();
 
         // TODO: Add action listeners for addItem and terminateItem
@@ -39,7 +38,13 @@ public class StateRegisterPopupMenu extends JPopupMenu {
             this.add(terminateItem);
             removeItem = new JMenuItem("Remove Transition");
             removeItem.addActionListener(e -> {
-                TransitionChangeEvent event = new TransitionChangeEvent(transition, null);
+                State state = stateRegister.getState(transition);
+                if (state == null) {
+                    System.out.println("State not found");
+                    return;
+                }
+                Character symbol = state.getSymbol(transition);
+                RemoveTransitionEvent event = new RemoveTransitionEvent(state, symbol);
                 receiver.receive(event);
             });
             this.add(removeItem);

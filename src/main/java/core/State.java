@@ -3,6 +3,7 @@ package core;
 import lombok.Getter;
 import observer.Publisher;
 import observer.events.TransitionCreatedEvent;
+import observer.events.TransitionRemovedEvent;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -17,6 +18,7 @@ public class State {
     private final Map<Character, Transition> transitions;
     private final boolean terminates;
     private final Publisher<TransitionCreatedEvent> transitionCreatedPublisher = new Publisher<>();
+    private final Publisher<TransitionRemovedEvent> transitionRemovedPublisher = new Publisher<>();
 
     public State(Map<Character, Transition> transitions, boolean terminates) {
         this.transitions = transitions;
@@ -30,6 +32,21 @@ public class State {
     public void addTransition(Character symbol, Transition transition) {
         this.transitions.put(symbol, transition);
         this.transitionCreatedPublisher.publish(new TransitionCreatedEvent(transition));
+    }
+
+    public void removeTransition(Character symbol) {
+        System.out.println("REMOVED TRANSITION");
+        Transition transition = this.transitions.remove(symbol);
+        this.transitionRemovedPublisher.publish(new TransitionRemovedEvent(transition));
+    }
+
+    public Character getSymbol(Transition transition) {
+        for (Character symbol : this.transitions.keySet()) {
+            if (this.transitions.get(symbol).equals(transition)) {
+                return symbol;
+            }
+        }
+        return null;
     }
 
     public void updateSymbols(Set<Character> symbols) {

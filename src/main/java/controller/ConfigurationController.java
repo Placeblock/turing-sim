@@ -7,6 +7,7 @@ import core.Transition;
 import event.Receiver;
 import event.events.*;
 import lombok.Getter;
+import observer.events.TransitionRemovedEvent;
 
 import java.util.Set;
 
@@ -29,6 +30,7 @@ public class ConfigurationController {
 
         this.receiver.registerHandler(TransitionCreateEvent.class, this::handleCreateTransitionEvent);
         this.receiver.registerHandler(TransitionChangeEvent.class, this::handleChangeTransitionEvent);
+        this.receiver.registerHandler(RemoveTransitionEvent.class, this::handleRemoveTransitionEvent);
         this.receiver.registerHandler(RemoveStateEvent.class, this::handleRemoveStateChangeEvent);
         this.receiver.registerHandler(AddStateEvent.class, this::handleAddStateChangeEvent);
         this.receiver.registerHandler(SaveTapeEvent.class, this::handleSaveTapeChangeEvent);
@@ -98,6 +100,10 @@ public class ConfigurationController {
         if (newTransition.getMove() != oldTransition.getMove()) {
             oldTransition.setMove(newTransition.getMove());
         }
+    }
+
+    private void handleRemoveTransitionEvent(RemoveTransitionEvent event) {
+        event.state().removeTransition(event.symbol());
     }
 
     private void handleSaveTapeChangeEvent(SaveTapeEvent event) {

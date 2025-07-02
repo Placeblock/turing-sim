@@ -11,6 +11,8 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.EventObject;
 
 @RequiredArgsConstructor
@@ -49,7 +51,7 @@ public class TransitionEditor extends AbstractCellEditor implements TableCellEdi
 
             }
         });
-        return new TransitionPanel(this.receiver, this.stateRegister, this.configuration, this.transition);
+        return new TransitionPanel(this.stateRegister, this.configuration, this.transition);
     }
 
     @Override

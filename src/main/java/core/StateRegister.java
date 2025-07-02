@@ -48,6 +48,15 @@ public class StateRegister {
         this.removeStatePublisher.publish(new RemoveStateEvent(state));
     }
 
+    public State getState(Transition transition) {
+        for (State state : this.states) {
+            if (state.getTransitions().containsValue(transition)) {
+                return state;
+            }
+        }
+        return null;
+    }
+
     public List<Character> getSymbols() {
         Set<Character> symbols = new HashSet<>();
 

@@ -5,36 +5,43 @@ import core.State;
 import core.StateRegister;
 import core.Transition;
 import event.Receiver;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
-@RequiredArgsConstructor
-public class StateRegisterRenderer implements TableCellRenderer {
-    private final Receiver receiver;
+public class StateRegisterRenderer extends JPanel implements TableCellRenderer {
     private final StateRegister stateRegister;
-    private final Configuration configuration;
+    public StateRegisterRenderer(StateRegister stateRegister) {
+        this.stateRegister = stateRegister;
+    }
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object o, boolean isSelected, boolean hasFocus, int row, int column) {
         if (row > 0 && column > 0) {
             Transition transition = (Transition) o;
-            if (transition == null) return new JLabel("-");
-            int stateIndex = stateRegister.getStates().indexOf(transition.getNewState());
-            String text = String.format("(q%d, %s, %s)", stateIndex, transition.getNewSymbol(), transition.getMove().getSymbol());
-            return new JLabel(text);
+            if (transition == null) {
+                this.add(new JLabel("-", SwingConstants.CENTER));
+            } else {
+                int stateIndex = stateRegister.getStates().indexOf(transition.getNewState());
+                String text = String.format("(%s, %s, %s)", stateIndex == -1 ? " " : "q"+stateIndex, transition.getNewSymbol() == null ? " " : transition.getNewSymbol(), transition.getMove().getSymbol());
+                JLabel label = new JLabel(text, SwingConstants.CENTER);
+                if (transition.getNewState() == null || transition.getNewSymbol() == null) {
+                    this.setBackground(Color.getHSBColor(350.0f/360, 0.8f, 1f));
+                }
+                this.add(label);
+            }
         }
         if(row > 0 && column == 0) {
-            // Render state name
             State state = (State) o;
-            return new JLabel("q" + stateRegister.getStates().indexOf(state));
+            JLabel label = new JLabel("q" + stateRegister.getStates().indexOf(state), SwingConstants.CENTER);
+            this.add(label);
         }
         if(row == 0 && column != 0){
-            return new JLabel(String.valueOf(o));
+            JLabel label = new JLabel(String.valueOf(o));
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            this.add(label);
         }
-        return null;
+        return this;
     }
 }
