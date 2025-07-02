@@ -3,7 +3,6 @@ package ui.stateregister;
 import core.Configuration;
 import core.State;
 import core.StateRegister;
-import core.Transition;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -11,13 +10,12 @@ import java.util.Iterator;
 
 public class StateRegisterTableModel extends AbstractTableModel {
 
-    private StateRegister stateRegister;
-    private Configuration configuration;
+    private final StateRegister stateRegister;
+    private final Configuration configuration;
 
     public StateRegisterTableModel(StateRegister stateRegister, Configuration configuration) {
         this.stateRegister = stateRegister;
         this.configuration = configuration;
-        this.fireTableDataChanged();
     }
 
     @Override
@@ -27,6 +25,7 @@ public class StateRegisterTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
+        System.out.println(this.configuration.getTapeAlphabet().size());
         return configuration.getTapeAlphabet().size() + 1;
     }
 
@@ -42,6 +41,7 @@ public class StateRegisterTableModel extends AbstractTableModel {
             return stateRegister.getStates().get(x - 1);
         }
         if (x == 0) {
+            System.out.println(configuration.getTapeAlphabet());
             Iterator<Character> iterator = configuration.getTapeAlphabet().iterator();
             Character symbol = null;
             for (int i = 0; i < y; i++) {
@@ -51,9 +51,8 @@ public class StateRegisterTableModel extends AbstractTableModel {
         }
         Character symbol = (Character) getValueAt(0, y);
         State stateOfTransition = stateRegister.getStates().get(x - 1);
-        Transition transition = stateOfTransition.getTransitions().get(symbol);
 
-        return transition;
+        return stateOfTransition.getTransitions().get(symbol);
     }
 
     public Class<?> getColumnClass(int columnIndex) {

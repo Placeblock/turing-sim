@@ -16,47 +16,36 @@ import java.awt.event.MouseEvent;
 
 
 public class StateRegisterUI extends JTable {
-    private final Emitter<AddStateEvent> addStateEmitter;
-    private final Emitter<RemoveStateEvent> removeStateEmitter;
-
     private final Receiver stateRegisterReceiver;
-    private final Receiver configurationReceiver;
     private final StateRegister stateRegister;
     private final Configuration configuration;
     private final StateRegisterTableModel tableModel;
 
     private JPopupMenu statePopupMenu;
     public StateRegisterUI(Receiver stateRegisterReceiver, Receiver configurationReceiver,
-                           StateRegister stateRegister, Configuration configuration,
-                           Emitter<AddStateEvent> addStateEmitter,
-                           Emitter<RemoveStateEvent> removeStateEmitter){
+                           StateRegister stateRegister, Configuration configuration){
         this(stateRegisterReceiver, configurationReceiver, stateRegister, configuration,
-             new StateRegisterTableModel(stateRegister, configuration), addStateEmitter, removeStateEmitter);
+             new StateRegisterTableModel(stateRegister, configuration));
     }
 
 
     private StateRegisterUI(Receiver stateRegisterReceiver, Receiver configurationReceiver,
                            StateRegister stateRegister, Configuration configuration,
-                           StateRegisterTableModel tableModel,
-                           Emitter<AddStateEvent> addStateEmitter,
-                           Emitter<RemoveStateEvent> removeStateEmitter) {
+                           StateRegisterTableModel tableModel) {
         super(tableModel);
         this.stateRegisterReceiver = stateRegisterReceiver;
-        this.configurationReceiver = configurationReceiver;
         this.tableModel = tableModel;
 
         this.setRowHeight(30);
         for (int i = 0; i < this.getColumnModel().getColumnCount(); i++) {
             this.getColumnModel().getColumn(i).setPreferredWidth(175);
         }
-        this.addStateEmitter = addStateEmitter;
-        this.removeStateEmitter = removeStateEmitter;
         this.stateRegister = stateRegister;
         this.configuration = configuration;
 
         this.stateRegister.getAddStatePublisher().subscribe(this::onStateAdd);
         this.stateRegister.getRemoveStatePublisher().subscribe(this::onStateRemove);
-        this.configuration.getTapeSymbolsChangedPublisher().subscribe(this::onRemoveTapeSymbol);
+        this.configuration.getTapeSymbolsChangedPublisher().subscribe(this::onTapeSymbolChanged);
 
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -90,9 +79,10 @@ public class StateRegisterUI extends JTable {
         tableModel.fireTableDataChanged();
     }
 
-    public void onRemoveTapeSymbol(observer.events.TapeSymbolsChangedEvent event) {
+    public void onTapeSymbolChanged(observer.events.TapeSymbolsChangedEvent event) {
+        System.out.println("TAPE SYMBOL CHANGED");
         // Remove UI Symbol
-        tableModel.fireTableDataChanged();
+        tableModel.fireTableStructureChanged();
     }
 
     @Override

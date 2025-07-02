@@ -19,7 +19,7 @@ public class Application {
             Receiver stateRegisterReceiver = stateRegisterController.getReceiver();
             Receiver configurationReceiver = configurationController.getReceiver();
 
-            StateRegisterUI stateRegisterUI = new StateRegisterUI(stateRegisterReceiver, configurationReceiver, stateRegister, configuration, null, null);
+            StateRegisterUI stateRegisterUI = new StateRegisterUI(stateRegisterReceiver, configurationReceiver, stateRegister, configuration);
             mainWindow.getContentPane().add(stateRegisterUI);
         });
     }
