@@ -34,9 +34,7 @@ public class StateRegisterUI extends JTable {
         this.tableModel = tableModel;
 
         this.setRowHeight(30);
-        for (int i = 0; i < this.getColumnModel().getColumnCount(); i++) {
-            this.getColumnModel().getColumn(i).setPreferredWidth(175);
-        }
+        updateColumnWidth();
         this.stateRegister = stateRegister;
         this.configuration = configuration;
 
@@ -67,6 +65,12 @@ public class StateRegisterUI extends JTable {
         });
     }
 
+    private void updateColumnWidth() {
+        for (int i = 1; i < this.getColumnModel().getColumnCount(); i++) {
+            this.getColumnModel().getColumn(i).setPreferredWidth(200);
+        }
+    }
+
     public void onStateAdd(observer.events.AddStateEvent event) {
         // Add UI State
         tableModel.fireTableDataChanged();
@@ -80,6 +84,7 @@ public class StateRegisterUI extends JTable {
         System.out.println("TAPE SYMBOL CHANGED");
         // Remove UI Symbol
         tableModel.fireTableStructureChanged();
+        this.updateColumnWidth();
     }
 
     @Override
