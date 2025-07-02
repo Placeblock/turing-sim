@@ -24,11 +24,18 @@ public class StateRegisterRenderer extends JPanel implements TableCellRenderer {
                 this.add(new JLabel("-", SwingConstants.CENTER));
             } else {
                 int stateIndex = stateRegister.getStates().indexOf(transition.getNewState());
-                String text = String.format("(%s, %s, %s)", stateIndex == -1 ? " " : "q"+stateIndex, transition.getNewSymbol() == null ? " " : transition.getNewSymbol(), transition.getMove().getSymbol());
+                
+                String text = String.format("( %s, %s, %s )",
+                    stateIndex == -1 ? " " : "q"+stateIndex,
+                    transition.getNewSymbol() == null ? " " : transition.getNewSymbol(),
+                    transition.getMove().getSymbol());
+
                 JLabel label = new JLabel(text, SwingConstants.CENTER);
+
                 if (transition.getNewState() == null || transition.getNewSymbol() == null) {
                     this.setBackground(Color.getHSBColor(350.0f/360, 0.8f, 1f));
                 }
+
                 this.add(label);
             }
         }

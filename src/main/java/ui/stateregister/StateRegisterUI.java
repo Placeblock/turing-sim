@@ -61,6 +61,11 @@ public class StateRegisterUI extends JTable {
             }
             private void maybeShowPopup(MouseEvent e) {
                 if (e.isPopupTrigger()) {
+                    // Stop any ongoing cell editing before showing popup
+                    if (StateRegisterUI.this.isEditing()) {
+                        StateRegisterUI.this.getCellEditor().stopCellEditing();
+                    }
+                    
                     int row = rowAtPoint(e.getPoint());
                     int col = columnAtPoint(e.getPoint());
                     setRowSelectionInterval(row, row);
