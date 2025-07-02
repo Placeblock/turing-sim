@@ -113,6 +113,12 @@ public class StateRegisterUI extends JTable {
         this.updateColumnWidth();
     }
 
+    public void onNewSymbolAdded(observer.events.AddSymbolToTapeAlphabetEvent event) {
+        // Add UI Symbol
+        tableModel.fireTableStructureChanged();
+        this.updateColumnWidth();
+    }
+
     @Override
     public TableCellRenderer getCellRenderer(int row, int column){
         return new StateRegisterRenderer(this.stateRegister);
