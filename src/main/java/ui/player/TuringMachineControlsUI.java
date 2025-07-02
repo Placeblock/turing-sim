@@ -12,9 +12,12 @@ import event.Emitter;
 import event.Receiver;
 import event.events.StepEvent;
 
+import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionEvent;
 
 public class TuringMachineControlsUI extends JPanel {
+
+    private static final int DEFAULT_SPEED_MS = 500;
 
     private final Emitter<StepEvent> stepEmitter;
     private Timer playTimer;
@@ -73,18 +76,18 @@ public class TuringMachineControlsUI extends JPanel {
         add(topPanel);
         add(bottomPanel);
     }
-    
-    private void onSpeedSliderChanged(javax.swing.event.ChangeEvent e) {
-        if (isPlaying && playTimer != null) {
-            int newDelay = getDelayFromSlider();
-            playTimer.setDelay(newDelay);
-        }
+
+    private void onSpeedSliderChanged(ChangeEvent e) {
+        if(playTimer == null) return;
+
+        int newDelay = getDelayFromSlider();
+        playTimer.setDelay(newDelay);
     }
     
     private int getDelayFromSlider() {
         int sliderValue = speedSlider.getValue();
         double multiplier = sliderValue / 2.0; // Convert slider value to multiplier
-        return (int) (500 / multiplier); // 500ms base delay divided by multiplier
+        return (int) (DEFAULT_SPEED_MS / multiplier); // base delay divided by multiplier
     }
     
     private void onStepButtonClicked(ActionEvent e) {
@@ -92,21 +95,24 @@ public class TuringMachineControlsUI extends JPanel {
     }
     
     private void onPlayButtonClicked(ActionEvent e) {
-        if (!isPlaying) {
-            isPlaying = true;
-            int delay = getDelayFromSlider();
-            playTimer = new Timer(delay, (ActionEvent ae) -> {
-                this.stepEmitter.emit(new StepEvent());
-            });
-            playTimer.start();
-        }
+        if (isPlaying) return;
+
+        isPlaying = true;
+        int delay = getDelayFromSlider();
+
+        playTimer = new Timer(delay, ae -> {
+            this.stepEmitter.emit(new StepEvent());
+        });
+
+        this.stepEmitter.emit(new StepEvent());
+        playTimer.start();
     }
     
     private void onStopButtonClicked(ActionEvent e) {
-        if (isPlaying && playTimer != null) {
-            playTimer.stop();
-            isPlaying = false;
-        }
+        if(!isPlaying || playTimer == null) return;
+
+        playTimer.stop();
+        isPlaying = false;
     }
     
     private void onResetButtonClicked(ActionEvent e) {
