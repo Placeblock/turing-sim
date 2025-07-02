@@ -78,6 +78,7 @@ public class StateRegisterUI extends JTable {
     }
     public void onStateRemove(observer.events.RemoveStateEvent event) {
         // Remove UI State
+        tableModel.fireTableRowsDeleted(0, tableModel.getRowCount());
         tableModel.fireTableDataChanged();
     }
 
