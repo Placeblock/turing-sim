@@ -7,7 +7,6 @@ import core.Transition;
 import event.Receiver;
 import event.events.*;
 import lombok.Getter;
-import observer.events.TransitionRemovedEvent;
 
 import java.util.Set;
 
@@ -34,6 +33,7 @@ public class ConfigurationController {
         this.receiver.registerHandler(RemoveStateEvent.class, this::handleRemoveStateChangeEvent);
         this.receiver.registerHandler(AddStateEvent.class, this::handleAddStateChangeEvent);
         this.receiver.registerHandler(SaveTapeEvent.class, this::handleSaveTapeChangeEvent);
+        this.receiver.registerHandler(AddSymbolToTapeAlphabetEvent.class, this::handleAddSymbolToTapeAlphabetEvent);
     }
 
     private void handleRemoveSymbolFromTapeAlphabetEvent(RemoveSymbolFromTapeAlphabetEvent event) {
@@ -48,6 +48,14 @@ public class ConfigurationController {
     private void handleTapeSymbolsChangeEvent(TapeSymbolsChangeEvent event) {
         Set<Character> newTapeSymbols = event.getSymbols();
         this.updateTransitionSymbols(event.getSymbols());
+        this.config.setTapeAlphabet(newTapeSymbols);
+    }
+
+    private void handleAddSymbolToTapeAlphabetEvent(AddSymbolToTapeAlphabetEvent event) {
+        Set<Character> newTapeSymbols = config.getTapeAlphabet();
+        newTapeSymbols.add(event.symbol());
+        this.updateTransitionSymbols(newTapeSymbols);
+        System.out.println("Adding symbol to tape alphabet: " + event.symbol());
         this.config.setTapeAlphabet(newTapeSymbols);
     }
 

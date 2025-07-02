@@ -5,7 +5,6 @@ import core.StateRegister;
 import core.Transition;
 import event.Receiver;
 import event.events.*;
-import observer.events.TransitionRemovedEvent;
 
 import javax.swing.*;
 
@@ -50,6 +49,28 @@ public class StateRegisterPopupMenu extends JPopupMenu {
             this.add(removeItem);
         }
         if(o instanceof Character symbol) {
+            addItem = new JMenuItem("Add Symbol");
+            addItem.addActionListener(e -> {
+                String input = JOptionPane.showInputDialog(
+                        null,
+                        "Enter new symbol:",
+                        "Add Symbol",
+                        JOptionPane.PLAIN_MESSAGE
+                );
+                if (input == null || input.isEmpty()) {
+                    return; // User cancelled or entered nothing
+                }
+                if (input.length() == 1) {
+                    AddSymbolToTapeAlphabetEvent event = new AddSymbolToTapeAlphabetEvent(input.charAt(0));
+                    receiver.receive(event);
+                }
+                if(input.length() > 1) {
+                    JOptionPane.showMessageDialog(null, "Please enter a single character symbol.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            });
+            this.add(addItem);
+
             removeItem = new JMenuItem("Remove Symbol");
             removeItem.addActionListener(e -> {
                 RemoveSymbolFromTapeAlphabetEvent event = new RemoveSymbolFromTapeAlphabetEvent(symbol);
