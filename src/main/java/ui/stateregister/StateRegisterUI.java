@@ -10,6 +10,8 @@ import observer.events.TransitionRemovedEvent;
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -62,9 +64,7 @@ public class StateRegisterUI extends JTable {
             private void maybeShowPopup(MouseEvent e) {
                 if (e.isPopupTrigger()) {
                     // Stop any ongoing cell editing before showing popup
-                    if (StateRegisterUI.this.isEditing()) {
-                        StateRegisterUI.this.getCellEditor().stopCellEditing();
-                    }
+                    StateRegisterUI.this.stopEditing();
                     
                     int row = rowAtPoint(e.getPoint());
                     int col = columnAtPoint(e.getPoint());
@@ -76,6 +76,12 @@ public class StateRegisterUI extends JTable {
                 }
             }
         });
+    }
+
+    public void stopEditing() {
+        if (this.isEditing()) {
+            this.getCellEditor().stopCellEditing();
+        }
     }
 
     private void updateColumnWidth() {

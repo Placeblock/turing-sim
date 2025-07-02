@@ -21,6 +21,8 @@ import ui.stateregister.StateRegisterUI;
 import ui.tape.TapeUI;
 
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MainWindow extends JFrame {
     public final int a = 1;
@@ -73,6 +75,14 @@ public class MainWindow extends JFrame {
 
         StateRegisterUI stateRegisterUI = new StateRegisterUI(receiver, stateRegister, config);
         this.getContentPane().add(stateRegisterUI);
+
+        // stop editing when clicking somewhere else
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                stateRegisterUI.stopEditing();
+            }
+        });
     }
 
     private void openFileChooser() {
