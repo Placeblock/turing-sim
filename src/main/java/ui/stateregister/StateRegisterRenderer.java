@@ -6,12 +6,13 @@ import core.StateRegister;
 import core.Transition;
 import event.Receiver;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class StateRegisterRenderer implements TableCellRenderer {
     private final Receiver receiver;
     private final StateRegister stateRegister;

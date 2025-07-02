@@ -1,8 +1,10 @@
 package ui.stateregister;
 
 import core.Configuration;
+import core.State;
 import core.StateRegister;
 import event.Receiver;
+import observer.events.TransitionCreatedEvent;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -75,10 +77,15 @@ public class StateRegisterUI extends JTable {
         // Add UI State
         tableModel.fireTableRowsInserted(0, event.index());
         tableModel.fireTableDataChanged();
+        event.state().getTransitionCreatedPublisher().subscribe(this::onTransitionCreate);
     }
     public void onStateRemove(observer.events.RemoveStateEvent event) {
         // Remove UI State
         tableModel.fireTableRowsDeleted(0, tableModel.getRowCount());
+        tableModel.fireTableDataChanged();
+        event.state().getTransitionCreatedPublisher().unsubscribe(this::onTransitionCreate);
+    }
+    public void onTransitionCreate(TransitionCreatedEvent event) {
         tableModel.fireTableDataChanged();
     }
 
@@ -99,7 +106,10 @@ public class StateRegisterUI extends JTable {
         if (column == 0) {
             return super.getCellEditor(row, column);
         }
-        return new TransitionEditor(this.receiver, this.stateRegister, this.configuration);
+        if (row == 0) return null;
+        State state = this.stateRegister.getStates().get(row - 1);
+        Character symbol = this.configuration.getTapeSymbol(column - 1);
+        return new TransitionEditor(this.receiver, this.stateRegister, this.configuration, state, symbol);
     }
 
 }

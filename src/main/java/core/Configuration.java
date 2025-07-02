@@ -8,10 +8,7 @@ import observer.events.InitialStateChangedEvent;
 import observer.events.InitialTapeStateChangedEvent;
 import observer.events.TapeSymbolsChangedEvent;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -76,6 +73,15 @@ public class Configuration {
             inputSymbols.add(c);
         }
         return inputSymbols;
+    }
+
+    public Character getTapeSymbol(int index) {
+        Iterator<Character> iterator = this.tapeAlphabet.iterator();
+        Character symbol = iterator.next();
+        for (int i = 0; i < index; i++) {
+            symbol = iterator.next();
+        }
+        return symbol;
     }
 
     private Set<Character> createTapeAlphabet() {

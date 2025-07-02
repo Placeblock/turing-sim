@@ -1,9 +1,7 @@
 package ui.stateregister;
 
 import core.*;
-import event.Emitter;
 import event.Receiver;
-import event.events.TransitionChangeEvent;
 import lombok.RequiredArgsConstructor;
 import observer.events.TransitionMoveChangedEvent;
 import observer.events.TransitionStateChangedEvent;
@@ -14,16 +12,17 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 
 public class TransitionPanel extends JPanel {
-    private final Emitter<TransitionChangeEvent> transitionChangeEventEmitter;
 
     private final JComboBox<State> stateComboBox;
     private final JComboBox<Character> newSymbolComboBox;
     private final JComboBox<Move> moveComboBox;
 
+    private final Transition transition;
+
     private boolean updatingContent = false;
 
     public TransitionPanel(Receiver receiver, StateRegister stateRegister, Configuration config, Transition transition) {
-        this.transitionChangeEventEmitter = new Emitter<>(receiver);
+        this.transition = transition;
         if (transition == null) {
             this.stateComboBox = null;
             this.newSymbolComboBox = null;
@@ -36,8 +35,8 @@ public class TransitionPanel extends JPanel {
         this.stateComboBox.setOpaque(true);
         this.stateComboBox.setRenderer(new StateComboBoxRenderer(stateRegister));
 
-        for (State state : stateRegister.getStates()) {
-            this.stateComboBox.addItem(state);
+        for (State listState : stateRegister.getStates()) {
+            this.stateComboBox.addItem(listState);
         }
         State newState = transition.getNewState();
         this.stateComboBox.setSelectedItem(newState);
@@ -47,13 +46,7 @@ public class TransitionPanel extends JPanel {
         this.stateComboBox.addItemListener((e) -> {
             if (this.updatingContent || e.getStateChange() != ItemEvent.SELECTED) return;
             State newNewState = (State) e.getItem();
-            Transition newTransition = new Transition(
-                    transition.getNewSymbol(),
-                    transition.getMove(),
-                    newNewState
-            );
-            TransitionChangeEvent event = new TransitionChangeEvent(transition, newTransition);
-            this.transitionChangeEventEmitter.emit(event);
+            this.transition.setNewState(newNewState);
         });
 
         // (->q1/q2/q3/q4, B, R)
@@ -69,13 +62,7 @@ public class TransitionPanel extends JPanel {
         this.newSymbolComboBox.addItemListener((e) -> {
             if (this.updatingContent || e.getStateChange() != ItemEvent.SELECTED) return;
             Character newNewSymbol = (Character) e.getItem();
-            Transition newTransition = new Transition(
-                    newNewSymbol,
-                    transition.getMove(),
-                    transition.getNewState()
-            );
-            TransitionChangeEvent event = new TransitionChangeEvent(transition, newTransition);
-            this.transitionChangeEventEmitter.emit(event);
+            this.transition.setNewSymbol(newNewSymbol);
         });
 
         this.moveComboBox = new JComboBox<>();
@@ -86,13 +73,7 @@ public class TransitionPanel extends JPanel {
         this.moveComboBox.addItemListener((e) -> {
             if (this.updatingContent || e.getStateChange() != ItemEvent.SELECTED) return;
             Move newMove = (Move) e.getItem();
-            Transition newTransition = new Transition(
-                    transition.getNewSymbol(),
-                    newMove,
-                    transition.getNewState()
-            );
-            TransitionChangeEvent event = new TransitionChangeEvent(transition, newTransition);
-            this.transitionChangeEventEmitter.emit(event);
+            this.transition.setMove(newMove);
         });
 
         this.add(new JLabel("("));

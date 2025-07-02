@@ -27,7 +27,8 @@ public class ConfigurationController {
         this.receiver.registerHandler(RemoveSymbolFromTapeAlphabetEvent.class, this::handleRemoveSymbolFromTapeAlphabetEvent);
         this.receiver.registerHandler(InitialStateChangeEvent.class, this::handleInitialStateChangeEvent);
 
-        this.receiver.registerHandler(TransitionChangeEvent.class, this::handleTransitionChangeEvent);
+        this.receiver.registerHandler(TransitionCreateEvent.class, this::handleCreateTransitionEvent);
+        this.receiver.registerHandler(TransitionChangeEvent.class, this::handleChangeTransitionEvent);
         this.receiver.registerHandler(RemoveStateEvent.class, this::handleRemoveStateChangeEvent);
         this.receiver.registerHandler(AddStateEvent.class, this::handleAddStateChangeEvent);
         this.receiver.registerHandler(SaveTapeEvent.class, this::handleSaveTapeChangeEvent);
@@ -78,7 +79,11 @@ public class ConfigurationController {
         stateRegister.removeState(event.state());
     }
 
-    private void handleTransitionChangeEvent(TransitionChangeEvent event) {
+    private void handleCreateTransitionEvent(TransitionCreateEvent event) {
+        event.state().addTransition(event.symbol(), event.transition());
+    }
+
+    private void handleChangeTransitionEvent(TransitionChangeEvent event) {
         System.out.println("UPDATING TRANSITION");
 
         Transition oldTransition = event.getOldTransition();

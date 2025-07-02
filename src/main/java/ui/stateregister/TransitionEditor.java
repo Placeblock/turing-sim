@@ -1,42 +1,61 @@
 package ui.stateregister;
 
-import core.Configuration;
-import core.Move;
-import core.StateRegister;
-import core.Transition;
+import core.*;
 import event.Receiver;
+import event.events.TransitionChangeEvent;
+import event.events.TransitionCreateEvent;
+import lombok.RequiredArgsConstructor;
 
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.util.EventObject;
 
+@RequiredArgsConstructor
 public class TransitionEditor extends AbstractCellEditor implements TableCellEditor {
-    private Transition currentTransition;
+    private Transition transition;
 
     private final Receiver receiver;
     private final StateRegister stateRegister;
     private final Configuration configuration;
 
-    public TransitionEditor(Receiver receiver, StateRegister stateRegister, Configuration configuration) {
-        this.receiver = receiver;
-        this.stateRegister = stateRegister;
-        this.configuration = configuration;
-    }
+    private final State state;
+    private final Character symbol;
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        currentTransition = (Transition) value;
-        if (this.currentTransition == null) {
-            this.currentTransition = new Transition(null, Move.NONE, null);
+        transition = (Transition) value;
+        boolean create = this.transition == null;
+        if (this.transition == null) {
+            this.transition = new Transition(null, Move.NONE, null);
         }
-        return new TransitionPanel(this.receiver, this.stateRegister, this.configuration, this.currentTransition);
+        Transition oldTransition = new Transition(transition.getNewSymbol(), transition.getMove(), transition.getNewState());
+        this.addCellEditorListener(new CellEditorListener() {
+            @Override
+            public void editingStopped(ChangeEvent changeEvent) {
+                if (create) {
+                    TransitionCreateEvent event = new TransitionCreateEvent(TransitionEditor.this.state, TransitionEditor.this.symbol, TransitionEditor.this.transition);
+                    TransitionEditor.this.receiver.receive(event);
+                } else {
+                    TransitionChangeEvent event = new TransitionChangeEvent(oldTransition, TransitionEditor.this.transition);
+                    TransitionEditor.this.receiver.receive(event);
+                }
+            }
+
+            @Override
+            public void editingCanceled(ChangeEvent changeEvent) {
+
+            }
+        });
+        return new TransitionPanel(this.receiver, this.stateRegister, this.configuration, this.transition);
     }
 
     @Override
     public Object getCellEditorValue() {
         // You may want to extract the edited values from transitionPanel here
-        return currentTransition;
+        return transition;
     }
 
     @Override

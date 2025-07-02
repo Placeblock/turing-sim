@@ -40,21 +40,15 @@ public class StateRegisterTableModel extends AbstractTableModel {
         if (y == 0 && x != 0) {
             return stateRegister.getStates().get(x - 1);
         }
-        if (x == 0) {
-            System.out.println(configuration.getTapeAlphabet());
-            Iterator<Character> iterator = configuration.getTapeAlphabet().iterator();
-            Character symbol = null;
-            for (int i = 0; i < y; i++) {
-                symbol = iterator.next();
-            }
+        Character symbol = configuration.getTapeSymbol(y - 1);
+        if (x == 0 && y != 0) {
+            System.out.println(y-1);
             return symbol;
         }
-        Character symbol = (Character) getValueAt(0, y);
-        State stateOfTransition = stateRegister.getStates().get(x - 1);
-        if(stateOfTransition.getTransitions() == null) {
-            return null;
-        }
-        return stateOfTransition.getTransitions().get(symbol);
+        if (x == 0) return null;
+
+        State state = stateRegister.getStates().get(x - 1);
+        return state.getTransitions().get(symbol);
     }
 
     public Class<?> getColumnClass(int columnIndex) {
