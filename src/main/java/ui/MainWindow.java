@@ -69,7 +69,22 @@ public class MainWindow extends JFrame {
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.setBorder(BorderFactory.createTitledBorder("State Register"));
         rightPanel.add(stateRegisterUI, BorderLayout.CENTER);
+
+        // Set initial preferred size
+        int initialWidth = (int) (getWidth() * 0.25); // 25% of window width
+        rightPanel.setPreferredSize(new Dimension(initialWidth, getHeight()));
+
         content.add(rightPanel, BorderLayout.EAST);
+
+        // === Dynamically resize right panel ===
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                int width = (int) (getWidth() * 0.5); // 25% of window width
+                rightPanel.setPreferredSize(new Dimension(width, getHeight()));
+                content.revalidate();
+            }
+        });
 
         // === Click Anywhere to Stop Editing ===
         addMouseListener(new MouseAdapter() {
