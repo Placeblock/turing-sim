@@ -1,12 +1,5 @@
 package ui;
 
-import java.io.File;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 import controller.ConfigurationController;
 import controller.MachineController;
 import core.Configuration;
@@ -20,19 +13,21 @@ import ui.player.TuringMachineControlsUI;
 import ui.stateregister.StateRegisterUI;
 import ui.tape.TapeUI;
 
-import java.awt.FlowLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 public class MainWindow extends JFrame {
-    public final int a = 1;
     public MainWindow(Configuration config, StateRegister stateRegister) {
         setTitle("Turing Maschine");
-        setSize(800, 450);
+        setSize(1000, 600);
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center the window
+        setLocationRelativeTo(null);
 
+        // === Controllers and Machine Setup ===
         ConfigurationController configurationController = new ConfigurationController(config, stateRegister);
         Receiver receiver = configurationController.getReceiver();
         Tape<Character> tape = new Tape<>(config.getBlankSymbol(), config.getInitialTapeState());
@@ -40,43 +35,43 @@ public class MainWindow extends JFrame {
         Machine machine = new Machine(machineState);
         MachineController machineController = new MachineController(machine);
 
-        // Menu bar setup
-        MenuBarTuring menuBar = new MenuBarTuring(new Receiver());
-        setJMenuBar(menuBar);
+        // === Menu Bar ===
+        setJMenuBar(new MenuBarTuring(receiver));
 
+        // === Layout Manager ===
+        Container content = getContentPane();
+        content.setLayout(new BorderLayout(10, 10));
+
+        // === Top Panel (File Open Button) ===
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton openButton = new JButton("Open File");
         openButton.addActionListener(e -> openFileChooser());
+        topPanel.add(openButton);
+        content.add(topPanel, BorderLayout.NORTH);
 
-        getContentPane().setLayout(new FlowLayout());
-        getContentPane().add(openButton);
+        // === Center Panel (Tape + Controls) ===
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        tape.moveNext();
-        tape.moveNext();
-        tape.moveNext();
+        tape.moveNext(); tape.moveNext(); tape.moveNext();
+        TapeUI tapeUI = new TapeUI(tape);
+        TuringMachineControlsUI controlsUI = new TuringMachineControlsUI(machineController.getReceiver());
 
-        TapeUI tapePanel = new TapeUI(tape);
-        getContentPane().add(tapePanel);
+        centerPanel.add(tapeUI);
+        centerPanel.add(Box.createVerticalStrut(10)); // spacing
+        centerPanel.add(controlsUI);
 
-        //! TEST
-        JButton testCharacterChangedEventButton = new JButton("Test Character Changed Event");
-        testCharacterChangedEventButton.addActionListener(e -> {
-            tapePanel.aaa.setSymbol('T');
-        });
-        getContentPane().add(testCharacterChangedEventButton);
+        content.add(centerPanel, BorderLayout.CENTER);
 
-        //! TEST
-        JButton testHeadChangedEventButton = new JButton("Test Head Changed Event");
-        testHeadChangedEventButton.addActionListener(e -> {
-            tape.moveNext();
-        });
-        getContentPane().add(testHeadChangedEventButton);
-
-        add(new TuringMachineControlsUI(machineController.getReceiver()));
-
+        // === Right Panel (State Register UI) ===
         StateRegisterUI stateRegisterUI = new StateRegisterUI(receiver, stateRegister, config);
-        this.getContentPane().add(stateRegisterUI);
+        JPanel rightPanel = new JPanel(new BorderLayout());
+        rightPanel.setBorder(BorderFactory.createTitledBorder("State Register"));
+        rightPanel.add(stateRegisterUI, BorderLayout.CENTER);
+        content.add(rightPanel, BorderLayout.EAST);
 
-        // stop editing when clicking somewhere else
+        // === Click Anywhere to Stop Editing ===
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
