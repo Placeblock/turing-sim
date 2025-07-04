@@ -61,7 +61,7 @@ public class StateRegisterPopupMenu extends JPopupMenu {
                         JOptionPane.PLAIN_MESSAGE
                 );
                 if (input == null || input.isEmpty()) {
-                    return; // User cancelled or entered nothing
+                    return;
                 }
                 if (input.length() == 1) {
                     AddSymbolToTapeAlphabetEvent event = new AddSymbolToTapeAlphabetEvent(input.charAt(0));

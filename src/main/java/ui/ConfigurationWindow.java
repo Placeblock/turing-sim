@@ -1,5 +1,6 @@
 package ui;
 
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import controller.ConfigurationController;
 import core.Configuration;
 import core.StateRegister;
@@ -18,6 +19,11 @@ public class ConfigurationWindow extends JFrame {
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
+        try {
+            UIManager.setLookAndFeel(new FlatIntelliJLaf());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // vertical layout
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
