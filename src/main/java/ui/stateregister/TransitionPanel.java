@@ -1,13 +1,13 @@
 package ui.stateregister;
 
 import core.*;
-import event.Receiver;
 import lombok.RequiredArgsConstructor;
 import observer.events.TransitionMoveChangedEvent;
 import observer.events.TransitionStateChangedEvent;
 import observer.events.TransitionSymbolChangedEvent;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 
@@ -22,6 +22,7 @@ public class TransitionPanel extends JPanel {
     private boolean updatingContent = false;
 
     public TransitionPanel(StateRegister stateRegister, Configuration config, Transition transition) {
+        // Empty transition
         this.transition = transition;
         if (transition == null) {
             this.stateComboBox = null;
@@ -30,11 +31,12 @@ public class TransitionPanel extends JPanel {
             this.add(new JLabel("-"));
             return;
         }
-
+        // StatecomboBox
         this.stateComboBox = new JComboBox<>();
+        this.stateComboBox.setPreferredSize(new Dimension(50, 25));
         this.stateComboBox.setOpaque(true);
         this.stateComboBox.setRenderer(new StateComboBoxRenderer(stateRegister));
-        this.stateComboBox.setEnabled(false); // Prevent bug
+        this.stateComboBox.setEnabled(false);
 
         for (State listState : stateRegister.getStates()) {
             this.stateComboBox.addItem(listState);
@@ -50,8 +52,9 @@ public class TransitionPanel extends JPanel {
             this.transition.setNewState(newNewState);
         });
 
-        // (->q1/q2/q3/q4, B, R)
+        // New Symbol ComboBox
         this.newSymbolComboBox = new JComboBox<>();
+        this.newSymbolComboBox.setPreferredSize(new Dimension(46, 25));
         this.newSymbolComboBox.setEnabled(false); // Prevent bug
         for (Character alphabetChar : config.getTapeAlphabet()) {
             this.newSymbolComboBox.addItem(alphabetChar);
@@ -66,9 +69,10 @@ public class TransitionPanel extends JPanel {
             Character newNewSymbol = (Character) e.getItem();
             this.transition.setNewSymbol(newNewSymbol);
         });
-
+        // Move ComboBox
         this.moveComboBox = new JComboBox<>();
-        this.moveComboBox.setEnabled(false); // Prevent bug
+        this.moveComboBox.setPreferredSize(new Dimension(72, 25));
+        this.moveComboBox.setEnabled(false);
         for (Move move : Move.values()) {
             this.moveComboBox.addItem(move);
         }
@@ -102,7 +106,8 @@ public class TransitionPanel extends JPanel {
             this.updatingContent = true;
             this.stateComboBox.setSelectedItem(event.getNewState());
             if (this.newSymbolComboBox.getSelectedItem() != null) {
-                this.setBackground(Color.WHITE);
+                this.setBackground(UIManager.getColor("Table.background"));
+                this.setBorder(new LineBorder(Color.lightGray, 1));
             }
             this.updatingContent = false;
         });
@@ -121,7 +126,8 @@ public class TransitionPanel extends JPanel {
             this.updatingContent = true;
             this.newSymbolComboBox.setSelectedItem(event.getNewSymbol());
             if(this.stateComboBox.getSelectedItem() != null) {
-                this.setBackground(Color.WHITE);
+                this.setBackground(UIManager.getColor("Table.background"));
+                this.setBorder(new LineBorder(Color.lightGray, 1));
             }
             this.updatingContent = false;
         });

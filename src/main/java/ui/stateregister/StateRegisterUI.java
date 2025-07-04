@@ -83,20 +83,20 @@ public class StateRegisterUI extends JTable {
     }
 
     private void updateColumnWidth() {
-        for (int i = 1; i < this.getColumnModel().getColumnCount(); i++) {
+        for (int i = 0; i < this.getColumnModel().getColumnCount(); i++) {
             this.getColumnModel().getColumn(i).setPreferredWidth(200);
+            this.getColumnModel().getColumn(i).setMinWidth(210);
+            this.getColumnModel().getColumn(i).setMaxWidth(210);
         }
     }
 
     public void onStateAdd(observer.events.AddStateEvent event) {
-        // Add UI State
         tableModel.fireTableRowsInserted(0, event.index());
         tableModel.fireTableDataChanged();
         event.state().getTransitionCreatedPublisher().subscribe(this::onTransitionCreate);
         event.state().getTransitionRemovedPublisher().subscribe(this::onTransitionRemove);
     }
     public void onStateRemove(observer.events.RemoveStateEvent event) {
-        // Remove UI State
         tableModel.fireTableRowsDeleted(0, tableModel.getRowCount());
         tableModel.fireTableDataChanged();
         event.state().getTransitionCreatedPublisher().unsubscribe(this::onTransitionCreate);
@@ -112,13 +112,11 @@ public class StateRegisterUI extends JTable {
 
     public void onTapeSymbolChanged(observer.events.TapeSymbolsChangedEvent event) {
         System.out.println("TAPE SYMBOL CHANGED");
-        // Remove UI Symbol
         tableModel.fireTableStructureChanged();
         this.updateColumnWidth();
     }
 
     public void onNewSymbolAdded(observer.events.AddSymbolToTapeAlphabetEvent event) {
-        // Add UI Symbol
         tableModel.fireTableStructureChanged();
         this.updateColumnWidth();
     }
@@ -138,5 +136,7 @@ public class StateRegisterUI extends JTable {
         Character symbol = this.configuration.getTapeSymbol(column - 1);
         return new TransitionEditor(this.receiver, this.stateRegister, this.configuration, state, symbol);
     }
+
+
 
 }

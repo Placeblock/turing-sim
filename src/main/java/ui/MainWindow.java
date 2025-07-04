@@ -72,11 +72,13 @@ public class MainWindow extends JFrame {
         // === Right Panel (State Register UI) ===
         StateRegisterUI stateRegisterUI = new StateRegisterUI(receiver, stateRegister, config);
         JPanel rightPanel = new JPanel(new BorderLayout());
+        JScrollPane tableScrollPane = new JScrollPane(stateRegisterUI);
+        rightPanel.add(tableScrollPane, BorderLayout.CENTER);
         rightPanel.setBorder(BorderFactory.createTitledBorder("State Register"));
         rightPanel.add(stateRegisterUI, BorderLayout.CENTER);
 
         // Set initial preferred size
-        int initialWidth = (int) (getWidth() * 0.25); // 25% of window width
+        int initialWidth = (int) (getWidth() * 0.25);
         rightPanel.setPreferredSize(new Dimension(initialWidth, getHeight()));
 
         content.add(rightPanel, BorderLayout.EAST);
