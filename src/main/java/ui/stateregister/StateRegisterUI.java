@@ -35,6 +35,8 @@ public class StateRegisterUI extends JTable {
         super(tableModel);
         this.receiver = receiver;
         this.tableModel = tableModel;
+        this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        this.setTableHeader(null);
 
         this.setRowHeight(30);
         updateColumnWidth();

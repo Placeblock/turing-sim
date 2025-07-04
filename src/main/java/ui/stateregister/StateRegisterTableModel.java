@@ -6,7 +6,6 @@ import core.StateRegister;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import java.util.Iterator;
 
 public class StateRegisterTableModel extends AbstractTableModel {
 
