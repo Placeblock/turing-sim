@@ -1,5 +1,6 @@
 package ui;
 
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import controller.ConfigurationController;
 import controller.MachineController;
 import core.Configuration;
@@ -34,7 +35,11 @@ public class MainWindow extends JFrame {
         MachineState machineState = new MachineState(tape, config.getInitialState());
         Machine machine = new Machine(machineState);
         MachineController machineController = new MachineController(machine);
-
+        try {
+            UIManager.setLookAndFeel(new FlatIntelliJLaf());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // === Menu Bar ===
         setJMenuBar(new MenuBarTuring(receiver));
 
