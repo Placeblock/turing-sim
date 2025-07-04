@@ -80,7 +80,7 @@ public class MainWindow extends JFrame {
         addComponentListener(new java.awt.event.ComponentAdapter() {
             @Override
             public void componentResized(java.awt.event.ComponentEvent e) {
-                int width = (int) (getWidth() * 0.5); // 25% of window width
+                int width = (int) (getWidth() * 0.5);
                 rightPanel.setPreferredSize(new Dimension(width, getHeight()));
                 content.revalidate();
             }

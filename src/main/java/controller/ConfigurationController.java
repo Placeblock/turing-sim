@@ -34,6 +34,13 @@ public class ConfigurationController {
         this.receiver.registerHandler(AddStateEvent.class, this::handleAddStateChangeEvent);
         this.receiver.registerHandler(SaveTapeEvent.class, this::handleSaveTapeChangeEvent);
         this.receiver.registerHandler(AddSymbolToTapeAlphabetEvent.class, this::handleAddSymbolToTapeAlphabetEvent);
+        this.receiver.registerHandler(TerminateStateEvent.class, this::handleTerminateStateEvent);
+    }
+
+    private void handleTerminateStateEvent(TerminateStateEvent terminateStateEvent) {
+        System.out.println("Handling TerminateStateEvent for state: " + terminateStateEvent.state());
+        this.stateRegister.getState(terminateStateEvent.state())
+                .setTerminates(terminateStateEvent.terminates());
     }
 
     private void handleRemoveSymbolFromTapeAlphabetEvent(RemoveSymbolFromTapeAlphabetEvent event) {

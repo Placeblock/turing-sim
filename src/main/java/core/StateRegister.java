@@ -57,6 +57,15 @@ public class StateRegister {
         return null;
     }
 
+    public State getState(State state){
+        for (State s : this.states) {
+            if (s.equals(state)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
     public List<Character> getSymbols() {
         Set<Character> symbols = new HashSet<>();
 

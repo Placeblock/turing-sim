@@ -1,6 +1,7 @@
 package core;
 
 import lombok.Getter;
+import lombok.Setter;
 import observer.Publisher;
 import observer.events.TransitionCreatedEvent;
 import observer.events.TransitionRemovedEvent;
@@ -16,7 +17,8 @@ import java.util.Set;
 @Getter
 public class State {
     private final Map<Character, Transition> transitions;
-    private final boolean terminates;
+    @Setter
+    private boolean terminates;
     private final Publisher<TransitionCreatedEvent> transitionCreatedPublisher = new Publisher<>();
     private final Publisher<TransitionRemovedEvent> transitionRemovedPublisher = new Publisher<>();
 
@@ -62,4 +64,5 @@ public class State {
             this.transitions.remove(symbol);
         }
     }
+
 }

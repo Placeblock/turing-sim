@@ -13,7 +13,6 @@ public class StateRegisterPopupMenu extends JPopupMenu {
     public StateRegisterPopupMenu(Receiver receiver, StateRegister stateRegister, Object o, int row) {
         super();
 
-        // TODO: Add action listeners for addItem and terminateItem
         JMenuItem addItem = new JMenuItem("Add State");
         addItem.addActionListener(e -> {
             AddStateEvent event = new AddStateEvent(row);
@@ -22,9 +21,15 @@ public class StateRegisterPopupMenu extends JPopupMenu {
         this.add(addItem);
         JMenuItem removeItem;
         if(o instanceof State state) {
-            JMenuItem terminateItem = new JMenuItem("Terminate State");
+            JMenuItem terminateItem = new JMenuItem();
+            updateTerminateItemText(terminateItem, state.isTerminates());
+            terminateItem.addActionListener(e -> {
+                boolean newState = !state.isTerminates();
+                TerminateStateEvent event = new TerminateStateEvent(state, newState);
+                receiver.receive(event);
+                updateTerminateItemText(terminateItem, newState);
+            });
             this.add(terminateItem);
-            this.add(addItem);
             removeItem = new JMenuItem("Remove State");
             removeItem.addActionListener(e -> {
                 RemoveStateEvent event = new RemoveStateEvent(state);
@@ -33,8 +38,6 @@ public class StateRegisterPopupMenu extends JPopupMenu {
             this.add(removeItem);
         }
         if(o instanceof  Transition transition) {
-            JMenuItem terminateItem = new JMenuItem("Terminate State");
-            this.add(terminateItem);
             removeItem = new JMenuItem("Remove Transition");
             removeItem.addActionListener(e -> {
                 State state = stateRegister.getState(transition);
@@ -78,5 +81,8 @@ public class StateRegisterPopupMenu extends JPopupMenu {
             });
             this.add(removeItem);
         }
+    }
+    private void updateTerminateItemText(JMenuItem item, boolean isFinal) {
+        item.setText(isFinal ? "Final State" : "Non-Final State");
     }
 }
