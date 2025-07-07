@@ -10,7 +10,7 @@ import javax.swing.Timer;
 
 import event.Emitter;
 import event.Receiver;
-import event.events.StepEvent;
+import event.events.*;
 
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionEvent;
@@ -20,12 +20,18 @@ public class TuringMachineControlsUI extends JPanel {
     private static final int DEFAULT_SPEED_MS = 500;
 
     private final Emitter<StepEvent> stepEmitter;
-    private Timer playTimer;
-    private JSlider speedSlider;
-    private boolean isPlaying = false;
-    
+    private final Emitter<ResetEvent> resetEmitter;
+    private final Emitter<StartEvent> startEmitter;
+    private final Emitter<StopEvent> stopEmitter;
+    private final Emitter<IntervalEvent> intervalEmitter;
+    private final JSlider speedSlider;
+
     public TuringMachineControlsUI(Receiver receiver) {
         this.stepEmitter = new Emitter<>(receiver);
+        this.resetEmitter = new Emitter<>(receiver);
+        this.startEmitter = new Emitter<>(receiver);
+        this.stopEmitter = new Emitter<>(receiver);
+        this.intervalEmitter = new Emitter<>(receiver);
         // To step use this.stepEmitter.emit(new StepEvent());
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -78,10 +84,7 @@ public class TuringMachineControlsUI extends JPanel {
     }
 
     private void onSpeedSliderChanged(ChangeEvent e) {
-        if(playTimer == null) return;
-
-        int newDelay = getDelayFromSlider();
-        playTimer.setDelay(newDelay);
+        this.intervalEmitter.emit(new IntervalEvent(this.getDelayFromSlider()));
     }
     
     private int getDelayFromSlider() {
@@ -95,32 +98,14 @@ public class TuringMachineControlsUI extends JPanel {
     }
     
     private void onPlayButtonClicked(ActionEvent e) {
-        if (isPlaying) return;
-
-        isPlaying = true;
-        int delay = getDelayFromSlider();
-
-        playTimer = new Timer(delay, ae -> {
-            this.stepEmitter.emit(new StepEvent());
-        });
-
-        this.stepEmitter.emit(new StepEvent());
-        playTimer.start();
+        this.startEmitter.emit(new StartEvent());
     }
     
     private void onStopButtonClicked(ActionEvent e) {
-        if(!isPlaying || playTimer == null) return;
-
-        playTimer.stop();
-        isPlaying = false;
+        this.stopEmitter.emit(new StopEvent());
     }
     
     private void onResetButtonClicked(ActionEvent e) {
-        // Stop the timer if playing
-        if (isPlaying && playTimer != null) {
-            playTimer.stop();
-            isPlaying = false;
-        }
-        // TODO: Implement reset functionality
+        this.resetEmitter.emit(new ResetEvent());
     }
 }

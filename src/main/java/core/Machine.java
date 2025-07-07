@@ -2,6 +2,7 @@ package core;
 
 
 import core.tape.TapeCell;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class Machine {
+    @Getter
     private final MachineState machineState;
 
     /**

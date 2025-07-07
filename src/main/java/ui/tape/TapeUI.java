@@ -9,6 +9,7 @@ import core.tape.Tape;
 import core.tape.TapeCell;
 import observer.events.TapeHeadPositionChangedEvent;
 import observer.events.TapeLengthModifiedEvent;
+import observer.events.TapeResetEvent;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -44,6 +45,7 @@ public class TapeUI extends JScrollPane {
 
         tape.getHeadPositionChangedPublisher().subscribe(this::onHeadPositionChanged);
         tape.getLengthModifiedPublisher().subscribe(this::onTapeLengthModified);
+        tape.getResetPublisher().subscribe(this::onReset);
     }
 
     /**
@@ -119,6 +121,10 @@ public class TapeUI extends JScrollPane {
         this.aaa = event.newHeadPosition(); //! TEST
 
         SwingUtilities.invokeLater(this::scrollToHeadCell);
+    }
+
+    private void onReset(TapeResetEvent event) {
+        this.rebuildTapeUI();
     }
 
     /**

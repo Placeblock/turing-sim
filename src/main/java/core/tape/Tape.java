@@ -8,6 +8,7 @@ import lombok.Getter;
 import observer.Publisher;
 import observer.events.TapeHeadPositionChangedEvent;
 import observer.events.TapeLengthModifiedEvent;
+import observer.events.TapeResetEvent;
 
 public class Tape<T> {
 
@@ -15,9 +16,11 @@ public class Tape<T> {
     private TapeCell<T> headPosition;
 
     @Getter
-    private Publisher<TapeHeadPositionChangedEvent<T>> headPositionChangedPublisher = new Publisher<>();
+    private final Publisher<TapeHeadPositionChangedEvent<T>> headPositionChangedPublisher = new Publisher<>();
     @Getter
-    private Publisher<TapeLengthModifiedEvent> lengthModifiedPublisher = new Publisher<>();
+    private final Publisher<TapeLengthModifiedEvent> lengthModifiedPublisher = new Publisher<>();
+    @Getter
+    private final Publisher<TapeResetEvent> resetPublisher = new Publisher<>();
 
     public Tape(T defaultSymbol) {
         this.defaultSymbol = defaultSymbol;
@@ -54,6 +57,11 @@ public class Tape<T> {
     public void setHead(TapeCell<T> head) {
         this.headPosition = head;
         this.headPositionChangedPublisher.publish(new TapeHeadPositionChangedEvent<>(head));
+    }
+
+    public void reset(TapeCell<T> newHead) {
+        this.headPosition = newHead;
+        this.resetPublisher.publish(new TapeResetEvent());
     }
 
     public TapeCell<T> getNext() {

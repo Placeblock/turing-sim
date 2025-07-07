@@ -34,7 +34,7 @@ public class MainWindow extends JFrame {
         Tape<Character> tape = new Tape<>(config.getBlankSymbol(), config.getInitialTapeState());
         MachineState machineState = new MachineState(tape, config.getInitialState());
         Machine machine = new Machine(machineState);
-        MachineController machineController = new MachineController(machine);
+        MachineController machineController = new MachineController(machine, config);
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (Exception e) {
