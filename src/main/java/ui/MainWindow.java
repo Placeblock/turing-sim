@@ -10,6 +10,7 @@ import core.StateRegister;
 import core.tape.Tape;
 import event.Receiver;
 import ui.menubar.MenuBarTuring;
+import ui.player.StatusPanel;
 import ui.player.TuringMachineControlsUI;
 import ui.stateregister.StateRegisterUI;
 import ui.tape.TapeUI;
@@ -51,7 +52,9 @@ public class MainWindow extends JFrame {
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton openButton = new JButton("Open File");
         openButton.addActionListener(e -> openFileChooser());
+        StatusPanel statusPanel = new StatusPanel(machineState.getCurrentStateChangedPublisher(), stateRegister);
         topPanel.add(openButton);
+        topPanel.add(statusPanel);
         content.add(topPanel, BorderLayout.NORTH);
 
         // === Center Panel (Tape + Controls) ===

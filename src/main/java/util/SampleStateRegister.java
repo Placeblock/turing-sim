@@ -17,7 +17,7 @@ public class SampleStateRegister {
                     0,0,1,RIGHT,0,false
                     0,2,0,RIGHT,0,false
                     0,B,B,NONE,1,false
-                    1,,,,,false
+                    1,,,,,true
                     """;
 
         try (InputStream inputStream = new java.io.ByteArrayInputStream(asd.getBytes(StandardCharsets.UTF_8))) {
