@@ -66,6 +66,7 @@ public class MachineController {
         machineState.setCurrentState(this.config.getInitialState());
 
         Tape<Character> tape = new Tape<>(config.getBlankSymbol(), config.getInitialTapeState());
+        machineState.getTape().setDefaultSymbol(config.getBlankSymbol());
         machineState.getTape().reset(tape.getHead());
 
         if (this.running) {

@@ -37,6 +37,10 @@ public class Configuration {
             System.out.println("Setting blank symbol because " + this.blankSymbol + " is not a valid symbol");
             this.setBlankSymbol(this.tapeAlphabet.iterator().next());
         }
+        String newInitialTapeState = this.removeInvalidCharacters(this.initialTapeState);
+        if (!newInitialTapeState.equals(this.initialTapeState)) {
+            this.setInitialTapeState(newInitialTapeState);
+        }
     }
 
     public void setBlankSymbol(Character blankSymbol) {
@@ -98,5 +102,9 @@ public class Configuration {
             initialState.add(c);
         }
         return initialState;
+    }
+
+    public String getInitialTapeString() {
+        return this.initialTapeState;
     }
 }

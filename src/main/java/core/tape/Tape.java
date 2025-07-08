@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import lombok.Getter;
+import lombok.Setter;
 import observer.Publisher;
 import observer.events.TapeHeadPositionChangedEvent;
 import observer.events.TapeLengthModifiedEvent;
@@ -12,7 +13,8 @@ import observer.events.TapeResetEvent;
 
 public class Tape<T> {
 
-    private final T defaultSymbol;
+    @Setter
+    private T defaultSymbol;
     private TapeCell<T> headPosition;
 
     @Getter

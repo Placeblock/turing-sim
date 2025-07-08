@@ -139,6 +139,7 @@ public class TransitionPanel extends JPanel {
 
         @Override
         public Component getListCellRendererComponent(JList<? extends State> jList, State state, int i, boolean b, boolean b1) {
+            if (state == null) return new JLabel();
             int index = this.stateRegister.getStates().indexOf(state);
             return new JLabel("q" + index);
         }

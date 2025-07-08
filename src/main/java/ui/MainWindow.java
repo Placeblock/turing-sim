@@ -9,6 +9,8 @@ import core.MachineState;
 import core.StateRegister;
 import core.tape.Tape;
 import event.Receiver;
+import ui.configuration.BlankSymbolUI;
+import ui.configuration.InitialStateUI;
 import ui.menubar.MenuBarTuring;
 import ui.player.StatusPanel;
 import ui.player.TuringMachineControlsUI;
@@ -62,11 +64,15 @@ public class MainWindow extends JFrame {
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        tape.moveNext(); tape.moveNext(); tape.moveNext();
         TapeUI tapeUI = new TapeUI(tape);
         TuringMachineControlsUI controlsUI = new TuringMachineControlsUI(machineController.getReceiver());
 
         centerPanel.add(tapeUI);
+        centerPanel.add(Box.createVerticalStrut(10));
+        JPanel configPanel = new JPanel();
+        configPanel.add(new InitialStateUI(config, receiver));
+        configPanel.add(new BlankSymbolUI(config, receiver));
+        centerPanel.add(configPanel);
         centerPanel.add(Box.createVerticalStrut(10)); // spacing
         centerPanel.add(controlsUI);
 
