@@ -42,6 +42,7 @@ public class StateRegisterRenderer extends JPanel implements TableCellRenderer {
         if(row > 0 && column == 0) {
             State state = (State) o;
             JLabel label = new JLabel("q" + stateRegister.getStates().indexOf(state), SwingConstants.CENTER);
+            if(state.isTerminates()) label.setForeground(Color.RED);
             this.add(label);
         }
         if(row == 0 && column != 0){

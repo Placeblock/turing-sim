@@ -71,7 +71,7 @@ public class StateRegisterUI extends JTable {
                     setRowSelectionInterval(row, row);
                     setColumnSelectionInterval(col, col);
                     Object cellValue = StateRegisterUI.this.getValueAt(row, col);
-                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(receiver, stateRegister, cellValue, row);
+                    StateRegisterUI.this.statePopupMenu = new StateRegisterPopupMenu(receiver, stateRegister, cellValue, row, StateRegisterUI.this);
                     statePopupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
@@ -137,6 +137,12 @@ public class StateRegisterUI extends JTable {
         }
         if (row == 0) return null;
         State state = this.stateRegister.getStates().get(row - 1);
+        
+        // Prevent editing if state is terminating
+        if (state.isTerminates()) {
+            return null;
+        }
+        
         Character symbol = this.configuration.getTapeSymbol(column - 1);
         return new TransitionEditor(this.receiver, this.stateRegister, this.configuration, state, symbol);
     }

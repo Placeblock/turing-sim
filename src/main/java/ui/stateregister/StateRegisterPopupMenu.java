@@ -6,14 +6,16 @@ import core.Transition;
 import event.Receiver;
 import event.events.*;
 
+import java.awt.Component;
+
 import javax.swing.*;
 
 public class StateRegisterPopupMenu extends JPopupMenu {
 
-    public StateRegisterPopupMenu(Receiver receiver, StateRegister stateRegister, Object o, int row) {
+    public StateRegisterPopupMenu(Receiver receiver, StateRegister stateRegister, Object o, int row, Component parent) {
         super();
 
-        JMenuItem addItem = new JMenuItem("Add State");
+        JMenuItem addItem = new JMenuItem("Add State after q" + (row - 1));
         addItem.addActionListener(e -> {
             AddStateEvent event = new AddStateEvent(row);
             receiver.receive(event);
@@ -28,6 +30,7 @@ public class StateRegisterPopupMenu extends JPopupMenu {
                 TerminateStateEvent event = new TerminateStateEvent(state, newState);
                 receiver.receive(event);
                 updateTerminateItemText(terminateItem, newState);
+                parent.repaint();
             });
             this.add(terminateItem);
             removeItem = new JMenuItem("Remove State");
@@ -83,6 +86,6 @@ public class StateRegisterPopupMenu extends JPopupMenu {
         }
     }
     private void updateTerminateItemText(JMenuItem item, boolean isFinal) {
-        item.setText(isFinal ? "Final State" : "Non-Final State");
+        item.setText(isFinal ? "Change to Non-Final State" : "Change to Final State");
     }
 }
