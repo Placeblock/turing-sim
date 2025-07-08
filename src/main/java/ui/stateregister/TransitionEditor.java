@@ -11,8 +11,6 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.util.EventObject;
 
 @RequiredArgsConstructor
@@ -37,7 +35,10 @@ public class TransitionEditor extends AbstractCellEditor implements TableCellEdi
         this.addCellEditorListener(new CellEditorListener() {
             @Override
             public void editingStopped(ChangeEvent changeEvent) {
-                if (create) {
+                if(create && TransitionEditor.this.transition.getNewState() == null && TransitionEditor.this.transition.getNewSymbol() == null) {
+                    return;
+                }
+                else if (create) {
                     TransitionCreateEvent event = new TransitionCreateEvent(TransitionEditor.this.state, TransitionEditor.this.symbol, TransitionEditor.this.transition);
                     TransitionEditor.this.receiver.receive(event);
                 } else {

@@ -33,7 +33,7 @@ public class StateRegisterRenderer extends JPanel implements TableCellRenderer {
                 JLabel label = new JLabel(text, SwingConstants.CENTER);
 
                 if (transition.getNewState() == null || transition.getNewSymbol() == null) {
-                    this.setBackground(Color.getHSBColor(350.0f/360, 0.8f, 1f));
+                    this.setBackground(new Color(0xFFADB0));
                 }
 
                 this.add(label);

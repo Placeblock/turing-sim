@@ -7,11 +7,12 @@ import observer.events.TransitionStateChangedEvent;
 import observer.events.TransitionSymbolChangedEvent;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 
 public class TransitionPanel extends JPanel {
+
+    private static final Color colorLightGreen = new Color(0xd3f8d3);
 
     private final JComboBox<State> stateComboBox;
     private final JComboBox<Character> newSymbolComboBox;
@@ -44,7 +45,7 @@ public class TransitionPanel extends JPanel {
         State newState = transition.getNewState();
         this.stateComboBox.setSelectedItem(newState);
         if (this.stateComboBox.getSelectedItem() == null) {
-            this.setBackground(Color.RED);
+            this.setBackground(Color.YELLOW);
         }
         this.stateComboBox.addItemListener((e) -> {
             if (this.updatingContent || e.getStateChange() != ItemEvent.SELECTED) return;
@@ -61,7 +62,7 @@ public class TransitionPanel extends JPanel {
         }
         this.newSymbolComboBox.setSelectedItem(transition.getNewSymbol());
         if (this.newSymbolComboBox.getSelectedItem() == null) {
-            this.setBackground(Color.RED);
+            this.setBackground(Color.YELLOW);
         }
 
         this.newSymbolComboBox.addItemListener((e) -> {
@@ -106,8 +107,7 @@ public class TransitionPanel extends JPanel {
             this.updatingContent = true;
             this.stateComboBox.setSelectedItem(event.getNewState());
             if (this.newSymbolComboBox.getSelectedItem() != null) {
-                this.setBackground(UIManager.getColor("Table.background"));
-                this.setBorder(new LineBorder(Color.lightGray, 1));
+                this.setBackground(colorLightGreen);
             }
             this.updatingContent = false;
         });
@@ -126,8 +126,7 @@ public class TransitionPanel extends JPanel {
             this.updatingContent = true;
             this.newSymbolComboBox.setSelectedItem(event.getNewSymbol());
             if(this.stateComboBox.getSelectedItem() != null) {
-                this.setBackground(UIManager.getColor("Table.background"));
-                this.setBorder(new LineBorder(Color.lightGray, 1));
+                this.setBackground(colorLightGreen);
             }
             this.updatingContent = false;
         });
