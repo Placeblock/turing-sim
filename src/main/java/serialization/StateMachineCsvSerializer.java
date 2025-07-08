@@ -45,34 +45,53 @@ public class StateMachineCsvSerializer {
      */
     public static void serialize(List<State> states, OutputStream outputStream) throws IOException {
         try (var writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8))) {
-            int i = 0;
-            for (var state : states) {
-                if(state.getTransitions().isEmpty()) {
-                    String line = String.format("%d,,,,,%b",
-                            i,
-                            state.isTerminates()
-                        );
-                    writer.write(line);
-                    writer.newLine();
-                    i++;
-                    continue;
-                }
-                for (var entry : state.getTransitions().entrySet()) {
-                    var symbol = entry.getKey();
-                    var transition = entry.getValue();
-                    String line = String.format("%d,%s,%s,%s,%d,%b",
-                            i,
-                            symbol,
-                            transition.getNewSymbol(),
-                            transition.getMove(),
-                            states.indexOf(transition.getNewState()),
-                            state.isTerminates()
-                        );
-                    writer.write(line);
-                    writer.newLine();
-                }
+            serialize(states, writer);
+        }
+    }
+
+    /**
+     * Serializes a list of states to a specified output stream in CSV format.
+     * Each state is represented by its transitions and whether it is a terminating state.
+     * <p>
+     * Example output format:
+     * <pre>
+     *0,0,1,RIGHT,0,false
+     *0,B,B,NONE,1,false
+     *1,,,,,true
+     * </pre>
+     *
+     * @param states the list of states to serialize
+     * @param outputStream the output stream to write the serialized data to
+     * @throws IOException if an I/O error occurs during stream writing
+     */
+    public static void serialize(List<State> states, BufferedWriter writer) throws IOException {
+        int i = 0;
+        for (var state : states) {
+            if(state.getTransitions().isEmpty()) {
+                String line = String.format("%d,,,,,%b",
+                        i,
+                        state.isTerminates()
+                    );
+                writer.write(line);
+                writer.newLine();
                 i++;
+                continue;
             }
+            for (var entry : state.getTransitions().entrySet()) {
+                var symbol = entry.getKey();
+                var transition = entry.getValue();
+                String line = String.format("%d,%s,%s,%s,%d,%b",
+                        i,
+                        symbol,
+                        transition.getNewSymbol(),
+                        transition.getMove(),
+                        states.indexOf(transition.getNewState()),
+                        state.isTerminates()
+                    );
+                writer.write(line);
+                writer.newLine();
+            }
+            i++;
         }
     }
 
@@ -91,45 +110,62 @@ public class StateMachineCsvSerializer {
      * @throws IOException if an I/O error occurs during stream reading
      */
     public static List<State> deserialize(InputStream inputStream) throws IOException {
+        try (var reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            return deserialize(reader);
+        }
+    }
+
+    /**
+     * Deserializes a list of states in CSV format to a list of states with transitions.
+     * <p>
+     * Example input format:
+     * <pre>
+     *0,0,1,RIGHT,0,false
+     *0,B,B,NONE,1,false
+     *1,,,,,true
+     * </pre>
+     * 
+     * @param inputStream the input stream containing the serialized states in CSV format
+     * @return a list of states with their transitions
+     * @throws IOException if an I/O error occurs during stream reading
+     */
+    public static List<State> deserialize(BufferedReader reader) throws IOException {
         var states = new ArrayList<State>();
         var transitionLateinitNewStateIndexMap = new HashMap<Transition, Integer>();
 
-        // Read the input stream line by line
-        try (var reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length != 6) throw new IOException("Invalid line format: " + line); // TODO replace with custom exception
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(",");
+            if (parts.length != 6) throw new IOException("Invalid line format: " + line); // TODO replace with custom exception
 
-                int stateIndex = Integer.parseInt(parts[0]);
+            int stateIndex = Integer.parseInt(parts[0]);
 
-                // If state not yet present, create a new state in the list
-                State state;
-                if (stateIndex >= states.size()) {
-                    var terminates = Boolean.parseBoolean(parts[5]);
-                    state = new State(new java.util.HashMap<>(), terminates);
-                    states.add(state);
-                } else {
-                    state = states.get(stateIndex);
-                }
-
-                // If transition is not present (State is terminating, therefore no transitions)
-                if (parts[1].isEmpty() && parts[2].isEmpty() && parts[3].isEmpty() && parts[4].isEmpty()) continue;
-
-                // Parse transition details
-                char symbol = parts[1].charAt(0);
-                char newSymbol = parts[2].charAt(0);
-                Move move = Move.valueOf(parts[3].toUpperCase());
-                int newStateIndex = Integer.parseInt(parts[4]);
-
-                var transition = new Transition(newSymbol, move, null);
-                state.getTransitions().put(symbol, transition);
-
-                // Since the new state object might not exist yet, the transition and its newStateIndex is stored for later initialization
-                transitionLateinitNewStateIndexMap.put(transition, newStateIndex);
+            // If state not yet present, create a new state in the list
+            State state;
+            if (stateIndex >= states.size()) {
+                var terminates = Boolean.parseBoolean(parts[5]);
+                state = new State(new java.util.HashMap<>(), terminates);
+                states.add(state);
+            } else {
+                state = states.get(stateIndex);
             }
-        }
 
+            // If transition is not present (State is terminating, therefore no transitions)
+            if (parts[1].isEmpty() && parts[2].isEmpty() && parts[3].isEmpty() && parts[4].isEmpty()) continue;
+
+            // Parse transition details
+            char symbol = parts[1].charAt(0);
+            char newSymbol = parts[2].charAt(0);
+            Move move = Move.valueOf(parts[3].toUpperCase());
+            int newStateIndex = Integer.parseInt(parts[4]);
+
+            var transition = new Transition(newSymbol, move, null);
+            state.getTransitions().put(symbol, transition);
+
+            // Since the new state object might not exist yet, the transition and its newStateIndex is stored for later initialization
+            transitionLateinitNewStateIndexMap.put(transition, newStateIndex);
+        }
+        
         // Now that all states and transitions are created, we can fill in the newState for each transition
         for (var entry : transitionLateinitNewStateIndexMap.entrySet()) {
             Transition transition = entry.getKey();
