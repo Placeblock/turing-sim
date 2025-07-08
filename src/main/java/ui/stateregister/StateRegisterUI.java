@@ -86,9 +86,11 @@ public class StateRegisterUI extends JTable {
 
     private void updateColumnWidth() {
         for (int i = 0; i < this.getColumnModel().getColumnCount(); i++) {
-            this.getColumnModel().getColumn(i).setPreferredWidth(200);
-            this.getColumnModel().getColumn(i).setMinWidth(210);
-            this.getColumnModel().getColumn(i).setMaxWidth(210);
+            if (i == 0) {
+                this.getColumnModel().getColumn(i).setPreferredWidth(50);
+            } else {
+                this.getColumnModel().getColumn(i).setPreferredWidth(250);
+            }
         }
     }
 
