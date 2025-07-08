@@ -15,8 +15,8 @@ public class SampleStateRegister {
 
         String asd = """
                     0,0,1,RIGHT,0,false
-                    0,2,0,RIGHT,0,false
-                    0,B,B,NONE,1,false
+                    0,1,0,RIGHT,0,false
+                    0,B,B,LEFT,1,false
                     1,,,,,true
                     """;
 
