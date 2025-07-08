@@ -93,7 +93,6 @@ public class StartupWindow extends JFrame {
         int returnValue = fileChooser.showOpenDialog(this);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            System.out.println("Selected config file: " + selectedFile.getAbsolutePath()); //!TEST
 
             boolean success = false;
             try {
@@ -123,14 +122,12 @@ public class StartupWindow extends JFrame {
     }
 
     private void loadTapeActionListener(ActionEvent e) {
-        // Open file chooser, for now just println the selected file path
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select Tape File");
 
         int returnValue = fileChooser.showOpenDialog(this);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            System.out.println("Selected tape file: " + selectedFile.getAbsolutePath()); //!TEST
 
             boolean success = false;
             try (var reader = new BufferedReader(new FileReader(selectedFile))) {

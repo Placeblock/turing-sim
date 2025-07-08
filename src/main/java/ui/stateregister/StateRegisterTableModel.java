@@ -24,7 +24,7 @@ public class StateRegisterTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        System.out.println(this.configuration.getTapeAlphabet().size());
+        //System.out.println(this.configuration.getTapeAlphabet().size());
         return configuration.getTapeAlphabet().size() + 1;
     }
 
@@ -41,7 +41,7 @@ public class StateRegisterTableModel extends AbstractTableModel {
         }
         Character symbol = configuration.getTapeSymbol(y - 1);
         if (x == 0 && y != 0) {
-            System.out.println(y-1);
+            //System.out.println(y-1);
             return symbol;
         }
         if (x == 0) return null;

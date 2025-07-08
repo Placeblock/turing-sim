@@ -127,6 +127,7 @@ public class StateMachineCsvSerializer {
      * @param inputStream the input stream containing the serialized states in CSV format
      * @return a list of states with their transitions
      * @throws IOException if an I/O error occurs during stream reading
+     * @throws StateMachineCsvDeserializationException if the CSV format is invalid
      */
     public static List<State> deserialize(BufferedReader reader) throws IOException {
         var states = new ArrayList<State>();
@@ -135,7 +136,7 @@ public class StateMachineCsvSerializer {
         String line;
         while ((line = reader.readLine()) != null) {
             String[] parts = line.split(",");
-            if (parts.length != 6) throw new IOException("Invalid line format: " + line); // TODO replace with custom exception
+            if (parts.length != 6) throw new StateMachineCsvDeserializationException("Invalid line format: " + line);
 
             int stateIndex = Integer.parseInt(parts[0]);
 
@@ -172,7 +173,7 @@ public class StateMachineCsvSerializer {
             if (newStateIndex < states.size()) {
                 transition.setNewState(states.get(newStateIndex));
             } else {
-                throw new IOException("Invalid new state index: " + newStateIndex); // TODO replace with custom exception
+                throw new StateMachineCsvDeserializationException("Invalid new state index: " + newStateIndex);
             }
         }
 
