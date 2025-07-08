@@ -58,6 +58,7 @@ public class MainWindow extends JFrame {
         Machine machine = new Machine(machineState);
         MachineController machineController = new MachineController(machine, config);
         try {
+            System.setProperty("flatlaf.uiScale", "1.2");
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (Exception e) {
             e.printStackTrace();

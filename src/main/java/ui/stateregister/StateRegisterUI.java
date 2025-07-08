@@ -38,7 +38,7 @@ public class StateRegisterUI extends JTable {
         this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         this.setTableHeader(null);
 
-        this.setRowHeight(30);
+        this.setRowHeight(40);
         updateColumnWidth();
         this.stateRegister = stateRegister;
         this.configuration = configuration;
@@ -89,7 +89,7 @@ public class StateRegisterUI extends JTable {
             if (i == 0) {
                 this.getColumnModel().getColumn(i).setPreferredWidth(50);
             } else {
-                this.getColumnModel().getColumn(i).setPreferredWidth(200);
+                this.getColumnModel().getColumn(i).setPreferredWidth(300);
             }
         }
     }
