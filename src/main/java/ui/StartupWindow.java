@@ -162,7 +162,7 @@ public class StartupWindow extends JFrame {
     }
 
     private void startButtonActionListener(ActionEvent e) {
-        MainWindow mainWindow = new MainWindow(config, stateRegister);
+        MainWindow mainWindow = new MainWindow(config, stateRegister, this);
         mainWindow.setVisible(true);
 
         setVisible(false);
@@ -174,7 +174,7 @@ public class StartupWindow extends JFrame {
 
         config.setInitialTapeState("000001010101");
 
-        MainWindow mainWindow = new MainWindow(config, stateRegister);
+        MainWindow mainWindow = new MainWindow(config, stateRegister, this);
         mainWindow.setVisible(true);
 
         setVisible(false);

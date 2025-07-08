@@ -40,6 +40,10 @@ import java.awt.event.MouseEvent;
  */
 public class MainWindow extends JFrame {
     public MainWindow(Configuration config, StateRegister stateRegister) {
+        this(config, stateRegister, null);
+    }
+
+    public MainWindow(Configuration config, StateRegister stateRegister, StartupWindow startupWindow) {
         setTitle("Turing Maschine");
         setSize(1000, 600);
         setResizable(true);
@@ -59,7 +63,7 @@ public class MainWindow extends JFrame {
             e.printStackTrace();
         }
         // === Menu Bar ===
-        setJMenuBar(new MenuBarTuring(this, receiver));
+        setJMenuBar(new MenuBarTuring(this, receiver, startupWindow));
 
         // === Layout Manager ===
         Container content = getContentPane();

@@ -20,28 +20,38 @@ public class MenuBarTuring extends JMenuBar {
     private final Emitter<SaveTransitionsEvent> saveTransitionsEmitter;
 
     private final JFrame parentFrame;
+    private final JFrame startupWindow;
 
-    public MenuBarTuring(JFrame parentFrame, Receiver receiver) {
+    public MenuBarTuring(JFrame parentFrame, Receiver receiver, JFrame startupWindow) {
         super();
         this.saveTapeEmitter = new Emitter<>(receiver);
         this.saveTransitionsEmitter = new Emitter<>(receiver);
         this.parentFrame = parentFrame;
+        this.startupWindow = startupWindow;
 
         JMenu fileMenu = new JMenu("File");
         JMenuItem saveTransitionsItem = new JMenuItem("Save Configuration");
         JMenuItem saveTapeItem = new JMenuItem("Save initial Tape");
+        JMenuItem quitToMenuItem = new JMenuItem("Quit to Menu");
         JMenuItem exitItem = new JMenuItem("Exit");
 
         saveTransitionsItem.addActionListener(this::saveTransitionsActionListener);
         saveTapeItem.addActionListener(this::saveTapeActionListener);
+        quitToMenuItem.addActionListener(this::quitToMenuActionListener);
         exitItem.addActionListener(e -> System.exit(0));
 
         fileMenu.add(saveTransitionsItem);
         fileMenu.add(saveTapeItem);
         fileMenu.addSeparator();
+        if(startupWindow != null) fileMenu.add(quitToMenuItem);
         fileMenu.add(exitItem);
 
         add(fileMenu);
+    }
+
+    private void quitToMenuActionListener(ActionEvent e) {
+        parentFrame.dispose();
+        startupWindow.setVisible(true);
     }
 
     private void saveTransitionsActionListener(ActionEvent e) {
