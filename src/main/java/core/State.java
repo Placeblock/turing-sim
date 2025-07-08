@@ -11,8 +11,17 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Class representing a state in a Turing machine.
- * A state consists of transitions for each character, and a flag indicating if it is a terminating state.
+ * Represents a state in a Turing machine.
+ *
+ * <p>A state consists of a set of transitions that define how the machine should behave
+ * when reading different symbols from the tape. Each state can be marked as terminating,
+ * which means the machine will stop execution when it reaches this state.</p>
+ *
+ * <p>States publish events when transitions are created or removed, allowing observers
+ * to react to changes in the state's configuration.</p>
+ *
+ * @see Transition
+ * @see StateRegister
  */
 @Getter
 public class State {

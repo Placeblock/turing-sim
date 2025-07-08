@@ -11,6 +11,22 @@ import serialization.ConfigSerializer;
 
 import java.util.Set;
 
+/**
+ * Controller responsible for managing configuration changes in the Turing machine.
+ *
+ * <p>This controller acts as the central coordinator for all configuration-related
+ * events, including changes to the tape alphabet, blank symbol, initial state,
+ * and state transitions. It ensures data consistency and coordinates updates
+ * between the configuration, state register, and dependent components.</p>
+ *
+ * <p>The controller implements the event-driven architecture pattern, registering
+ * handlers for various configuration events and coordinating the appropriate
+ * responses to maintain system integrity.</p>
+ *
+ * @see Configuration
+ * @see StateRegister
+ * @see event.Receiver
+ */
 public class ConfigurationController {
 
     @Getter

@@ -21,6 +21,8 @@ public class Machine {
      * moves the head according to the transition,
      * and updates the current state of the machine.
      * @return true if the step was successful, false if the machine is in a terminating state.
+     * @throws IllegalStateException if no transition exists for the current state/symbol
+     *                              or if the transition is incomplete
      */
     public boolean step() {
         var state = this.machineState.getCurrentState();

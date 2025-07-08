@@ -11,6 +11,22 @@ import lombok.Getter;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Controller responsible for managing Turing machine execution.
+ * 
+ * <p>This controller handles all machine execution commands including step-by-step
+ * execution, continuous running with configurable speed, stopping, and resetting
+ * the machine state. It provides a timer-based execution model for automated
+ * running and ensures proper cleanup of resources.</p>
+ * 
+ * <p>The controller responds to various execution events and coordinates with
+ * the Machine and Configuration classes to provide a complete execution
+ * management system.</p>
+ * 
+ * @see Machine
+ * @see Configuration
+ * @see event.Receiver
+ */
 public class MachineController {
     @Getter
     private final Receiver receiver = new Receiver();

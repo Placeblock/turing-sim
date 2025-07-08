@@ -11,6 +11,22 @@ import observer.events.TapeSymbolsChangedEvent;
 
 import java.util.*;
 
+/**
+ * Configuration class for a Turing machine.
+ * 
+ * <p>This class encapsulates all the configuration parameters needed to define
+ * a Turing machine, including the tape alphabet, blank symbol, initial state,
+ * and initial tape content. It provides validation and maintains consistency
+ * between related configuration elements.</p>
+ * 
+ * <p>The configuration publishes events when key properties change, allowing
+ * dependent components to react appropriately. For example, when the tape
+ * alphabet changes, invalid symbols are automatically removed from the initial
+ * tape state.</p>
+ * 
+ * @see State
+ * @see StateRegister
+ */
 @Getter
 @Setter
 @AllArgsConstructor

@@ -22,6 +22,22 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Main application window for the Turing machine simulator.
+ * 
+ * <p>This class creates and manages the primary user interface, including the
+ * tape visualization, state register table, control panels, and menu system.
+ * It coordinates between various UI components and establishes the overall
+ * layout and user interaction patterns.</p>
+ * 
+ * <p>The window integrates multiple controllers and UI components to provide
+ * a cohesive user experience for designing, configuring, and executing
+ * Turing machines.</p>
+ * 
+ * @see Configuration
+ * @see StateRegister
+ * @see Machine
+ */
 public class MainWindow extends JFrame {
     public MainWindow(Configuration config, StateRegister stateRegister) {
         setTitle("Turing Maschine");

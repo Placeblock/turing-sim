@@ -7,8 +7,18 @@ import observer.Publisher;
 import observer.events.CurrentStateChangedEvent;
 
 /**
- * Class representing the state of the Turing machine itself.
- * It contains the current position of the tape of the machine.
+ * Represents the runtime state of a Turing machine.
+ * 
+ * <p>The MachineState encapsulates the current execution state of the machine,
+ * including the tape and the current state. It provides a centralized way to
+ * track and modify the machine's state during execution.</p>
+ * 
+ * <p>When the current state changes, this class publishes events to notify
+ * observers such as the UI components that need to update their display.</p>
+ * 
+ * @see Machine
+ * @see State
+ * @see Tape
  */
 @Getter
 @AllArgsConstructor

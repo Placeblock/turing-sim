@@ -5,6 +5,21 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Central event receiver that implements a type-safe event dispatching system.
+ * 
+ * <p>The Receiver class provides a mechanism for registering event handlers
+ * and dispatching events to the appropriate handlers based on event type.
+ * It maintains a registry of handlers organized by event class and ensures
+ * type safety through generics.</p>
+ * 
+ * <p>This class is fundamental to the application's event-driven architecture,
+ * allowing loose coupling between components while maintaining type safety.</p>
+ * 
+ * @see Handler
+ * @see Event
+ * @see Emitter
+ */
 public class Receiver {
     private final Map<Class<? extends Event>, Set<Handler<?>>> handlers = new HashMap<>();
 
