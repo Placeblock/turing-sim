@@ -1,5 +1,6 @@
 package core;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import observer.Publisher;
@@ -12,18 +13,22 @@ import java.util.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class Configuration {
     private final Publisher<InitialTapeStateChangedEvent> initialTapeStateChangedPublisher = new Publisher<>();
     private final Publisher<TapeSymbolsChangedEvent> tapeSymbolsChangedPublisher = new Publisher<>();
     private final Publisher<BlankSymbolChangedEvent> blankSymbolChangedPublisher = new Publisher<>();
     private final Publisher<InitialStateChangedEvent> initialStateChangedPublisher = new Publisher<>();
 
-    private String initialTapeState = "";
-    private Set<Character> tapeAlphabet = createTapeAlphabet();
-    private Character blankSymbol = 'B';
+    private String initialTapeState;
+    private Set<Character> tapeAlphabet;
+    private Character blankSymbol;
     private State initialState;
 
     public Configuration(State initialState) {
+        this.initialTapeState = "";
+        this.tapeAlphabet = createDefaultTapeAlphabet();
+        this.blankSymbol = 'B';
         this.initialState = initialState;
     }
 
@@ -88,7 +93,7 @@ public class Configuration {
         return symbol;
     }
 
-    private Set<Character> createTapeAlphabet() {
+    private Set<Character> createDefaultTapeAlphabet() {
         LinkedHashSet<Character> alphabet = new LinkedHashSet<>();
         alphabet.add('0');
         alphabet.add('1');

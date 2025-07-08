@@ -2,19 +2,31 @@ package ui;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 
+import core.Configuration;
+import core.StateRegister;
+import serialization.ConfigSerializer;
+import util.SampleStateRegister;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class StartupWindow extends JFrame {
 
     private JLabel tapeLabel;
+    private JButton loadTapeButton;
     private JLabel transitionsLabel;
     private JButton startButton;
 
     private boolean isTapeLoaded = false;
     private boolean areTransitionsLoaded = false;
+
+    private static final Color colorDarkGreen = new Color(0x008800);
 
     public StartupWindow() {
         setTitle("Turing Machine Simulator");
@@ -31,23 +43,24 @@ public class StartupWindow extends JFrame {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         
+        // Load Transitions button and label
+        JPanel transitionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton loadTransitionsButton = new JButton("Load Config");
+        loadTransitionsButton.addActionListener(this::loadTransitionsActionListener);
+        transitionsLabel = new JLabel("Config needs to be loaded");
+        transitionsLabel.setForeground(Color.RED);
+        transitionsPanel.add(loadTransitionsButton);
+        transitionsPanel.add(transitionsLabel);
+        
         // Load Tape button and label
         JPanel tapePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton loadTapeButton = new JButton("Load Tape");
+        loadTapeButton = new JButton("Load Tape");
         loadTapeButton.addActionListener(this::loadTapeActionListener);
+        loadTapeButton.setEnabled(false);
         tapeLabel = new JLabel("Tape needs to be loaded");
         tapeLabel.setForeground(Color.RED);
         tapePanel.add(loadTapeButton);
         tapePanel.add(tapeLabel);
-        
-        // Load Transitions button and label
-        JPanel transitionsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton loadTransitionsButton = new JButton("Load Transitions");
-        loadTransitionsButton.addActionListener(this::loadTransitionsActionListener);
-        transitionsLabel = new JLabel("Transitions need to be loaded");
-        transitionsLabel.setForeground(Color.RED);
-        transitionsPanel.add(loadTransitionsButton);
-        transitionsPanel.add(transitionsLabel);
         
         // Start button (disabled)
         JPanel startPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -63,13 +76,51 @@ public class StartupWindow extends JFrame {
         
         // Add vertical glue to center content vertically
         mainPanel.add(Box.createVerticalGlue());
-        mainPanel.add(tapePanel);
         mainPanel.add(transitionsPanel);
+        mainPanel.add(tapePanel);
         mainPanel.add(startPanel);
         mainPanel.add(Box.createVerticalGlue());
         
         add(mainPanel);
-        setVisible(true);
+    }
+
+    private Configuration config;
+    private StateRegister stateRegister;
+
+    private void loadTransitionsActionListener(ActionEvent e) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select Config File");
+
+        int returnValue = fileChooser.showOpenDialog(this);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            System.out.println("Selected config file: " + selectedFile.getAbsolutePath()); //!TEST
+
+            boolean success = false;
+            try {
+                var halloHerrKaupp = ConfigSerializer.deserialize(new FileInputStream(selectedFile));
+                config = halloHerrKaupp.getConfig();
+                stateRegister = halloHerrKaupp.getRegister();
+                success = true;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            if(!success) {
+                transitionsLabel.setText("Failed to load config");
+                transitionsLabel.setForeground(Color.RED);
+                return;
+            }
+
+            // When config is loaded successfully
+            areTransitionsLoaded = true;
+            transitionsLabel.setText("Config loaded");
+            transitionsLabel.setForeground(colorDarkGreen);
+            loadTapeButton.setEnabled(true);
+
+            // Enable start button if both tape and config are loaded
+            maybeEnableStartButton();
+        }
     }
 
     private void loadTapeActionListener(ActionEvent e) {
@@ -80,41 +131,34 @@ public class StartupWindow extends JFrame {
         int returnValue = fileChooser.showOpenDialog(this);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            // TODO: Implement tape loading logic
             System.out.println("Selected tape file: " + selectedFile.getAbsolutePath()); //!TEST
+
+            boolean success = false;
+            try (var reader = new BufferedReader(new FileReader(selectedFile))) {
+                config.setInitialTapeState(reader.readLine().trim());
+                success = true;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            if (!success) {
+                tapeLabel.setText("Failed to load tape");
+                tapeLabel.setForeground(Color.RED);
+                return;
+            }
 
             // When tape is loaded successfully
             isTapeLoaded = true;
             tapeLabel.setText("Tape loaded");
-            tapeLabel.setForeground(Color.GREEN);
+            tapeLabel.setForeground(colorDarkGreen);
 
-            // Enable start button if both tape and transitions are loaded
-            maybeEnableStartButton();
-        }
-    }
-
-    private void loadTransitionsActionListener(ActionEvent e) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Select Transitions File");
-
-        int returnValue = fileChooser.showOpenDialog(this);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            // TODO: Implement transitions loading logic
-            System.out.println("Selected transitions file: " + selectedFile.getAbsolutePath()); //!TEST
-
-            // When transitions are loaded successfully
-            areTransitionsLoaded = true;
-            transitionsLabel.setText("Transitions loaded");
-            transitionsLabel.setForeground(Color.GREEN);
-
-            // Enable start button if both tape and transitions are loaded
+            // Enable start button if both tape and config are loaded
             maybeEnableStartButton();
         }
     }
 
     private void maybeEnableStartButton() {
-        if (isTapeLoaded && areTransitionsLoaded) {
+        if (isTapeLoaded && areTransitionsLoaded && config != null && stateRegister != null) {
             startButton.setEnabled(true);
         } else {
             startButton.setEnabled(false);
@@ -122,22 +166,28 @@ public class StartupWindow extends JFrame {
     }
 
     private void startButtonActionListener(ActionEvent e) {
-        // TODO: Implement start button logic
-        System.out.println("Start button clicked");
+        MainWindow mainWindow = new MainWindow(config, stateRegister);
+        mainWindow.setVisible(true);
 
-        //setVisible(false);
+        setVisible(false);
     }
 
     private void startWithExampleActionListener(ActionEvent e) {
-        // TODO: Implement logic to start with example data
-        System.out.println("Start with example data button clicked");
+        StateRegister stateRegister = SampleStateRegister.get();
+        Configuration config = new Configuration(stateRegister.getStates().getFirst());
 
-        //setVisible(false);
+        config.setInitialTapeState("000001010101");
+
+        MainWindow mainWindow = new MainWindow(config, stateRegister);
+        mainWindow.setVisible(true);
+
+        setVisible(false);
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             StartupWindow startupWindow = new StartupWindow();
+            startupWindow.setVisible(true);
         });
     }
 }
