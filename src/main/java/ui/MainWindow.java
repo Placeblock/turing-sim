@@ -21,7 +21,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 
 public class MainWindow extends JFrame {
     public MainWindow(Configuration config, StateRegister stateRegister) {
@@ -44,7 +43,7 @@ public class MainWindow extends JFrame {
             e.printStackTrace();
         }
         // === Menu Bar ===
-        setJMenuBar(new MenuBarTuring(receiver));
+        setJMenuBar(new MenuBarTuring(this, receiver));
 
         // === Layout Manager ===
         Container content = getContentPane();
@@ -52,10 +51,7 @@ public class MainWindow extends JFrame {
 
         // === Top Panel (File Open Button) ===
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton openButton = new JButton("Open File");
-        openButton.addActionListener(e -> openFileChooser());
         StatusPanel statusPanel = new StatusPanel(machineState.getCurrentStateChangedPublisher(), stateRegister);
-        topPanel.add(openButton);
         topPanel.add(statusPanel);
         content.add(topPanel, BorderLayout.NORTH);
 
@@ -112,15 +108,5 @@ public class MainWindow extends JFrame {
                 stateRegisterUI.stopEditing();
             }
         });
-    }
-
-    private void openFileChooser() {
-        JFileChooser fileChooser = new JFileChooser();
-        int result = fileChooser.showOpenDialog(this);
-
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            JOptionPane.showMessageDialog(this, "Selected file: " + selectedFile.getAbsolutePath());
-        }
     }
 }

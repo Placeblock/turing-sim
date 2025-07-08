@@ -1,10 +1,10 @@
 package ui.menubar;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.io.File;
 
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -19,46 +19,50 @@ public class MenuBarTuring extends JMenuBar {
     private final Emitter<SaveTapeEvent> saveTapeEmitter;
     private final Emitter<SaveTransitionsEvent> saveTransitionsEmitter;
 
-    public MenuBarTuring(Receiver receiver) {
+    private final JFrame parentFrame;
+
+    public MenuBarTuring(JFrame parentFrame, Receiver receiver) {
         super();
-        // TODO logic on the machine side needs to be implemented
         this.saveTapeEmitter = new Emitter<>(receiver);
         this.saveTransitionsEmitter = new Emitter<>(receiver);
+        this.parentFrame = parentFrame;
 
         JMenu fileMenu = new JMenu("File");
-        JMenuItem saveTapeItem = new JMenuItem("Save Tape");
-        JMenuItem saveTransitionsItem = new JMenuItem("Save Transitions");
+        JMenuItem saveTransitionsItem = new JMenuItem("Save Configuration");
+        JMenuItem saveTapeItem = new JMenuItem("Save initial Tape");
+        JMenuItem exitItem = new JMenuItem("Exit");
 
-        saveTapeItem.addActionListener(this::saveTapeActionListener);
         saveTransitionsItem.addActionListener(this::saveTransitionsActionListener);
+        saveTapeItem.addActionListener(this::saveTapeActionListener);
+        exitItem.addActionListener(e -> System.exit(0));
 
-        fileMenu.add(saveTapeItem);
         fileMenu.add(saveTransitionsItem);
+        fileMenu.add(saveTapeItem);
+        fileMenu.addSeparator();
+        fileMenu.add(exitItem);
 
         add(fileMenu);
+    }
+
+    private void saveTransitionsActionListener(ActionEvent e) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(new File("config.txt")); // Default file name
+
+        int returnValue = fileChooser.showSaveDialog(parentFrame);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            saveTransitionsEmitter.emit(new SaveTransitionsEvent(selectedFile));
+        }
     }
 
     private void saveTapeActionListener(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setSelectedFile(new File("tape.txt")); // Default file name
 
-        int returnValue = fileChooser.showSaveDialog(null);
+        int returnValue = fileChooser.showSaveDialog(parentFrame);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            saveTapeEmitter.emit(new SaveTapeEvent(selectedFile.getAbsolutePath()));
-            System.out.println("Selected file: " + selectedFile.getAbsolutePath()); //!TEST
-        }
-    }
-
-    private void saveTransitionsActionListener(ActionEvent e) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setSelectedFile(new File("transitions.txt")); // Default file name
-
-        int returnValue = fileChooser.showSaveDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            saveTransitionsEmitter.emit(new SaveTransitionsEvent(selectedFile.getAbsolutePath()));
-            System.out.println("Selected file: " + selectedFile.getAbsolutePath()); //!TEST
+            saveTapeEmitter.emit(new SaveTapeEvent(selectedFile));
         }
     }
 }

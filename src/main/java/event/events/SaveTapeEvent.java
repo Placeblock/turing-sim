@@ -1,6 +1,8 @@
 package event.events;
 
+import java.io.File;
+
 import event.Event;
 
-public record SaveTapeEvent(String filePath) implements Event {
+public record SaveTapeEvent(File file) implements Event {
 }

@@ -7,6 +7,7 @@ import core.Transition;
 import event.Receiver;
 import event.events.*;
 import lombok.Getter;
+import serialization.ConfigSerializer;
 
 import java.util.Set;
 
@@ -32,7 +33,8 @@ public class ConfigurationController {
         this.receiver.registerHandler(RemoveTransitionEvent.class, this::handleRemoveTransitionEvent);
         this.receiver.registerHandler(RemoveStateEvent.class, this::handleRemoveStateChangeEvent);
         this.receiver.registerHandler(AddStateEvent.class, this::handleAddStateChangeEvent);
-        this.receiver.registerHandler(SaveTapeEvent.class, this::handleSaveTapeChangeEvent);
+        this.receiver.registerHandler(SaveTapeEvent.class, this::handleSaveTapeEvent);
+        this.receiver.registerHandler(SaveTransitionsEvent.class, this::handleSaveTransitionsEvent);
         this.receiver.registerHandler(AddSymbolToTapeAlphabetEvent.class, this::handleAddSymbolToTapeAlphabetEvent);
         this.receiver.registerHandler(TerminateStateEvent.class, this::handleTerminateStateEvent);
     }
@@ -121,8 +123,22 @@ public class ConfigurationController {
         event.state().removeTransition(event.symbol());
     }
 
-    private void handleSaveTapeChangeEvent(SaveTapeEvent event) {
-        System.out.println("SaveTapeEvent received, but not implemented yet.");
-        //TODO
+    private void handleSaveTransitionsEvent(SaveTransitionsEvent event) {
+        try (var outputStream = new java.io.FileOutputStream(event.file())) {
+            ConfigSerializer.serialize(config, stateRegister, outputStream);
+            System.out.println("Config saved to: " + event.file().getAbsolutePath());
+        } catch (java.io.IOException e) {
+            System.err.println("Error saving config: " + e.getMessage());
+        }
+    }
+
+    private void handleSaveTapeEvent(SaveTapeEvent event) {
+        var tapeContent = config.getInitialTapeString();
+        try (var writer = new java.io.BufferedWriter(new java.io.FileWriter(event.file()))) {
+            writer.write(tapeContent);
+            System.out.println("Tape saved to: " + event.file().getAbsolutePath());
+        } catch (java.io.IOException e) {
+            System.err.println("Error saving tape: " + e.getMessage());
+        }
     }
 }

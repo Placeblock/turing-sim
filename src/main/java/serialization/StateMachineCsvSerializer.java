@@ -20,7 +20,6 @@ import java.util.List;
 
 
 
-// TODO rename class to StateMachineCsvSerializer or similar
 /**
  * Serializer class for converting a list of states to and from a CSV format.
  * This class provides methods to serialize a list of states to an output stream

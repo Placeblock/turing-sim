@@ -42,7 +42,7 @@ public class InitialStateUI extends JPanel {
             }
         });
 
-        this.add(new JLabel("Initial State: "));
+        this.add(new JLabel("Initial tape content: "));
         this.add(this.textField);
     }
 

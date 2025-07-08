@@ -25,6 +25,7 @@ public class StatusPanel extends JPanel {
 
         currentStatePublisher.subscribe(this::onCurrentStateChanged);
 
+        add(Box.createHorizontalStrut(10));
         add(stateLabel);
         add(Box.createHorizontalStrut(20));
         add(terminationLabel);
