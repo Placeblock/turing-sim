@@ -43,14 +43,14 @@ public class ConfigSerializer {
     public static void serialize(Configuration config, StateRegister register, OutputStream outputStream) throws IOException {
         try (var writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8))) {
             String outputStr = String.format(
-                "# Tape Alphabet\n"+
+                "# Eingabealphabet\n"+
                 "%s\n\n"+
                 "# Blank Zeichen\n"+
                 "%s\n\n"+
                 "# Anfangs state\n"+
                 "%s\n\n"+
                 "# Übergangsfunktion\n",
-                config.getTapeAlphabet().stream().map(String::valueOf).collect(Collectors.joining()),
+                config.getInputSymbols().stream().map(String::valueOf).collect(Collectors.joining()),
                 config.getBlankSymbol(),
                 register.indexOf(config.getInitialState())
             );
@@ -70,7 +70,7 @@ public class ConfigSerializer {
     public static ConfigAndStateRegister deserialize(InputStream inputStream) throws IOException {
         String tapeAlphabetLine, blankSymbolLine, initialStateLine;
         try (var reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            reader.readLine(); // # Tape Alphabet
+            reader.readLine(); // # Eingabealphabet
             tapeAlphabetLine = reader.readLine();
             reader.readLine(); // Skip
             reader.readLine(); // # Blank Zeichen

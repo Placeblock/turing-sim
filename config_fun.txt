@@ -1,5 +1,5 @@
-# Bandalphabet
-JOEMA
+# Eingabealphabet
+JOE
 
 # Blank Zeichen
 _

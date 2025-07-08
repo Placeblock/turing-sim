@@ -1,4 +1,4 @@
-# Bandalphabet
+# Eingabealphabet
 01
 
 # Blank Zeichen
