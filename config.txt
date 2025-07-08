@@ -1,0 +1,14 @@
+# Bandalphabet
+01
+
+# Blank Zeichen
+B
+
+# Anfangs state
+0
+
+# Übergangsfunktion
+0,0,1,RIGHT,0,false
+0,1,0,RIGHT,0,false
+0,B,B,LEFT,1,false
+1,,,,,true

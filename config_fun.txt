@@ -1,0 +1,15 @@
+# Bandalphabet
+JOEMA
+
+# Blank Zeichen
+_
+
+# Anfangs state
+0
+
+# Übergangsfunktion
+0,J,M,RIGHT,0,false
+0,O,A,RIGHT,0,false
+0,E,M,RIGHT,0,false
+0,_,A,NONE,1,false
+1,,,,,true
