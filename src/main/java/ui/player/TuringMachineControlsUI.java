@@ -6,7 +6,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.Timer;
 
 import event.Emitter;
 import event.Receiver;
@@ -17,7 +16,7 @@ import java.awt.event.ActionEvent;
 
 public class TuringMachineControlsUI extends JPanel {
 
-    private static final int DEFAULT_SPEED_MS = 500;
+    private static final int DEFAULT_SPEED_MS = 250;
 
     private final Emitter<StepEvent> stepEmitter;
     private final Emitter<ResetEvent> resetEmitter;
@@ -81,6 +80,8 @@ public class TuringMachineControlsUI extends JPanel {
         
         add(topPanel);
         add(bottomPanel);
+
+        this.intervalEmitter.emit(new IntervalEvent(DEFAULT_SPEED_MS));
     }
 
     private void onSpeedSliderChanged(ChangeEvent e) {

@@ -38,7 +38,10 @@ public class MachineController {
         this.timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                MachineController.this.machine.step();
+                if (!MachineController.this.machine.step()) { // If the machine has terminated
+                    MachineController.this.timer.cancel();
+                    MachineController.this.running = false;
+                }
             }
         }, 0, this.interval);
         this.running = true;
@@ -61,6 +64,7 @@ public class MachineController {
 
     private void handleResetEvent(ResetEvent event) {
         this.timer.cancel();
+        this.running = false;
 
         MachineState machineState = this.machine.getMachineState();
         machineState.setCurrentState(this.config.getInitialState());
@@ -68,10 +72,6 @@ public class MachineController {
         Tape<Character> tape = new Tape<>(config.getBlankSymbol(), config.getInitialTapeState());
         machineState.getTape().setDefaultSymbol(config.getBlankSymbol());
         machineState.getTape().reset(tape.getHead());
-
-        if (this.running) {
-            this.handleStartEvent(new StartEvent());
-        }
     }
 
 }
