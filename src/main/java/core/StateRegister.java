@@ -66,6 +66,10 @@ public class StateRegister {
         return null;
     }
 
+    public int indexOf(State state) {
+        return this.states.indexOf(state);
+    }
+
     public List<Character> getSymbols() {
         Set<Character> symbols = new HashSet<>();
 
