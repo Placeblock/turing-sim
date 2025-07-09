@@ -7,8 +7,6 @@ import ui.StartupWindow;
 public class Application {
 
     public static void main(String[] args) {
-        System.setProperty("flatlaf.uiScale", "1.12");
-
         try { UIManager.setLookAndFeel(new FlatIntelliJLaf()); }
         catch (Exception e) { e.printStackTrace(); }
 
