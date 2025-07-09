@@ -71,6 +71,7 @@ public class MainWindow extends JFrame {
 
         // === Top Panel (File Open Button) ===
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topPanel.add(new InitialStateUI(config, receiver));
         StatusPanel statusPanel = new StatusPanel(machineState.getCurrentStateChangedPublisher(), stateRegister);
         topPanel.add(statusPanel);
         content.add(topPanel, BorderLayout.NORTH);
@@ -84,8 +85,6 @@ public class MainWindow extends JFrame {
         TuringMachineControlsUI controlsUI = new TuringMachineControlsUI(machineController.getReceiver());
 
         centerPanel.add(tapeUI);
-        centerPanel.add(Box.createVerticalStrut(10));
-        centerPanel.add(new InitialStateUI(config, receiver));
         centerPanel.add(Box.createVerticalStrut(10)); // spacing
         centerPanel.add(controlsUI);
 
