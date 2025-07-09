@@ -35,7 +35,7 @@ public class TransitionPanel extends JPanel {
 
         // StatecomboBox
         this.stateComboBox = new JComboBox<>();
-        this.stateComboBox.setPreferredSize(new Dimension(50, 25));
+        this.stateComboBox.setPreferredSize(new Dimension(65, 35));
         this.stateComboBox.setOpaque(true);
         this.stateComboBox.setRenderer(new StateComboBoxRenderer(stateRegister));
         this.stateComboBox.setEnabled(false);
@@ -56,7 +56,7 @@ public class TransitionPanel extends JPanel {
 
         // New Symbol ComboBox
         this.newSymbolComboBox = new JComboBox<>();
-        this.newSymbolComboBox.setPreferredSize(new Dimension(45, 25));
+        this.newSymbolComboBox.setPreferredSize(new Dimension(55, 35));
         this.newSymbolComboBox.setEnabled(false); // Prevent bug
         for (Character alphabetChar : config.getTapeAlphabet()) {
             this.newSymbolComboBox.addItem(alphabetChar);
@@ -74,7 +74,7 @@ public class TransitionPanel extends JPanel {
 
         // Move ComboBox
         this.moveComboBox = new JComboBox<>();
-        this.moveComboBox.setPreferredSize(new Dimension(70, 25));
+        this.moveComboBox.setPreferredSize(new Dimension(95, 25));
         this.moveComboBox.setEnabled(false);
         for (Move move : Move.values()) {
             this.moveComboBox.addItem(move);
