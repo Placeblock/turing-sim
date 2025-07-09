@@ -6,6 +6,8 @@ import event.Receiver;
 import event.events.InitialTapeStateChangeEvent;
 import observer.events.InitialTapeStateChangedEvent;
 
+import java.awt.Dimension;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -19,8 +21,14 @@ public class InitialStateUI extends JPanel {
 
     public InitialStateUI(Configuration config, Receiver receiver) {
         this.initialStateChangeEmitter = new Emitter<>(receiver);
-        this.textField = new JTextField(config.getInitialTapeString());
-
+        this.textField = new JTextField(config.getInitialTapeString()) {
+            @Override
+            public Dimension getPreferredSize() {
+                Dimension preferred = super.getPreferredSize();
+                return new Dimension(Math.max(50, preferred.width), preferred.height);
+            }
+        };
+        
         config.getInitialTapeStateChangedPublisher().subscribe(this::updateInitialState);
 
         this.textField.getDocument().addDocumentListener(new DocumentListener() {
@@ -28,12 +36,18 @@ public class InitialStateUI extends JPanel {
             public void insertUpdate(DocumentEvent documentEvent) {
                 String text = InitialStateUI.this.textField.getText();
                 InitialStateUI.this.onUpdateInitialState(text);
+                InitialStateUI.this.textField.revalidate();
+                InitialStateUI.this.revalidate();
+                InitialStateUI.this.repaint();
             }
 
             @Override
             public void removeUpdate(DocumentEvent documentEvent) {
                 String text = InitialStateUI.this.textField.getText();
                 InitialStateUI.this.onUpdateInitialState(text);
+                InitialStateUI.this.textField.revalidate();
+                InitialStateUI.this.revalidate();
+                InitialStateUI.this.repaint();
             }
 
             @Override

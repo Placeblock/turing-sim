@@ -38,7 +38,7 @@ public class Machine {
         System.out.println("Reading: " + currentHeadSymbol);
         Transition transition = state.getTransition(currentHeadSymbol);
         if (transition == null) {
-            JOptionPane.showMessageDialog(null,"No transition found for symbol " + currentHeadSymbol + ". Your table seems incomplete.","Fehler!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"No transition found for symbol " + currentHeadSymbol + ". \nYour table seems incomplete.","Fehler!", JOptionPane.ERROR_MESSAGE);
             throw new IllegalStateException("No transition found for symbol " + currentHeadSymbol);
         }
         if (transition.getNewSymbol() == null || transition.getNewState() == null) {

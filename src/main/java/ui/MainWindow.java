@@ -1,6 +1,5 @@
 package ui;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
 import controller.ConfigurationController;
 import controller.MachineController;
 import core.Configuration;

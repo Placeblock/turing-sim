@@ -20,7 +20,6 @@ public class StartupWindow extends JFrame {
     private JLabel transitionsLabel;
     private JButton startButton;
 
-    private boolean isTapeLoaded = false;
     private boolean areTransitionsLoaded = false;
 
     private static final Color colorDarkGreen = new Color(0x008800);
@@ -49,8 +48,8 @@ public class StartupWindow extends JFrame {
         loadTapeButton = new JButton("Load Tape");
         loadTapeButton.addActionListener(this::loadTapeActionListener);
         loadTapeButton.setEnabled(false);
-        tapeLabel = new JLabel("Tape needs to be loaded");
-        tapeLabel.setForeground(Color.RED);
+        tapeLabel = new JLabel("No tape loaded (optional)");
+        //tapeLabel.setForeground(Color.RED);
         tapePanel.add(loadTapeButton);
         tapePanel.add(tapeLabel);
         
@@ -137,7 +136,6 @@ public class StartupWindow extends JFrame {
             }
 
             // When tape is loaded successfully
-            isTapeLoaded = true;
             tapeLabel.setText("Tape loaded");
             tapeLabel.setForeground(colorDarkGreen);
 
@@ -147,7 +145,7 @@ public class StartupWindow extends JFrame {
     }
 
     private void maybeEnableStartButton() {
-        if (isTapeLoaded && areTransitionsLoaded && config != null && stateRegister != null) {
+        if (areTransitionsLoaded && config != null && stateRegister != null) {
             startButton.setEnabled(true);
         } else {
             startButton.setEnabled(false);
