@@ -1,0 +1,23 @@
+# Blank Zeichen
+_
+
+# Anfangs state
+0
+
+# Übergangsfunktion
+0,E,M,RIGHT,0,false
+0,J,M,RIGHT,0,false
+0,O,A,RIGHT,0,false
+0,_,A,NONE,1,false
+1,A,A,LEFT,1,false
+1,M,M,LEFT,1,false
+1,_,_,RIGHT,2,false
+2,A,O,RIGHT,3,false
+2,M,J,RIGHT,2,false
+3,A,_,LEFT,4,false
+3,M,E,RIGHT,3,false
+4,E,E,LEFT,4,false
+4,J,J,LEFT,4,false
+4,O,O,LEFT,4,false
+4,_,_,RIGHT,0,false
+5,,,,,true
