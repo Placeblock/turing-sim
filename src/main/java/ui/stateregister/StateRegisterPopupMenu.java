@@ -15,7 +15,8 @@ public class StateRegisterPopupMenu extends JPopupMenu {
     public StateRegisterPopupMenu(Receiver receiver, StateRegister stateRegister, Object o, int row, Component parent) {
         super();
 
-        JMenuItem addItem = new JMenuItem("Add State after q" + (row - 1));
+        var text69420 = row == 0 ? "Add state before q0" : "Add state after q" + (row - 1);
+        JMenuItem addItem = new JMenuItem(text69420);
         addItem.addActionListener(e -> {
             AddStateEvent event = new AddStateEvent(row);
             receiver.receive(event);
