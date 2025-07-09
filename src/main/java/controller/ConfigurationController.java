@@ -9,6 +9,7 @@ import event.events.*;
 import lombok.Getter;
 import serialization.ConfigSerializer;
 
+import javax.swing.*;
 import java.util.Set;
 
 /**
@@ -57,6 +58,10 @@ public class ConfigurationController {
 
     private void handleTerminateStateEvent(TerminateStateEvent terminateStateEvent) {
         System.out.println("Handling TerminateStateEvent for state: " + terminateStateEvent.state());
+        if (this.config.getInitialState().equals(terminateStateEvent.state())) {
+            JOptionPane.showMessageDialog(null,"Der Anfangszustand kann nicht zum Endzustand gemacht werden.","Fehler!",1);
+            return;
+        }
         this.stateRegister.getState(terminateStateEvent.state())
                 .setTerminates(terminateStateEvent.terminates());
     }
@@ -85,6 +90,10 @@ public class ConfigurationController {
     }
 
     private void handleInitialStateChangeEvent(InitialStateChangeEvent event) {
+        if (event.initialState().isTerminates()) {
+            JOptionPane.showMessageDialog(null,"Ein Endzustand kann nicht zum Anfangszustand gemacht werden.","Fehler!",1);
+            return;
+        }
         this.config.setInitialState(event.initialState());
     }
 

@@ -1,5 +1,6 @@
 package ui.stateregister;
 
+import core.Configuration;
 import core.State;
 import core.StateRegister;
 import core.Transition;
@@ -11,8 +12,10 @@ import java.awt.*;
 
 public class StateRegisterRenderer extends JPanel implements TableCellRenderer {
     private final StateRegister stateRegister;
-    public StateRegisterRenderer(StateRegister stateRegister) {
+    Configuration config;
+    public StateRegisterRenderer(StateRegister stateRegister, Configuration config) {
         this.stateRegister = stateRegister;
+        this.config = config;
     }
 
     @Override
@@ -43,6 +46,9 @@ public class StateRegisterRenderer extends JPanel implements TableCellRenderer {
             State state = (State) o;
             JLabel label = new JLabel("q" + stateRegister.getStates().indexOf(state), SwingConstants.CENTER);
             if(state.isTerminates()) label.setForeground(Color.RED);
+            if (this.config.getInitialState().equals(state)) {
+                label.setForeground(Color.GREEN);
+            }
             this.add(label);
         }
         if(row == 0 && column != 0){

@@ -39,6 +39,14 @@ public class StateRegisterPopupMenu extends JPopupMenu {
                 receiver.receive(event);
             });
             this.add(removeItem);
+            if (!state.isTerminates()) {
+                JMenuItem initialState = new JMenuItem("Set Initial State");
+                initialState.addActionListener(e -> {
+                    InitialStateChangeEvent event = new InitialStateChangeEvent(state);
+                    receiver.receive(event);
+                });
+                this.add(initialState);
+            }
         }
         if(o instanceof  Transition transition) {
             removeItem = new JMenuItem("Remove Transition");
