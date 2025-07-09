@@ -69,6 +69,7 @@ public class MainWindow extends JFrame {
         Container content = getContentPane();
         content.setLayout(new BorderLayout(10, 10));
 
+
         // === Top Panel (File Open Button) ===
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.add(new InitialStateUI(config, receiver));

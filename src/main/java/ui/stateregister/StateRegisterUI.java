@@ -91,7 +91,7 @@ public class StateRegisterUI extends JTable {
             if (i == 0) {
                 this.getColumnModel().getColumn(i).setPreferredWidth(50);
             } else {
-                this.getColumnModel().getColumn(i).setPreferredWidth(255);
+                this.getColumnModel().getColumn(i).setPreferredWidth(285);
             }
         }
     }
