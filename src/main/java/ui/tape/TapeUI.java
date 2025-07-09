@@ -15,13 +15,10 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Rectangle;
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TapeUI extends JScrollPane {
-
-    public TapeCell<Character> aaa; //! TEST
 
     public Tape<Character> tape;
     public JPanel tapePanel;
@@ -34,8 +31,7 @@ public class TapeUI extends JScrollPane {
         this.tape = tape;
 
         setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        setPreferredSize(new Dimension(300, 50)); //! TEST
+        setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         setBorder(null);
 
         tapePanel = new JPanel(new GridBagLayout());
@@ -83,7 +79,6 @@ public class TapeUI extends JScrollPane {
         var head = tape.getHead();
         this.headCellUI = newCellToUIMap.get(head);
         this.headCellUI.highlight();
-        this.aaa = head; //! TEST
         
         // Update the cell to UI map
         this.cellToUIMap = newCellToUIMap;
@@ -118,7 +113,6 @@ public class TapeUI extends JScrollPane {
         this.headCellUI.resetHighlight(); // Reset highlight on old head cell
         this.headCellUI = this.cellToUIMap.get(event.newHeadPosition());
         this.headCellUI.highlight(); // Highlight new head cell
-        this.aaa = event.newHeadPosition(); //! TEST
 
         SwingUtilities.invokeLater(this::scrollToHeadCell);
     }
