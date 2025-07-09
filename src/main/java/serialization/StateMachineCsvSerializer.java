@@ -66,6 +66,7 @@ public class StateMachineCsvSerializer {
     public static void serialize(List<State> states, BufferedWriter writer) throws IOException {
         int i = 0;
         for (var state : states) {
+            // Handle states with no transitions (typically terminating states)
             if(state.getTransitions().isEmpty()) {
                 String line = String.format("%d,,,,,%b",
                         i,
@@ -76,6 +77,7 @@ public class StateMachineCsvSerializer {
                 i++;
                 continue;
             }
+            // Write one line per transition: stateIndex,inputSymbol,outputSymbol,move,newStateIndex,terminates
             for (var entry : state.getTransitions().entrySet()) {
                 var symbol = entry.getKey();
                 var transition = entry.getValue();
@@ -131,6 +133,7 @@ public class StateMachineCsvSerializer {
      */
     public static List<State> deserialize(BufferedReader reader) throws IOException {
         var states = new ArrayList<State>();
+        // Store transitions that need their target state set after all states are created
         var transitionLateinitNewStateIndexMap = new HashMap<Transition, Integer>();
 
         String line;
@@ -140,7 +143,7 @@ public class StateMachineCsvSerializer {
 
             int stateIndex = Integer.parseInt(parts[0]);
 
-            // If state not yet present, create a new state in the list
+            // Create state if it doesn't exist yet (states may be referenced before being defined)
             State state;
             if (stateIndex >= states.size()) {
                 var terminates = Boolean.parseBoolean(parts[5]);
@@ -150,15 +153,16 @@ public class StateMachineCsvSerializer {
                 state = states.get(stateIndex);
             }
 
-            // If transition is not present (State is terminating, therefore no transitions)
+            // Skip transition creation for terminating states (empty transition fields)
             if (parts[1].isEmpty() && parts[2].isEmpty() && parts[3].isEmpty() && parts[4].isEmpty()) continue;
 
-            // Parse transition details
-            char symbol = parts[1].charAt(0);
-            char newSymbol = parts[2].charAt(0);
-            Move move = Move.valueOf(parts[3].toUpperCase());
-            int newStateIndex = Integer.parseInt(parts[4]);
+            // Parse transition components
+            char symbol = parts[1].charAt(0); // input symbol
+            char newSymbol = parts[2].charAt(0); // output symbol
+            Move move = Move.valueOf(parts[3].toUpperCase()); // movement direction
+            int newStateIndex = Integer.parseInt(parts[4]); // target state index
 
+            // Create transition with null target state (will be set later)
             var transition = new Transition(newSymbol, move, null);
             state.getTransitions().put(symbol, transition);
 
@@ -166,7 +170,7 @@ public class StateMachineCsvSerializer {
             transitionLateinitNewStateIndexMap.put(transition, newStateIndex);
         }
         
-        // Now that all states and transitions are created, we can fill in the newState for each transition
+        // Second pass: link all transitions to their target states
         for (var entry : transitionLateinitNewStateIndexMap.entrySet()) {
             Transition transition = entry.getKey();
             int newStateIndex = entry.getValue();
