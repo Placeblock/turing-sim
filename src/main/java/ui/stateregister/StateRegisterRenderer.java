@@ -12,6 +12,7 @@ import java.awt.*;
 
 public class StateRegisterRenderer extends JPanel implements TableCellRenderer {
     public static final Color INVALID_BG_COLOR = new Color(0xFFADB0);
+    private static final Color colorDarkGreen = new Color(0x008800);
 
     private final StateRegister stateRegister;
     Configuration config;
@@ -49,7 +50,7 @@ public class StateRegisterRenderer extends JPanel implements TableCellRenderer {
             JLabel label = new JLabel("q" + stateRegister.getStates().indexOf(state), SwingConstants.CENTER);
             if(state.isTerminates()) label.setForeground(Color.RED);
             if (this.config.getInitialState().equals(state)) {
-                label.setForeground(Color.GREEN);
+                label.setForeground(colorDarkGreen);
             }
             this.add(label);
         }
