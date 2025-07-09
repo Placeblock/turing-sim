@@ -8,9 +8,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.stream.Collectors;
+import java.util.HashSet;
 
 import core.Configuration;
+import core.State;
 import core.StateRegister;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,14 +44,11 @@ public class ConfigSerializer {
     public static void serialize(Configuration config, StateRegister register, OutputStream outputStream) throws IOException {
         try (var writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8))) {
             String outputStr = String.format(
-                "# Eingabealphabet\n"+
-                "%s\n\n"+
                 "# Blank Zeichen\n"+
                 "%s\n\n"+
                 "# Anfangs state\n"+
                 "%s\n\n"+
                 "# Übergangsfunktion\n",
-                config.getInputSymbols().stream().map(String::valueOf).collect(Collectors.joining()),
                 config.getBlankSymbol(),
                 register.indexOf(config.getInitialState())
             );
@@ -68,11 +66,8 @@ public class ConfigSerializer {
      * @throws IOException if an I/O error occurs during stream reading
      */
     public static ConfigAndStateRegister deserialize(InputStream inputStream) throws IOException {
-        String tapeAlphabetLine, blankSymbolLine, initialStateLine;
+        String blankSymbolLine, initialStateLine;
         try (var reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            reader.readLine(); // # Eingabealphabet
-            tapeAlphabetLine = reader.readLine();
-            reader.readLine(); // Skip
             reader.readLine(); // # Blank Zeichen
             blankSymbolLine = reader.readLine();
             reader.readLine(); // Skip
@@ -81,11 +76,15 @@ public class ConfigSerializer {
             reader.readLine(); // Skip
             reader.readLine(); // # Übergangsfunktion
 
-            var tapeAlphabet = tapeAlphabetLine.chars().mapToObj(c -> (char) c).collect(Collectors.toSet());
             var blankSymbol = blankSymbolLine.charAt(0);
             var initialStateIndex = Integer.parseInt(initialStateLine);
 
             var states = StateMachineCsvSerializer.deserialize(reader);
+
+            var tapeAlphabet = new HashSet<Character>();
+            for (State state : states) {
+                tapeAlphabet.addAll(state.getTransitions().keySet());
+            }
 
             var initialState = states.get(initialStateIndex);
 
