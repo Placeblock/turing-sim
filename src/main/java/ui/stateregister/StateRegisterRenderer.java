@@ -54,7 +54,11 @@ public class StateRegisterRenderer extends JPanel implements TableCellRenderer {
             this.add(label);
         }
         if(row == 0 && column != 0){
-            JLabel label = new JLabel(String.valueOf(o));
+            Character symbol = (Character) o;
+            JLabel label = new JLabel(String.valueOf(symbol));
+            if (symbol.equals(this.config.getBlankSymbol())) {
+                label.setForeground(Color.BLUE);
+            }
             label.setHorizontalAlignment(SwingConstants.CENTER);
             this.add(label);
         }

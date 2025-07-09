@@ -91,6 +91,12 @@ public class StateRegisterPopupMenu extends JPopupMenu {
                 receiver.receive(event);
             });
             this.add(removeItem);
+            JMenuItem blankSymbolItem = new JMenuItem("Set Blank Symbol");
+            blankSymbolItem.addActionListener(e -> {
+                BlankSymbolChangeEvent event = new BlankSymbolChangeEvent(symbol);
+                receiver.receive(event);
+            });
+            this.add(blankSymbolItem);
         }
     }
     private void updateTerminateItemText(JMenuItem item, boolean isFinal) {

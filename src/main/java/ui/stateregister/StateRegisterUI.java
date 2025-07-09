@@ -47,6 +47,7 @@ public class StateRegisterUI extends JTable {
         this.stateRegister.getRemoveStatePublisher().subscribe(this::onStateRemove);
         this.configuration.getTapeSymbolsChangedPublisher().subscribe(this::onTapeSymbolChanged);
         this.configuration.getInitialStateChangedPublisher().subscribe(this::onInitialStateChange);
+        this.configuration.getBlankSymbolChangedPublisher().subscribe(this::onBlankSymbolChange);
 
         for (State state : this.stateRegister.getStates()) {
             state.getTransitionCreatedPublisher().subscribe(this::onTransitionCreate);
@@ -123,10 +124,8 @@ public class StateRegisterUI extends JTable {
     public void onInitialStateChange(observer.events.InitialStateChangedEvent event) {
         tableModel.fireTableDataChanged();
     }
-
-    public void onNewSymbolAdded(observer.events.AddSymbolToTapeAlphabetEvent event) {
-        tableModel.fireTableStructureChanged();
-        this.updateColumnWidth();
+    public void onBlankSymbolChange(observer.events.BlankSymbolChangedEvent event) {
+        tableModel.fireTableDataChanged();
     }
 
     @Override

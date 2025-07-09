@@ -9,7 +9,6 @@ import core.MachineState;
 import core.StateRegister;
 import core.tape.Tape;
 import event.Receiver;
-import ui.configuration.BlankSymbolUI;
 import ui.configuration.InitialStateUI;
 import ui.menubar.MenuBarTuring;
 import ui.player.StatusPanel;
@@ -86,10 +85,7 @@ public class MainWindow extends JFrame {
 
         centerPanel.add(tapeUI);
         centerPanel.add(Box.createVerticalStrut(10));
-        JPanel configPanel = new JPanel();
-        configPanel.add(new InitialStateUI(config, receiver));
-        configPanel.add(new BlankSymbolUI(config, receiver));
-        centerPanel.add(configPanel);
+        centerPanel.add(new InitialStateUI(config, receiver));
         centerPanel.add(Box.createVerticalStrut(10)); // spacing
         centerPanel.add(controlsUI);
 
