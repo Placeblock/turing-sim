@@ -59,7 +59,7 @@ public class ConfigurationController {
     private void handleTerminateStateEvent(TerminateStateEvent terminateStateEvent) {
         System.out.println("Handling TerminateStateEvent for state: " + terminateStateEvent.state());
         if (this.config.getInitialState().equals(terminateStateEvent.state())) {
-            JOptionPane.showMessageDialog(null,"Der Anfangszustand kann nicht zum Endzustand gemacht werden.","Fehler!",1);
+            JOptionPane.showMessageDialog(null,"Der Anfangszustand kann nicht zum Endzustand gemacht werden.","Fehler!",JOptionPane.ERROR_MESSAGE);
             return;
         }
         this.stateRegister.getState(terminateStateEvent.state())

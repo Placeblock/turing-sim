@@ -5,6 +5,8 @@ import core.tape.TapeCell;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import javax.swing.*;
+
 /**
  * Class representing a Turing machine.
  */
@@ -36,6 +38,7 @@ public class Machine {
         System.out.println("Reading: " + currentHeadSymbol);
         Transition transition = state.getTransition(currentHeadSymbol);
         if (transition == null) {
+            JOptionPane.showMessageDialog(null,"No transition found for symbol " + currentHeadSymbol + ". Your table seems incomplete.","Fehler!", JOptionPane.ERROR_MESSAGE);
             throw new IllegalStateException("No transition found for symbol " + currentHeadSymbol);
         }
         if (transition.getNewSymbol() == null || transition.getNewState() == null) {

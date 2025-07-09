@@ -46,7 +46,7 @@ public class TransitionPanel extends JPanel {
         State newState = transition.getNewState();
         this.stateComboBox.setSelectedItem(newState);
         if (this.stateComboBox.getSelectedItem() == null) {
-            this.setBackground(Color.YELLOW);
+            this.setBackground(StateRegisterRenderer.INVALID_BG_COLOR);
         }
         this.stateComboBox.addItemListener((e) -> {
             if (this.updatingContent || e.getStateChange() != ItemEvent.SELECTED) return;
@@ -63,7 +63,7 @@ public class TransitionPanel extends JPanel {
         }
         this.newSymbolComboBox.setSelectedItem(transition.getNewSymbol());
         if (this.newSymbolComboBox.getSelectedItem() == null) {
-            this.setBackground(Color.YELLOW);
+            this.setBackground(StateRegisterRenderer.INVALID_BG_COLOR);
         }
 
         this.newSymbolComboBox.addItemListener((e) -> {

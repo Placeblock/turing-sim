@@ -11,6 +11,8 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 
 public class StateRegisterRenderer extends JPanel implements TableCellRenderer {
+    public static final Color INVALID_BG_COLOR = new Color(0xFFADB0);
+
     private final StateRegister stateRegister;
     Configuration config;
     public StateRegisterRenderer(StateRegister stateRegister, Configuration config) {
@@ -36,7 +38,7 @@ public class StateRegisterRenderer extends JPanel implements TableCellRenderer {
                 JLabel label = new JLabel(text, SwingConstants.CENTER);
 
                 if (transition.getNewState() == null || transition.getNewSymbol() == null) {
-                    this.setBackground(new Color(0xFFADB0));
+                    this.setBackground(INVALID_BG_COLOR);
                 }
 
                 this.add(label);
