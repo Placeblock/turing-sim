@@ -1,7 +1,5 @@
 package ui;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
-
 import core.Configuration;
 import core.StateRegister;
 import serialization.ConfigSerializer;
@@ -33,11 +31,6 @@ public class StartupWindow extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
-        try {
-            UIManager.setLookAndFeel(new FlatIntelliJLaf());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         // Create main panel with vertical layout and center alignment
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
